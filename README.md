@@ -1,7 +1,29 @@
-# Chrono Curse
+# Chrono Curse(WIP)
 
-A 2D Mobile game developed in Unity, using C# as the main programming language. It is a rogue-lite game with four classes archer, mage, knight, and rogue. Using the Random Walk Algorithm to procedurally generate dungeons, gives players a unique experience each time. Players will be able to player different characters at at time. Each character has one life, if the character dies then they are permanently lost. So it helpful to make sure to play smartly and cautiously.
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+
+## General info 
+A 2D rogue-lite mobile game with four classes archer, mage, knight, and rogue. Using the Random Walk Algorithm to procedurally generate dungeons, gives players a unique experience each time. Players will be able to play different characters at a time. Each character has one life, if the character dies then they are permanently lost. It is important to play smartly and cautiously.
  
-It will have a market system to sell and trade loot with other players, 
+It will have a market system to sell and trade loot with other players, along with a leaderboard showcasing the usersname, character, level, kills, and distance traveled in the never ending dungeon. 
+
+	
+## Technologies
+Project is created with:
+* Unity
+* Programming Language: C#
+	
+## Features (WIP)
+* Marketplace to sell loot from dungeons, and buy better weapons, gear, potions, etc. 
+  * Can trade with other players.
+* Leaderboard
+* Procedural Generation
+* Scalable enemies and dungeons
+ 
+## Setup
+Download here: {WIP}
 
 

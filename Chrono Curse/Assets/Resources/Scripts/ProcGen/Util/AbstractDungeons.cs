@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AbstractDungeons : MonoBehaviour
 {
-    [SerializeField]
+
     protected TilemapUtil tilemapUtil = null;
 
     [SerializeField]
@@ -12,11 +12,8 @@ public abstract class AbstractDungeons : MonoBehaviour
 
     public void GenerateDungeon()
     {
-        tilemapUtil.Clear();
         RunProceduralGeneration();
     }
 
     protected abstract void RunProceduralGeneration();
-
-    protected abstract HashSet<Vector2Int> GetFloorPositions(RoomMaker parameters, Vector2Int position);
 }   

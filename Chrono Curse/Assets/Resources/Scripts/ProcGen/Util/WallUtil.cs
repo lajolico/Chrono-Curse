@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallLogic : MonoBehaviour
+public class WallUtil : MonoBehaviour
 {
+
+    private static RoomManager roomManager = FindObjectOfType<RoomManager>();
 
     /// <summary>
     /// Other scripts will pass their floorPostions and the tilemaps we want to use to locate and find postions for our walls.
@@ -13,8 +15,9 @@ public class WallLogic : MonoBehaviour
     /// <param name="tilemap">Tilemap we are passing</param>
     public static void CreateWalls(HashSet<Vector2Int> floorPositions, TilemapUtil tilemap)
     {
-        var wallPositions = GetWallPositions(floorPositions, Direction2D.eightDirectionsList);
-        var cornerWallPositions = GetWallPositions(floorPositions, Direction2D.diagonalDirectionsList);
+        var wallPositions = GetWallPositions(floorPositions, DirectionUtil.eightDirectionsList);
+        roomManager.Walls.UnionWith(wallPositions);
+        var cornerWallPositions = GetWallPositions(floorPositions, DirectionUtil.diagonalDirectionsList);
         SetWall(tilemap, wallPositions, floorPositions);
         SetCornerWalls(tilemap, cornerWallPositions, floorPositions);
     }
@@ -31,7 +34,7 @@ public class WallLogic : MonoBehaviour
          foreach (var position in wallPositions)
          {
              string neighboursBinaryType = "";
-             foreach (var direction in Direction2D.cardinalDirections)
+             foreach (var direction in DirectionUtil.cardinalDirections)
              {
                  var neighbourPosition = position + direction;
                  if (floorPositions.Contains(neighbourPosition))
@@ -59,7 +62,7 @@ public class WallLogic : MonoBehaviour
         foreach (var position in cornerWallPositions)
         {
             string neighboursBinaryType = "";
-            foreach (var direction in Direction2D.eightDirectionsList)
+            foreach (var direction in DirectionUtil.eightDirectionsList)
             {
                 var neighbourPosition = position + direction;
                 if (floorPositions.Contains(neighbourPosition))

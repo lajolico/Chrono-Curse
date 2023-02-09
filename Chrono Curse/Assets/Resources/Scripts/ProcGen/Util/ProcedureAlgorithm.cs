@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -28,7 +29,7 @@ public static class ProcedureAlgorithm
         for(int i = 0; i < walkLength; i++)
         {
             //as we walk get a new position and add it the previous position randomly
-            var newPos = prevPos + Direction2D.GetRandomDirection();
+            var newPos = prevPos + DirectionUtil.GetRandomDirection();
             path.Add(newPos); //Add it to our HashSet
             prevPos = newPos; //update our position to the algorithm
         }
@@ -37,37 +38,60 @@ public static class ProcedureAlgorithm
     }
 
     /// <summary>
-    /// Keep track of our different positions in the list, easier access and can connect other corridors.
+    /// Creates our corridors, connecting the different rooms.
     /// </summary>
-    /// <param name="startPos"></param>
-    /// <param name="corridorLength"></param>
-    /// <param name="corridorWidth"></param>
+    /// <param name="currentRoomCenter">Recieves roomCenter from </param>
+    /// <param name="destination">Where are we going!?</param>
+    /// <param name="corridorWidth">How big is this corridor going to be?</param>
     /// <returns></returns>
-    public static List<Vector2Int> GetCorridors(Vector2Int startPos, int corridorLength, int corridorWidth)
+    public static HashSet<Vector2Int> GetCorridors(Vector2Int currentRoomCenter, Vector2Int destination, int corridorWidth)
     {
-        List<Vector2Int> corridor = new List<Vector2Int>();
-        var direction = Direction2D.GetRandomDirection();
-        var currentPos = startPos;
-        corridor.Add(currentPos);
-
-        for (int i = 0; i < corridorLength; i++)
+        HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+        var position = currentRoomCenter;
+        corridor.Add(position);
+        while (position.y != destination.y)
         {
-            currentPos += direction;
-
-            for(int k = 0; k < corridorWidth; k++) 
+            if (destination.y > position.y)
             {
-                for(int j = 0; j < corridorWidth; j++) 
+                position += Vector2Int.up;
+            }
+            else if (destination.y < position.y)
+            {
+                position += Vector2Int.down;
+            }
+            for (int k = 0; k < corridorWidth; k++)
+            {
+                for (int j = 0; j < corridorWidth; j++)
                 {
-                    var offset = new Vector2Int(k,j); 
+                    var offset = new Vector2Int(k, j);
 
-                    corridor.Add(currentPos+offset);
+                    corridor.Add(position + offset);
+                }
+            }
+        }
+        while (position.x != destination.x)
+        {
+            if (destination.x > position.x)
+            {
+                position += Vector2Int.right;
+            }
+            else if (destination.x < position.x)
+            {
+                position += Vector2Int.left;
+            }
+            for (int k = 0; k < corridorWidth; k++)
+            {
+                for (int j = 0; j < corridorWidth; j++)
+                {
+                    var offset = new Vector2Int(k, j);
+
+                    corridor.Add(position + offset);
                 }
             }
         }
 
         return corridor;
     }
-
     /// <summary>
     /// Assist in the generation of rooms, by splitting them from a big room into smaller ones.
     /// FIFO Algorithm, that deals with first room, spits back out, rinse and repeat.
@@ -137,45 +161,28 @@ public static class ProcedureAlgorithm
         roomsQueue.Enqueue(room1);
         roomsQueue.Enqueue(room2);
     }
-}
 
-/// <summary>
-/// Direction Class that deals with different directions of the tileset, overall helper class.
-/// </summary>
-public static class Direction2D
-{
-    public static List<Vector2Int> cardinalDirections = new List<Vector2Int>
+    /// <summary>
+    /// Get our floor positions that will help with placing our walls and other objects
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public static HashSet<Vector2Int> GetFloorPositions(RoomMaker parameters, Vector2Int position)
     {
-        new Vector2Int(0,1),//UP
-        new Vector2Int(1,0),//RIGHT
-        new Vector2Int(0,-1),//DOWN
-        new Vector2Int(-1,0) //LEFT
-    };
+        var currentPos = position;
+        HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
+        for (int i = 0; i < parameters.iterations; i++)
+        {
+            var path = ProcedureAlgorithm.GetPath(currentPos, parameters.walkLength);
+            floorPositions.UnionWith(path); //remove dupes and ensure O(n)
 
-     public static List<Vector2Int> diagonalDirectionsList = new List<Vector2Int>
-    {
-        new Vector2Int(1,1), //UP-RIGHT
-        new Vector2Int(1,-1), //RIGHT-DOWN
-        new Vector2Int(-1, -1), // DOWN-LEFT
-        new Vector2Int(-1, 1) //LEFT-UP
-    };
-
-    public static List<Vector2Int> eightDirectionsList = new List<Vector2Int>
-    {
-        new Vector2Int(0,1), //UP
-        new Vector2Int(1,1), //UP-RIGHT
-        new Vector2Int(1,0), //RIGHT
-        new Vector2Int(1,-1), //RIGHT-DOWN
-        new Vector2Int(0, -1), // DOWN
-        new Vector2Int(-1, -1), // DOWN-LEFT
-        new Vector2Int(-1, 0), //LEFT
-        new Vector2Int(-1, 1) //LEFT-UP
-
-    };
-
-    public static Vector2Int GetRandomDirection()
-    {
-        return cardinalDirections[UnityEngine.Random.Range(0, cardinalDirections.Count)];
+            if (parameters.changePosPerIteration)
+            {
+                currentPos = floorPositions.ElementAt(Random.Range(0, floorPositions.Count));
+            }
+        }
+        return floorPositions;
     }
 
 }

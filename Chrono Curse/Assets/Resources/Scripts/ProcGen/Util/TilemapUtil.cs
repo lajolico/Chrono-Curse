@@ -19,7 +19,7 @@ public class TilemapUtil : MonoBehaviour
     private Tilemap floorTileMap, wallTileMap;
 
     [SerializeField]
-    private TileBase roomTile, floorTile, wallRight, wallLeft, wallBottom, wallFull,
+    private TileBase floorTile, wallRight, wallLeft, wallBottom, wallFull,
          wallInnerCornerDownLeft, wallInnerCornerDownRight,
          wallDiagonalCornerDownRight, wallDiagonalCornerDownLeft, wallDiagonalCornerUpRight, wallDiagonalCornerUpLeft;
 
@@ -35,9 +35,9 @@ public class TilemapUtil : MonoBehaviour
     // Method in charge of painting out layered tiles to the TileMap
     private void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tileMap, TileBase tile)
     {
-        foreach(var position in positions)
+         foreach(var position in positions)
         {
-            PaintSingleTile(tileMap, tile, position);
+            PaintSingleTile(tileMap, tile, position); 
         }
     }
 

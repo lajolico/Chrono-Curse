@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -22,8 +21,10 @@ public class PropManager : MonoBehaviour
     //Make sure we can find our roomManager, because it has all of our floors/rooms data
     private void Awake()
     {
-       //roomManager = FindObjectOfType<RoomManager>();
-    }    
+       roomManager = FindObjectOfType<RoomManager>();
+    }
+
+    public UnityEvent FinishedGeneration;
 
     /// <summary>
     /// Process our props and check with the different room tiles, what we need to place down props in our dungeon
@@ -59,9 +60,14 @@ public class PropManager : MonoBehaviour
             InitPropsPlacement(room, innerProps, room.TilesInsideRoom, PlacementOrigin.BottomLeft);
 
         }
+
+        Invoke("RunEvent", 1);
     }
 
-
+    public void RunEvent()
+    {
+        FinishedGeneration?.Invoke();
+    }
 
     /// <summary>
     /// Helper function that assists with placing our props in each room.

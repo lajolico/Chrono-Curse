@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 
 /// <summary>
@@ -37,9 +39,15 @@ public class Room
     //Track our prop locations and data;
     public HashSet<Vector2Int> PropPositions { get; private set; } = new HashSet<Vector2Int>();
     public List<GameObject> PropListReference { get; private set; } = new List<GameObject>();
-    
+
+    //Used for entity spawn locations, i.e. exit portal, enemies, and the player
+    public List<Vector2Int> SpawnPositions { get; set; } = new List<Vector2Int>();
+
     //Holds the about of enemies in each room and what type
     public List<GameObject> EnemiesInRoom { get; private set; } = new List<GameObject>();
+
+    //Amount of enemies we want in rooms that don't have a set number of enemies
+    public int EnemiesPerRoom { get; set; } = Random.Range(1, 5);
 
 
     //Constructor to be used in other portions of our scripts, specifically Dungeon Generator

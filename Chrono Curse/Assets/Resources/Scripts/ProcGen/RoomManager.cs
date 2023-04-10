@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -18,6 +19,10 @@ public class RoomManager : MonoBehaviour
     public HashSet<Vector2Int> Walls = new HashSet<Vector2Int>();
 
     public GameObject PlayerReference { get; set; }
+
+    public GameObject ExitReference { get; set; }
+
+    public GameObject BossReference { get; set; }
 
     //Reset our dungeon and how we interact with it.
     public void Reset()
@@ -41,6 +46,8 @@ public class RoomManager : MonoBehaviour
         Corridors = new();
         Walls = new();
         Destroy(PlayerReference);
+        Destroy(ExitReference);
+        Destroy(BossReference);
     }
 
     /// <summary>
@@ -80,8 +87,6 @@ public class RoomManager : MonoBehaviour
     /// This assists in item/prop placing later on in the dungeon levels
     /// </summary>
     /// 
-
-    
     public void GatherRoomData()
     {
         foreach (Room room in Rooms)
@@ -154,6 +159,18 @@ public class RoomManager : MonoBehaviour
         if (showGizmo == false)
             return;
 
+        Color color = Color.blue;
+        color.a = 0.3f;
+        Gizmos.color = color;
+
+        foreach (Room room in Rooms)
+        {
+            foreach (Vector2Int pos in room.FloorTiles)
+            {
+                Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
+            }
+        }
+
         /*
         //Get our corridors and paint them for development
         Gizmos.color = Color.black;
@@ -163,6 +180,30 @@ public class RoomManager : MonoBehaviour
         }
         */
     }
+
+
+    public void SetRoomTypes(List<Room> rooms)
+    {
+         for(int i = 0; i < rooms.Count; i++) 
+         {
+
+            Room room = rooms[i];
+
+            if(i==0)
+            {
+                room.roomType = Room.RoomType.Entrance;
+            }else if(i == rooms.Count - 1)
+            {
+                room.roomType = Room.RoomType.Exit;
+            }else
+            {
+                room.roomType = (Room.RoomType)Random.Range(0, 2);
+            }
+         }
+    }
+
+    
+
 }
 
  

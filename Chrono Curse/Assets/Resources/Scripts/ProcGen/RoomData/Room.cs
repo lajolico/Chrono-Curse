@@ -10,8 +10,14 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class Room
 {
+    public enum RoomType { Normal, Important, Empty, Entrance, Exit }
+
     //Where are our rooms located at? Specifically used for finding different rooms in relation to eachother.
     public Vector2Int RoomCenter { get; private set; }
+
+    public RoomType roomType = RoomType.Normal;
+
+    //Set our room types
     
     //Get our floor tiles in a specific room
     public HashSet<Vector2Int> FloorTiles { get; private set; } = new HashSet<Vector2Int>();
@@ -35,7 +41,6 @@ public class Room
 
     public HashSet<Vector2Int> WallsTop { get; private set; } = new HashSet<Vector2Int>();
 
-
     //Track our prop locations and data;
     public HashSet<Vector2Int> PropPositions { get; private set; } = new HashSet<Vector2Int>();
     public List<GameObject> PropListReference { get; private set; } = new List<GameObject>();
@@ -49,7 +54,6 @@ public class Room
 
     //Amount of enemies we want in rooms that don't have a set number of enemies
     public int NumberOfEnemiesPerRoom { get; set; } = Random.Range(1, 5);
-
 
     //Constructor to be used in other portions of our scripts, specifically Dungeon Generator
     public Room(Vector2Int roomCenter, HashSet<Vector2Int> floorTilePositions)

@@ -4,16 +4,16 @@ using UnityEngine;
 using Cinemachine;
 using System.Linq;
 using System;
+using Random = UnityEngine.Random;
+using UnityEditor;
 
 public class EntitySpawner : MonoBehaviour
 {
 
 
     [SerializeField]
-    private GameObject enemyPrefab, playerPrefeb;
-
-    [SerializeField]
-    private int playerRoomIndex = 0;
+    private GameObject enemyPrefab, playerPrefab, exitPrefab, bossEnemyPrefab;
+     
     [SerializeField]
     private CinemachineVirtualCamera vCamera;
 
@@ -40,10 +40,8 @@ public class EntitySpawner : MonoBehaviour
     private void PlaceEntities()
     {
         //Get the count of our rooms to loop through start spawning our player and enemies
-        for (int i = 0; i < roomManager.Rooms.Count; i++)
+        foreach (Room room in roomManager.Rooms)
         {
-            Room room = roomManager.Rooms[i];
-
             //Start generating the locations for our dictionary to be used in our pathfinder
             SpawnValidatorAlgorithm spawnGraph = new SpawnValidatorAlgorithm(room.FloorTiles);
 
@@ -58,39 +56,102 @@ public class EntitySpawner : MonoBehaviour
             //Positions that we can reach + path == positions where we can place enemies
             room.PossibleSpawnPostions = floorMap.Keys.OrderBy(x => Guid.NewGuid()).ToList();
 
+            room.PossibleSpawnPostions.Remove(room.RoomCenter);
 
-            if (i != playerRoomIndex)
-            {
-                PlaceEnemies(room, room.NumberOfEnemiesPerRoom);
-            }
+            SpawnEnemies(room);
 
-            if (i == playerRoomIndex)
+            if (room.roomType == Room.RoomType.Entrance)
             {
-                GameObject player = Instantiate(playerPrefeb);
+                GameObject player = Instantiate(playerPrefab);
                 player.transform.localPosition = room.RoomCenter + Vector2.one * 0.5f;
                 vCamera.Follow = player.transform;
                 vCamera.LookAt = player.transform;
                 roomManager.PlayerReference = player;
             }
+
+            if(room.roomType == Room.RoomType.Exit)
+            {
+                GameObject exit = Instantiate(exitPrefab);
+                exit.transform.localPosition = room.RoomCenter + Vector2.one * 0.5f;
+                roomManager.ExitReference = exit;
+            }
         }
     }
-
-
-    private void PlaceEnemies(Room room, int amount)
+    /// <summary>
+    /// Spawns enemies in a room based on its RoomType.
+    /// </summary>
+    /// <param name="room">The Room object to spawn enemies in.</param>
+    private void SpawnEnemies(Room room)
     {
-        for (int i = 0; i < amount; i++)
+        //TODO, remove this and update it with the GM's level 
+        int playerLevel = 5;
+
+        switch (room.roomType)
         {
-           
-            GameObject enemy = Instantiate(enemyPrefab);
-            enemy.transform.localPosition = room.PossibleSpawnPostions[i] + Vector2.one * 0.5f;
-            room.EnemiesInRoom.Add(enemy);
-            //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
-            room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
+            case Room.RoomType.Normal:
+                // Spawn a random number of enemies based on the player's level
+                int numEnemies = Random.Range(playerLevel, playerLevel + 3);
+                for (int i = 0; i < numEnemies; i++)
+                {
+                    if(room.PossibleSpawnPostions.Count <= i)
+                    {
+                        return;
+                    }
+                    // Spawn enemy prefab
+                    GameObject enemy = Instantiate(enemyPrefab, room.PossibleSpawnPostions[i] + Vector2.one * 0.5f, Quaternion.identity);
+                    room.EnemiesInRoom.Add(enemy);
+                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
+                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
+                }
+                break;
+            case Room.RoomType.Important:
+                // Spawn more enemies than normal rooms
+                int numImportantEnemies = Random.Range(playerLevel + 2, playerLevel + 5);
+                for (int i = 0; i < numImportantEnemies; i++)
+                {
+
+                    if (room.PossibleSpawnPostions.Count <= i)
+                    {
+                        return;
+                    }
+                    // Spawn enemy prefab
+                    GameObject enemy = Instantiate(enemyPrefab);
+                    enemy.transform.localPosition = room.PossibleSpawnPostions[i] + Vector2.one * 0.5f;
+                    room.EnemiesInRoom.Add(enemy);
+                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
+                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
+                }
+                break;
+            case Room.RoomType.Exit:
+                GameObject boss = Instantiate(bossEnemyPrefab, room.RoomCenter + Vector2.one * 0.8f, Quaternion.identity);
+                roomManager.BossReference = boss;
+
+                int numExitEnemies = Random.Range(playerLevel + 2, playerLevel + 8);
+
+                for (int i = 0; i < numExitEnemies; i++) 
+                {
+                    if (room.PossibleSpawnPostions.Count <= i)
+                    {
+                        return;
+                    }
+                    // Spawn enemy prefab
+                    GameObject enemy = Instantiate(enemyPrefab, room.PossibleSpawnPostions[i] + Vector2.one * 0.5f, Quaternion.identity);
+                    room.EnemiesInRoom.Add(enemy);
+                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
+                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
+                }
+                break;
+            case Room.RoomType.Empty:
+                //No enemies
+                break;
+            case Room.RoomType.Entrance:
+                //No enemies
+                break;
+            default:
+                Debug.LogError("Invalid room type.");
+                break;
         }
-
-
     }
-        
     /// <summary>
     /// Visually help see where everything spawns, very helpful.
     /// </summary>

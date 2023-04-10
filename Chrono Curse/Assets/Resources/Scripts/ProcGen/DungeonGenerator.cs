@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.Events;
+using System;
 
 /// <summary>
 /// Generates our rooms and corridors, linking those rooms. Using the MapGenerator to assist in this.
@@ -91,19 +92,16 @@ public class DungeonGenerator : AbstractDungeons
         //Get all the positions of our RoomFloorTiles
         HashSet<Vector2Int> floor = roomManager.GetRoomFloorTiles();
         HashSet<Vector2Int> corridors = ConnectRooms(roomManager.GetRoomCenters());
-
-        //Get our room floor tiles so we can substract from the Set corridors
-        //HashSet<Vector2Int> tempRoomPositions = new HashSet<Vector2Int>(floor);
-
+        
         //Floor will unionwith Corridors for painting
         floor.UnionWith(corridors);
 
-        //For every position in our corridor positions subtract those that are in
-        //the rooms
-        //corridors.ExceptWith(tempRoomPositions);
 
         //Pass our corridor positions for use in our room Manager
         roomManager.Corridors.UnionWith(corridors);
+
+        //Set our room types and find  the locations of where our player and exit will spawn.
+        roomManager.SetRoomTypes(roomManager.Rooms);
 
         //Paint all of our tiles
         tilemapUtil.PaintFloorTiles(floor);
@@ -124,7 +122,7 @@ public class DungeonGenerator : AbstractDungeons
 
         while(roomCenters.Count > 0)
         {
-            Vector2Int closest = FindClosestPointTo(currentRoomCenter, roomCenters);
+            Vector2Int closest = DistanceUtil.FindClosestPointTo(currentRoomCenter, roomCenters);
             roomCenters.Remove(closest);
             HashSet<Vector2Int> newCorridor = ProcedureAlgorithm.GetCorridors(currentRoomCenter, closest,corridorWidth );
             currentRoomCenter = closest;
@@ -132,26 +130,6 @@ public class DungeonGenerator : AbstractDungeons
 
         }
         return corridors;
-    }
-
-    /*
-        Find the closest dungeon room point to that specific room. Loop through the roomCenters
-        Return the point back to ConnectRooms, where it will continue the algorithm
-    */
-    private Vector2Int FindClosestPointTo(Vector2Int currentRoomCenter, List<Vector2Int> roomCenters)
-    {
-        Vector2Int closest = Vector2Int.zero;
-        float distance = float.MaxValue;
-        foreach (var position in roomCenters)
-        {
-            float currentDistance = Vector2.Distance(position, currentRoomCenter);
-            if(currentDistance < distance)
-            {
-                distance = currentDistance;
-                closest = position;
-            }
-        }
-        return closest;
     }
 
     /// <summary>

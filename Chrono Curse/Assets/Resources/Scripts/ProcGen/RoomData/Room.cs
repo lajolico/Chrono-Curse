@@ -41,13 +41,14 @@ public class Room
     public List<GameObject> PropListReference { get; private set; } = new List<GameObject>();
 
     //Used for entity spawn locations, i.e. exit portal, enemies, and the player
-    public List<Vector2Int> SpawnPositions { get; set; } = new List<Vector2Int>();
+    public List<Vector2Int> PossibleSpawnPostions { get; set; } = new List <Vector2Int>();
 
     //Holds the about of enemies in each room and what type
     public List<GameObject> EnemiesInRoom { get; private set; } = new List<GameObject>();
+    public HashSet<Vector2Int> EnemySpawnPositions { get; private set; } = new HashSet<Vector2Int>();
 
     //Amount of enemies we want in rooms that don't have a set number of enemies
-    public int EnemiesPerRoom { get; set; } = Random.Range(1, 5);
+    public int NumberOfEnemiesPerRoom { get; set; } = Random.Range(1, 5);
 
 
     //Constructor to be used in other portions of our scripts, specifically Dungeon Generator

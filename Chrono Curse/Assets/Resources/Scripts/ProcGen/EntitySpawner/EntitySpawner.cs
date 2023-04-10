@@ -4,7 +4,6 @@ using UnityEngine;
 using Cinemachine;
 using System.Linq;
 using System;
-using UnityEngine.UIElements;
 
 public class EntitySpawner : MonoBehaviour
 {
@@ -22,9 +21,6 @@ public class EntitySpawner : MonoBehaviour
 
     [SerializeField]
     private bool showGizmo = false;
-
-    private GameObject player;
-    
      
     private void Awake()
     {
@@ -46,118 +42,143 @@ public class EntitySpawner : MonoBehaviour
         //Get the count of our rooms to loop through start spawning our player and enemies
         for (int i = 0; i < roomManager.Rooms.Count; i++)
         {
-
             Room room = roomManager.Rooms[i];
 
-            HashSet<Vector2Int> positions = GetSpawnPostions(room);
+            //Start generating the locations for our dictionary to be used in our pathfinder
+            SpawnValidatorAlgorithm spawnGraph = new SpawnValidatorAlgorithm(room.FloorTiles);
 
-            room.SpawnPositions = positions.OrderBy(x => Guid.NewGuid()).ToList();
+            //Grab only the rooms tiles WITHOUT intersecting the corridor paths. 
+
+            HashSet<Vector2Int> floors = new HashSet<Vector2Int>(room.FloorTiles);
+            floors.IntersectWith(roomManager.Corridors);
+
+            //Run the BFS to find all the tiles in the room accessible from the path
+            Dictionary<Vector2Int, Vector2Int> floorMap = spawnGraph.FindSpawnLocations(floors.First(), room.PropPositions);
+
+            //Positions that we can reach + path == positions where we can place enemies
+            room.PossibleSpawnPostions = floorMap.Keys.OrderBy(x => Guid.NewGuid()).ToList();
+
 
             if (i != playerRoomIndex)
             {
-                PlaceEnemies(room, 5);
+                PlaceEnemies(room, room.NumberOfEnemiesPerRoom);
             }
 
-            if (i == playerRoomIndex){
-                Debug.Log(i + " " + room.EnemiesInRoom.Count);
-
-                player = Instantiate(playerPrefeb);
+            if (i == playerRoomIndex)
+            {
+                GameObject player = Instantiate(playerPrefeb);
                 player.transform.localPosition = room.RoomCenter + Vector2.one * 0.5f;
                 vCamera.Follow = player.transform;
                 vCamera.LookAt = player.transform;
                 roomManager.PlayerReference = player;
-             }
+            }
         }
     }
 
 
     private void PlaceEnemies(Room room, int amount)
     {
-        for (int i = 0; i < room.SpawnPositions.Count; i++)
+        for (int i = 0; i < amount; i++)
         {
-            if (room.EnemiesInRoom.Count >= amount)
-            { 
-               return;
-            } 
-
-            if (!IsValidSpawnPosition(room.SpawnPositions[i], room))
-            {
-                return;
-            }
-
+           
             GameObject enemy = Instantiate(enemyPrefab);
-            enemy.transform.localPosition = room.RoomCenter + Vector2.one * 0.5f;
+            enemy.transform.localPosition = room.PossibleSpawnPostions[i] + Vector2.one * 0.5f;
             room.EnemiesInRoom.Add(enemy);
+            //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
+            room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
         }
+
+
     }
-
-    private bool IsValidSpawnPosition(Vector2Int spawnPosition, Room room)
-    {
-        // Check if the spawn position is on top of another enemy
-        foreach (GameObject enemy in room.EnemiesInRoom)
-        {
-            Vector2Int enemyPosition = new Vector2Int(Mathf.RoundToInt(enemy.transform.position.x), Mathf.RoundToInt(enemy.transform.position.y));
-
-            Vector2Int playerPosition = new Vector2Int(Mathf.RoundToInt(player.transform.position.x), Mathf.RoundToInt(player.transform.position.y));
-
-            if (Vector2Int.Distance(spawnPosition, enemyPosition) < 2)
-            {
-                return false;
-            }
-
-            if (Vector2Int.Distance(spawnPosition, playerPosition) < 1)
-            {
-                return false;
-            }
-
-        }
-
-        // Check if the spawn position is on top of or next to a prop
-        foreach (GameObject prop in room.PropListReference)
-        {
-            Vector2Int propPosition = new Vector2Int(Mathf.RoundToInt(prop.transform.position.x), Mathf.RoundToInt(prop.transform.position.y));
-
-            if (Vector2Int.Distance(spawnPosition, propPosition) < 2)
-            {
-                return false;
-            }
-
-            if (Mathf.Abs(spawnPosition.x - propPosition.x) <= 1 && Mathf.Abs(spawnPosition.y - propPosition.y) <= 1)
-            {
-                return false;
-            }
-        }
-
-
-
-        // If the spawn position is not on top of or next to any other objects, it is a valid spawn position
-        return true;
-    }
-
-    private HashSet<Vector2Int> GetSpawnPostions(Room room)
-    {
-        HashSet<Vector2Int> spawnPositions = new HashSet<Vector2Int>(room.FloorTiles);
-        spawnPositions.ExceptWith(room.PropPositions);
         
-        return spawnPositions;
-    }
-
-    
-
+    /// <summary>
+    /// Visually help see where everything spawns, very helpful.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         if (roomManager == null || showGizmo == false)
             return;
-        foreach (Room room in roomManager.Rooms)
+       
+        Color color = Color.green;
+        color.a = 0.3f;
+        Gizmos.color= color;
+ 
+        foreach(Room room in roomManager.Rooms)
         {
-            Color color = Color.green;
-            color.a = 0.3f;
-            Gizmos.color = color;
-
-            foreach (Vector2Int pos in room.SpawnPositions)
+            foreach (Vector2Int pos in  room.PossibleSpawnPostions)
             {
                 Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
             }
         }
+    }
+}
+
+/// <summary>
+/// The purpose of this class is to find spawn locations for our entities (enemies) and other objects
+/// </summary>
+internal class SpawnValidatorAlgorithm
+{
+    Dictionary<Vector2Int, List<Vector2Int>> graph = new Dictionary<Vector2Int, List<Vector2Int>>();
+
+    public SpawnValidatorAlgorithm(HashSet<Vector2Int> roomFloor)
+    {
+        foreach (Vector2Int pos in roomFloor)
+        {
+            List<Vector2Int> neighbours = new List<Vector2Int>();
+            foreach (Vector2Int direction in DirectionUtil.cardinalDirections)
+            {
+                Vector2Int newPos = pos + direction;
+                if (roomFloor.Contains(newPos))
+                {
+                    neighbours.Add(newPos);
+                }
+            }
+            graph.Add(pos, neighbours);
+        }
+    }
+
+    /// <summary>
+    /// Creates a map of reachable tiles in our dungeon. Will also assist in pathfinding for our enemies in their rooms.
+    /// </summary>
+    /// <param name="startPos">Door position or tile position on the path between rooms inside this room</param>
+    /// <param name="obstacles">Things, we do not want to spawn on</param>
+    /// <returns></returns>
+    public Dictionary<Vector2Int, Vector2Int> FindSpawnLocations(Vector2Int startPos, HashSet<Vector2Int> obstacles)
+    {
+        //Nodes that have yet to be explored in our dungeon
+        Queue<Vector2Int> unexploredNodes = new Queue<Vector2Int>();
+        unexploredNodes.Enqueue(startPos);
+
+        HashSet<Vector2Int> visitedNodes = new HashSet<Vector2Int>
+        {
+            startPos
+        };
+ 
+        Dictionary<Vector2Int, Vector2Int> map = new Dictionary<Vector2Int, Vector2Int>
+        {
+            { startPos, startPos }
+        };
+
+        while (unexploredNodes.Count > 0)
+        {
+            //Dequeue the node then put into our neighbors list
+            Vector2Int node = unexploredNodes.Dequeue();
+            List<Vector2Int> neighbours = graph[node];
+
+            //This algorithm tries to find a path between prop positions or obstacles
+            foreach (Vector2Int neighbourPosition in neighbours)
+            {
+             
+                if (visitedNodes.Contains(neighbourPosition) == false &&
+                    obstacles.Contains(neighbourPosition) == false)
+                {
+                    unexploredNodes.Enqueue(neighbourPosition);
+                    visitedNodes.Add(neighbourPosition);
+                    map[neighbourPosition] = node;
+                }
+            }
+        }
+
+        return map;
     }
 }

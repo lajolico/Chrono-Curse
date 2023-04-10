@@ -82,12 +82,13 @@ public class DungeonGenerator : AbstractDungeons
         List<BoundsInt> rooms = ProcedureAlgorithm.BSP(new BoundsInt((Vector3Int)startPos, new Vector3Int(    
             dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
 
-       
-        foreach (var room in rooms)
+
+        for(int i = 0; i < rooms.Count; i++)
         {
-            roomManager.Rooms.Add(GenerateRooms(rooms,(Vector2Int)Vector3Int.RoundToInt(room.center)));
+            roomManager.Rooms.Add(GenerateRooms(rooms[i], (Vector2Int)Vector3Int.RoundToInt(rooms[i].center)));
         }
 
+        //Get all the positions of our RoomFloorTiles
         HashSet<Vector2Int> floor = roomManager.GetRoomFloorTiles();
         HashSet<Vector2Int> corridors = ConnectRooms(roomManager.GetRoomCenters());
 
@@ -160,23 +161,22 @@ public class DungeonGenerator : AbstractDungeons
     /// <param name="roomsList"></param>
     /// <param name="roomCenter"></param>
     /// <returns></returns>
-    private Room GenerateRooms(List<BoundsInt> roomsList, Vector2Int roomCenter)
+    private Room GenerateRooms(BoundsInt room, Vector2Int roomCenter)
     {
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
-        for (int i = 0; i < roomsList.Count; i++)
+        
+        var roomBounds = room;
+        var roomBoundsXY = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
+        var roomFloor = ProcedureAlgorithm.GetFloorPositions(roomParams, roomBoundsXY);
+        foreach (var position in roomFloor)
         {
-            var roomBounds = roomsList[i];
-            var roomBoundsXY = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
-            var roomFloor = ProcedureAlgorithm.GetFloorPositions(roomParams, roomBoundsXY);
-            foreach (var position in roomFloor)
+            if(position.x >= (roomBounds.xMin + roomDistance) && position.x <= (roomBounds.xMax - roomDistance)
+                    && position.y >= (roomBounds.yMin - roomDistance) && position.y <= (roomBounds.yMax - roomDistance))
             {
-                if(position.x >= (roomBounds.xMin + roomDistance) && position.x <= (roomBounds.xMax - roomDistance)
-                        && position.y >= (roomBounds.yMin - roomDistance) && position.y <= (roomBounds.yMax - roomDistance))
-                {
-                    floor.Add(position);
-                }
+                floor.Add(position);
             }
         }
+       
         return new Room(roomCenter, floor);
     }
 

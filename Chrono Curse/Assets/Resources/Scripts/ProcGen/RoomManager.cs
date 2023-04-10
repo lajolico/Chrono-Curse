@@ -8,8 +8,6 @@ using UnityEngine.Rendering;
 
 public class RoomManager : MonoBehaviour
 {
-    
-
     public List<Room> Rooms { get; set; } = new List<Room>();
 
     [SerializeField]
@@ -156,59 +154,14 @@ public class RoomManager : MonoBehaviour
         if (showGizmo == false)
             return;
 
-
+        /*
         //Get our corridors and paint them for development
         Gizmos.color = Color.black;
         foreach (Vector2Int position in Corridors)
         {
             Gizmos.DrawCube(position + Vector2.one * 0.5f, Vector2.one);
         }
-
-        foreach ( Room room in Rooms)
-        {
-            
-            //Draw inner tiles
-            Gizmos.color = Color.yellow;
-            foreach (Vector2Int floorPosition in room.TilesInsideRoom)
-            {
-                Gizmos.DrawCube(floorPosition + Vector2.one * 0.5f, Vector2.one);
-            }
-
-            //Draw near wall tiles DOWN
-            Gizmos.color = Color.magenta;
-            foreach (Vector2Int position in room.WallsTop)
-            {
-                Gizmos.DrawCube(position + Vector2.one * 0.5f, Vector2.one);
-            }
-
-            //Draw near wall tiles LEFT
-            Gizmos.color = Color.cyan;
-            foreach (Vector2Int position in room.TilesNearLeftSide)
-            {
-                Gizmos.DrawCube(position + Vector2.one * 0.5f, Vector2.one);
-            }
-
-            Gizmos.color = Color.white;
-            foreach (Vector2Int floorPosition in room.TilesNearRightSide)
-            {
-
-                Gizmos.DrawCube(floorPosition + Vector2.one * 0.5f, Vector2.one);
-            }
-
-            //Draw near wall tiles DOWN
-            Gizmos.color = Color.green;
-            foreach (Vector2Int floorPosition in room.TilesNearBottomSide)
-            {
-                Gizmos.DrawCube(floorPosition + Vector2.one * 0.5f, Vector2.one);
-            }
-
-            //Draw near wall tiles CORNERS
-            Gizmos.color = Color.gray;
-            foreach (Vector2Int floorPosition in room.TilesNearUpperSide)
-            {
-                Gizmos.DrawCube(floorPosition + Vector2.one * 0.5f, Vector2.one);
-            }
-        }
+        */
     }
 }
 

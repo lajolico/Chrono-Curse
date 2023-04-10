@@ -250,8 +250,6 @@ public class PropManager : MonoBehaviour
 
             for (int i = 0; i < quantity; i++)
             {
-
-
                 if (!PlaceProp(room, prop, possiblePositions, origin))
                     break;
             }
@@ -261,10 +259,6 @@ public class PropManager : MonoBehaviour
 
     private void PlaceGameObject(Room room, Vector2Int position, Prop propToPlace)
     {
-
-        if (room.PropPositions.Contains(position))
-            return;
-
         //Our Prop itself
         GameObject propHolder = Instantiate(propPrefabParent);
 
@@ -295,7 +289,9 @@ public class PropManager : MonoBehaviour
 
         //Save the prop in the room data (so in the dunbgeon data)
 
+
         room.PropPositions.Add(position);
+        
         room.PropListReference.Add(propHolder);
     }
 

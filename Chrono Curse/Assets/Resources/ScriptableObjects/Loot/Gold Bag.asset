@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa79518f8507049418e147907a16a08a, type: 3}
+  m_Name: Gold Bag
+  m_EditorClassIdentifier: 
+  lootName: Gold Bag
+  sprite: {fileID: -1127033382, guid: e7ee3acf48295c240a8c23f7cad8c9a1, type: 3}
+  minAmount: 2
+  maxAmount: 3
+  rarityLevel: 0
+  minGoldAmount: 20
+  maxGoldAmount: 50

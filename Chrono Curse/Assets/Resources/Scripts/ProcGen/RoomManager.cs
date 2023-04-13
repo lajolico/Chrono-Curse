@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -45,7 +44,7 @@ public class RoomManager : MonoBehaviour
         Rooms = new();
         Corridors = new();
         Walls = new();
-        Destroy(PlayerReference);
+        PlayerManager.Instance.DestroyPlayer();
         Destroy(ExitReference);
         Destroy(BossReference);
     }
@@ -159,13 +158,13 @@ public class RoomManager : MonoBehaviour
         if (showGizmo == false)
             return;
 
-        Color color = Color.blue;
+        Color color = Color.green;
         color.a = 0.3f;
         Gizmos.color = color;
 
         foreach (Room room in Rooms)
         {
-            foreach (Vector2Int pos in room.FloorTiles)
+            foreach (Vector2Int pos in room.WallsTop)
             {
                 Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
             }
@@ -197,7 +196,7 @@ public class RoomManager : MonoBehaviour
                 room.roomType = Room.RoomType.Exit;
             }else
             {
-                room.roomType = (Room.RoomType)Random.Range(0, 2);
+                room.roomType = (Room.RoomType)Random.Range(0, 3);
             }
          }
     }

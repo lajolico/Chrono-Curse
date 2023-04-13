@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 
@@ -10,9 +11,12 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rb;
 
+    public Transform playerTransform;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerTransform = GetComponent<Transform>();
     }
 
     void Update()

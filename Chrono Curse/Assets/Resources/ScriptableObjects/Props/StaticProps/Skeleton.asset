@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fece6e6517894d24e9d32b15ac8f6b91, type: 3}
+  m_Name: Skeleton
+  m_EditorClassIdentifier: 
+  propSprite: {fileID: 1498224178, guid: e7ee3acf48295c240a8c23f7cad8c9a1, type: 3}
+  Size: {x: 1, y: 1}
+  hasCollider: 0
+  NearWallUpper: 0
+  NearWallBottom: 0
+  NearWallRight: 0
+  NearWallLeft: 0
+  Inner: 0
+  OnTopWalls: 1
+  Important: 0
+  Exit: 0
+  Entrance: 0
+  Normal: 1
+  Empty: 1
+  PlaceAsGroup: 0
+  GroupMinAmount: 1
+  GroupMaxAmount: 1
+  PlaceRandomly: 1
+  PlacementQuantity: 2

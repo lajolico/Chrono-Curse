@@ -61,7 +61,7 @@ public class SaveManager : MonoBehaviour
     {
         PlayerData playerData= PlayerManager.Instance.GetPlayerData();
 
-        SaveGameData saveData = new SaveGameData(playerData);
+        // SaveGameData saveData = new SaveGameData(playerData);
 
         string json = JsonUtility.ToJson(saveData);
 

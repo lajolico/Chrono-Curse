@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.2d.tilemap.extras": "2.2.4",
+    "com.unity.2d.tilemap.extras": "2.2.5",
     "com.unity.adaptiveperformance.samsung.android": "4.0.2",
     "com.unity.cinemachine": "2.8.9",
     "com.unity.collab-proxy": "1.17.7",

@@ -3,22 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Test
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - Obstacles
   - Water
   - UI
-  - Obstacle
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Traps
+  - Player
+  - Enemies
+  - Items
+  - Floor
+  - Walls
+  - Doors
   - 
   - 
   - 
@@ -39,6 +38,27 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UI
+    uniqueID: 1545737455
+    locked: 0
+  - name: Traps
+    uniqueID: 2923255445
+    locked: 0
+  - name: Player
+    uniqueID: 1993945171
+    locked: 0
+  - name: Dash
+    uniqueID: 1372871305
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemies
+    uniqueID: 1901795547
+    locked: 0
+  - name: Loot
+    uniqueID: 574586393
+    locked: 0
+  - name: World
+    uniqueID: 374297847
     locked: 0

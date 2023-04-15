@@ -10,6 +10,8 @@ public class LootManager : MonoBehaviour
     [SerializeField] private ObjectPooling lootPool;
     [SerializeField] private List<Loot> allLoot;
 
+    private LootManager() { }
+
     private void Awake()
     {
         if (Instance == null)
@@ -35,6 +37,7 @@ public class LootManager : MonoBehaviour
             newLoot.transform.position = position;
             newLoot.GetComponent<LootPickup>().SetLoot(loot);
             newLoot.SetActive(true);
+            newLoot.GetComponent<LootPickup>().CollectAfterDelay(0.1f);
             allLoot.Add(loot);
         }
     }
@@ -49,12 +52,13 @@ public class LootManager : MonoBehaviour
         {
             if(lootPickup.Loot.minGoldAmount> 0) 
             {
-                PlayerManager.Instance.UpdateGold(lootPickup.Loot.GenerateGoldAmount());
-                Debug.Log("Player Gold :" + PlayerManager.Instance.GetGold());
+                PlayerManager.Instance.SetGold(lootPickup.Loot.GenerateGoldAmount());
+                Debug.Log("Player Gold :" + PlayerManager.Instance.Gold);
             }
 
             allLoot.Remove(lootPickup.Loot);
             lootPool.ReturnObject(lootPickup.gameObject);
+            lootPickup.ResetState();
         }
     }
 }

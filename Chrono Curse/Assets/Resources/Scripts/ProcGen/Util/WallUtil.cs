@@ -16,10 +16,11 @@ public class WallUtil : MonoBehaviour
     public static void CreateWalls(HashSet<Vector2Int> floorPositions, TilemapUtil tilemap)
     {
         var wallPositions = GetWallPositions(floorPositions, DirectionUtil.eightDirectionsList);
-        roomManager.Walls.UnionWith(wallPositions);
         var cornerWallPositions = GetWallPositions(floorPositions, DirectionUtil.diagonalDirectionsList);
         SetWall(tilemap, wallPositions, floorPositions);
         SetCornerWalls(tilemap, cornerWallPositions, floorPositions);
+        roomManager.Walls.UnionWith(wallPositions);
+        roomManager.Walls.UnionWith(cornerWallPositions);
     }
 
     /// <summary>

@@ -17,8 +17,6 @@ public class Room
 
     public RoomType roomType = RoomType.Normal;
 
-    //Set our room types
-    
     //Get our floor tiles in a specific room
     public HashSet<Vector2Int> FloorTiles { get; private set; } = new HashSet<Vector2Int>();
 
@@ -43,7 +41,6 @@ public class Room
 
     //Track our prop locations and data;
     public HashSet<Vector2Int> PropPositions { get; private set; } = new HashSet<Vector2Int>();
-    public List<GameObject> PropListReference { get; private set; } = new List<GameObject>();
 
     //Used for entity spawn locations, i.e. exit portal, enemies, and the player
     public List<Vector2Int> PossibleSpawnPostions { get; set; } = new List <Vector2Int>();

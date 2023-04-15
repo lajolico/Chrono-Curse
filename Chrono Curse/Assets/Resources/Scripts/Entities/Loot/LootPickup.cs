@@ -13,6 +13,8 @@ public class LootPickup : MonoBehaviour
     private Vector2 originalPosition;
     private CircleCollider2D triggerCollider;
 
+    private bool canCollect = false;
+
     private void Start()
     {
         // Get the CircleCollider2D component of the loot object
@@ -51,22 +53,44 @@ public class LootPickup : MonoBehaviour
         }
     }
 
+    //Set the loot of from our LootContainer to our LootPickup
     public void SetLoot(Loot newLoot)
     {
         loot = newLoot;
         GetComponent<SpriteRenderer>().sprite = newLoot.Sprite;
     }
 
+    //Get and return our loot for use in the LootManager
     public Loot Loot
     {
         get { return loot; }
     }
 
+    /// <summary>
+    /// Specifically looking for the player, and to make sure that we can actually collect.
+    /// </summary>
+    /// <param name="other">Any object with a Collider2D</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && canCollect)
         {
             LootManager.Instance.CollectLoot(this);
         }
+    }
+
+    public void CollectAfterDelay(float delay)
+    {
+        StartCoroutine(DelayBeforeCollection(delay));
+    }
+
+    private IEnumerator DelayBeforeCollection(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        canCollect = true;
+    }
+
+    public void ResetState()
+    {
+        canCollect = false; 
     }
 }

@@ -13,10 +13,9 @@ public class LootContainer : MonoBehaviour
     [SerializeField]
     private LayerMask wallLayer;
 
-    [SerializeField] private float dropDistance = 0.5f;
-    [SerializeField] private float spreadRadius = 0.5f;
-    [SerializeField] private float dropOffset = 1f;
-
+    [SerializeField] private float dropDistance;
+    [SerializeField] private float spreadRadius;
+    [SerializeField] private float dropOffset;
 
     /// <summary>
     /// Drops loot from the lootItems list at the given position, with the specified amount.

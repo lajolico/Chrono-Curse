@@ -8,6 +8,8 @@ using UnityEngine.Rendering;
 
 public class RoomManager : MonoBehaviour
 {
+    public static RoomManager Instance { get; private set; }
+
     public List<Room> Rooms { get; set; } = new List<Room>();
 
     [SerializeField]
@@ -17,21 +19,28 @@ public class RoomManager : MonoBehaviour
 
     public HashSet<Vector2Int> Walls = new HashSet<Vector2Int>();
 
-    public GameObject PlayerReference { get; set; }
-
     public GameObject ExitReference { get; set; }
 
     public GameObject BossReference { get; set; }
+    private RoomManager() { }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     //Reset our dungeon and how we interact with it.
     public void Reset()
     {
         foreach (Room room in Rooms)
         {
-            foreach (var item in room.PropListReference)
-            {
-                Destroy(item);
-            }
             foreach (var item in room.EnemiesInRoom)
             {
                 Destroy(item);
@@ -162,14 +171,12 @@ public class RoomManager : MonoBehaviour
         color.a = 0.3f;
         Gizmos.color = color;
 
-        foreach (Room room in Rooms)
+       
+        foreach (Vector2Int pos in Walls)
         {
-            foreach (Vector2Int pos in room.WallsTop)
-            {
-                Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
-            }
+            Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
         }
-
+        
         /*
         //Get our corridors and paint them for development
         Gizmos.color = Color.black;

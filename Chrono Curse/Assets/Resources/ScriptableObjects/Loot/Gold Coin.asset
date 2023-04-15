@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootName: Gold Coin
   sprite: {fileID: 834089141, guid: 618ad7b3376508643a0edfe4215652c1, type: 3}
-  minAmount: 20
-  maxAmount: 50
+  minAmount: 5
+  maxAmount: 10
   rarityLevel: 0
-  minGoldAmount: 1
-  maxGoldAmount: 1
+  minGoldAmount: 10
+  maxGoldAmount: 15

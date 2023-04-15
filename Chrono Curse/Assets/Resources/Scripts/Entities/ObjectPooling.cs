@@ -8,7 +8,7 @@ public class ObjectPooling : MonoBehaviour
     private GameObject  prefab;
 
     [SerializeField]
-    private int poolSize = 30;
+    private int poolSize = 15;
 
     [SerializeField]
     private bool canGrow = true;

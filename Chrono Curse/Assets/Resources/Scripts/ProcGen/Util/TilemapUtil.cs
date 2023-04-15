@@ -26,6 +26,11 @@ public class TilemapUtil : MonoBehaviour
     [SerializeField]
     private List<TileBase> wallFront = new List<TileBase>();
 
+    public Tilemap FloorTilemap { get { return floorTileMap; } }
+
+    public Tilemap WallTilemap { get { return wallTileMap; } }
+
+
     //Helper function that allows other classes to pass their floorPositions to get painted
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {

@@ -5,12 +5,14 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.Events;
 using System;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Generates our rooms and corridors, linking those rooms. Using the MapGenerator to assist in this.
 /// </summary>
 public class DungeonGenerator : AbstractDungeons
 {
+    public static DungeonGenerator Instance { get; private set; }
 
     [SerializeField]
     protected RoomMaker roomParams;
@@ -25,6 +27,7 @@ public class DungeonGenerator : AbstractDungeons
     private int dungeonWidth = 60, dungeonHeight = 60;
    
 
+
     [SerializeField]
     [Range(1,3)]
     [Tooltip("The bigger the value, the more distance between rooms.")]
@@ -36,17 +39,31 @@ public class DungeonGenerator : AbstractDungeons
 
     public UnityEvent FinishedGeneration;
 
+    private HashSet<Vector2Int> dungeonFloorTiles = new HashSet<Vector2Int>();
+
+    private HashSet<Vector2Int> dungeonWallTiles = new HashSet<Vector2Int>();
+
+    private DungeonGenerator() { }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     /// <summary>
     /// Check if our required gameobjects are attacked to our DungeonGenerator Object
     /// Important ones such as DungeonManager and the TilempaUtil
     /// </summary>
     private void InitDungeon()
     {
-        roomManager = FindObjectOfType<RoomManager>();
-        if (roomManager == null)
-        {
-            roomManager = gameObject.AddComponent<RoomManager>();
-        }
+        roomManager = RoomManager.Instance;
 
         tilemapUtil = FindObjectOfType<TilemapUtil>();
         if (tilemapUtil == null)
@@ -63,6 +80,7 @@ public class DungeonGenerator : AbstractDungeons
         InitDungeon();
         tilemapUtil.Clear();
         roomManager.Reset();
+        PropManager.Instance.Reset();
         
         CreateRooms();
         roomManager.GatherRoomData();
@@ -96,7 +114,6 @@ public class DungeonGenerator : AbstractDungeons
         //Floor will unionwith Corridors for painting
         floor.UnionWith(corridors);
 
-
         //Pass our corridor positions for use in our room Manager
         roomManager.Corridors.UnionWith(corridors);
 
@@ -106,6 +123,10 @@ public class DungeonGenerator : AbstractDungeons
         //Paint all of our tiles
         tilemapUtil.PaintFloorTiles(floor);
         WallUtil.CreateWalls(floor, tilemapUtil);
+
+        //This is for our save file, where we reload the dungeon tiles
+        dungeonFloorTiles.UnionWith(floor);
+        dungeonWallTiles.UnionWith(RoomManager.Instance.Walls);
     }
 
     /// <summary>
@@ -156,6 +177,36 @@ public class DungeonGenerator : AbstractDungeons
         }
        
         return new Room(roomCenter, floor);
+    }
+
+   public DungeonData GetDungeonData()
+   {
+        DungeonData dungeonData = new DungeonData();
+
+        dungeonData.floorTiles = new List<TileSaveData>();
+        dungeonData.wallTiles = new List<TileSaveData>();
+
+        foreach(Vector3Int pos in dungeonFloorTiles)
+        {
+            TileBase tile = tilemapUtil.FloorTilemap.GetTile(pos);
+            if(tile != null)
+            {
+                TileSaveData tileData = new TileSaveData(pos, tile);
+                dungeonData.floorTiles.Add(tileData);
+            }
+        }
+
+        foreach (Vector3Int pos in dungeonWallTiles)
+        {
+            TileBase tile = tilemapUtil.WallTilemap.GetTile(pos);
+            if (tile != null)
+            {
+                TileSaveData tileData = new TileSaveData(pos, tile);
+                dungeonData.wallTiles.Add(tileData);
+            }
+        }
+
+        return dungeonData;
     }
 
 }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa79518f8507049418e147907a16a08a, type: 3}
-  m_Name: Gold Bag
+  m_Name: Mana Potion
   m_EditorClassIdentifier: 
-  lootName: Gold Bag
-  sprite: {fileID: -1127033382, guid: e7ee3acf48295c240a8c23f7cad8c9a1, type: 3}
-  minAmount: 2
-  maxAmount: 3
-  rarityLevel: 0
-  minGoldAmount: 30
-  maxGoldAmount: 60
+  lootName: Mana Potion
+  sprite: {fileID: -764463446, guid: 618ad7b3376508643a0edfe4215652c1, type: 3}
+  minAmount: 1
+  maxAmount: 1
+  rarityLevel: 1
+  minGoldAmount: 0
+  maxGoldAmount: 0

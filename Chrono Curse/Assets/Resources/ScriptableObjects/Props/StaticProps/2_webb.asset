@@ -24,11 +24,8 @@ MonoBehaviour:
   NearWallLeft: 0
   Inner: 0
   OnTopWalls: 0
-  Important: 1
-  Exit: 1
-  Entrance: 1
-  Normal: 1
-  Empty: 1
+  roomTypeRestricted: 0
+  allowedRoomTypes: 
   PlaceAsGroup: 0
   GroupMinAmount: 1
   GroupMaxAmount: 1

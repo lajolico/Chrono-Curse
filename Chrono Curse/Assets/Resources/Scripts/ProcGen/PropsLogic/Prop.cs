@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
 [CreateAssetMenu(fileName = "Prop", menuName = "ChronoCurse/Prop")]
 public class Prop : ScriptableObject
 {
@@ -23,12 +22,9 @@ public class Prop : ScriptableObject
     public bool Inner = false;
     public bool OnTopWalls = false;
 
-    [Space, Header("Place in RoomType")]
-    public bool Important = false;
-    public bool Exit = false;
-    public bool Entrance = false;
-    public bool Normal = false;
-    public bool Empty = false;
+    [Space, Header("Room Type Options")]
+    public bool roomTypeRestricted;
+    public List<Room.RoomType> allowedRoomTypes;
 
     [Space, Header("Group placement: ")]
     public bool PlaceAsGroup = false;

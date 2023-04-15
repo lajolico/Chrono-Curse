@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -10,7 +8,10 @@ using Random = UnityEngine.Random;
 
 public class PropManager : MonoBehaviour
 {
-    RoomManager roomManager;
+
+    public static PropManager Instance { get; private set; }
+
+    private static RoomManager roomManager = RoomManager.Instance;
 
     [SerializeField]
     private List<Prop> propsToPlace;
@@ -18,10 +19,23 @@ public class PropManager : MonoBehaviour
     [SerializeField]
     private GameObject propPrefabParent;
 
+    //All objects that have been spawned
+    [SerializeField]
+    private List<GameObject> allProps = new List<GameObject>();
+
+    private PropManager() { }
+
     //Make sure we can find our roomManager, because it has all of our floors/rooms data
     private void Awake()
     {
-       roomManager = FindObjectOfType<RoomManager>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public UnityEvent FinishedGeneration;
@@ -99,6 +113,11 @@ public class PropManager : MonoBehaviour
             //loop through our varied amount of props
             for (int i = 0; i < quantity; i++)
             {
+                // Check if the prop should be placed in specific room types
+                if (propToPlace.roomTypeRestricted && !propToPlace.allowedRoomTypes.Contains(room.roomType))
+                {
+                    continue; // Skip this prop if the room type is not allowed
+                }
 
                 //Order our new list by shuffling and convert to a list
                 List<Vector2Int> possiblePositions = tempPositions.OrderBy(x => Guid.NewGuid()).ToList();
@@ -232,8 +251,6 @@ public class PropManager : MonoBehaviour
         int quantity = new int();
 
         HashSet<Vector2Int> tempPositions = new HashSet<Vector2Int>(positions);
-        tempPositions.ExceptWith(roomManager.Corridors);
-        tempPositions.ExceptWith(room.PropPositions);
 
         List<Vector2Int> possiblePositions = tempPositions.OrderBy(x => Guid.NewGuid()).ToList();
 
@@ -249,6 +266,13 @@ public class PropManager : MonoBehaviour
 
             for (int i = 0; i < quantity; i++)
             {
+
+                // Check if the prop should be placed in specific room types
+                if (prop.roomTypeRestricted && prop.allowedRoomTypes.Contains(room.roomType))
+                {
+                    continue; // Skip this prop if the room type is not allowed
+                }
+
                 if (!PlaceProp(room, prop, possiblePositions, origin))
                     break;
             }
@@ -309,9 +333,8 @@ public class PropManager : MonoBehaviour
 
         room.PropPositions.Add(position);
         
-        room.PropListReference.Add(propHolder);
+        allProps.Add(propHolder);
     }
-
 
     /// <summary>
     /// Where to start placing the prop ex. start at BottomLeft corner and search.
@@ -325,4 +348,23 @@ public class PropManager : MonoBehaviour
         TopRight
     }
 
+    public void Reset()
+    {
+       foreach(GameObject prop in allProps)
+        {
+            Destroy(prop);
+        }
+    }
+
+    public PropData GetPropData()
+    {
+        PropData propData= new PropData();
+        propData.props = allProps;
+        return propData;
+    }
+
+    internal void LoadPropData(PropData propData)
+    {
+        
+    }
 }

@@ -6,9 +6,13 @@ using UnityEngine.UIElements;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
-     
-    public int Health { get; private set; }
-    public int Gold { get; private set; }
+
+    public int Health { get; private set; } = 100;
+    public int Gold { get; private set; } = 0;
+
+    public int Level { get; private set; } = 1;
+
+    public float Stamina { get; private set; } = 120.0f;
 
     [SerializeField]
     public GameObject playerPrefab;
@@ -98,20 +102,40 @@ public class PlayerManager : MonoBehaviour
     }
 
     // Public method to update the player's health
-    public void UpdateHealth(int amount)
+    public void SetHealth(int amount)
     {
         Health += amount;
     }
 
     // Public method to update the player's gold
-    public void UpdateGold(int amount)
+    public void SetGold(int amount)
     {
         Gold += amount;
     }
 
-    public int GetGold()
+    /// <summary>
+    /// Used in our SaveManager, will save the current stats of our player
+    /// </summary>
+    /// <returns>Returns PlayerData</returns>
+    public PlayerData GetPlayerData()
     {
-        return this.Gold;
+        PlayerData playerData = new PlayerData();
+        playerData.position = GetPlayerPosition();
+        playerData.health =  Health;
+        playerData.gold =  Gold;
+        playerData.stamina =  Stamina;
+        playerData.level =  Level;
+
+        return playerData;
+    }
+
+    public void LoadPlayerData (PlayerData playerData)
+    {
+        playerInstance.transform.position = playerData.position;
+        Health = playerData.health;
+        Gold = playerData.gold;
+        Stamina = playerData.stamina;
+        Level = playerData.level;  
     }
 
 }

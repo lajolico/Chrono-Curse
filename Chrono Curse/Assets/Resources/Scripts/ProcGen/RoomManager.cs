@@ -19,8 +19,6 @@ public class RoomManager : MonoBehaviour
 
     public HashSet<Vector2Int> Walls = new HashSet<Vector2Int>();
 
-    public GameObject ExitReference { get; set; }
-
     public GameObject BossReference { get; set; }
     private RoomManager() { }
 
@@ -54,7 +52,6 @@ public class RoomManager : MonoBehaviour
         Corridors = new();
         Walls = new();
         PlayerManager.Instance.DestroyPlayer();
-        Destroy(ExitReference);
         Destroy(BossReference);
     }
 

@@ -9,19 +9,29 @@ using Random = UnityEngine.Random;
 //Date: 1/21/2023
 //Purpose: Assists with Room Generation, then saves it as a scriptable object to be used in development of ProcGen
 
-public class RoomUtil : AbstractDungeons
+public class RoomUtil : MonoBehaviour
 {
 
+    [SerializeField]
+    private TilemapUtil tilemapUtil; 
 
     [SerializeField]
-    protected RoomMaker roomParams;
+    private RoomMaker roomParams;
 
-    protected override void RunProceduralGeneration()
+    private void Awake()
     {
         tilemapUtil = FindObjectOfType<TilemapUtil>();
+        if (tilemapUtil == null)
+        {
+            tilemapUtil = gameObject.AddComponent<TilemapUtil>();
+        }
+    }
+
+    public void RunProceduralGeneration()
+    {
         tilemapUtil.Clear();
 
-        HashSet<Vector2Int> floorPositions = ProcedureAlgorithm.GetFloorPositions(roomParams, startPos);
+        HashSet<Vector2Int> floorPositions = ProcedureAlgorithm.GetFloorPositions(roomParams, Vector2Int.zero);
         tilemapUtil.PaintFloorTiles(floorPositions);
 
     }

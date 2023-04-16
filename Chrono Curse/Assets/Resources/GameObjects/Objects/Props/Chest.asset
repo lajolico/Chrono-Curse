@@ -25,7 +25,7 @@ MonoBehaviour:
   Inner: 1
   OnTopWalls: 0
   roomTypeRestricted: 1
-  allowedRoomTypes: 010000000400000003000000
+  allowedRoomTypes: 0100000004000000
   PlaceAsGroup: 0
   GroupMinAmount: 1
   GroupMaxAmount: 1

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 using System.Linq;
 using System;
 using Random = UnityEngine.Random;
@@ -10,17 +9,17 @@ using UnityEditor;
 public class EntitySpawner : MonoBehaviour
 {
 
+    public static EntitySpawner Instance { get; private set; }
 
     [SerializeField]
     private GameObject enemyPrefab, exitPrefab, bossEnemyPrefab;
-     
-    [SerializeField]
-    private CinemachineVirtualCamera vCamera;
 
     RoomManager roomManager;
 
     [SerializeField]
     private bool showGizmo = false;
+
+    private EntitySpawner() { }
      
     private void Awake()
     {
@@ -35,6 +34,8 @@ public class EntitySpawner : MonoBehaviour
             return;
         } 
         PlaceEntities();
+        GameManager.Instance.SaveDungeon();
+
     }
 
     private void PlaceEntities()
@@ -64,15 +65,13 @@ public class EntitySpawner : MonoBehaviour
             {
                 PlayerManager.Instance.SpawnPlayer();
                 PlayerManager.Instance.SetPlayerPosition(room.RoomCenter + Vector2.one * 0.5f);
-                vCamera.Follow = PlayerManager.Instance.GetPlayerTransform();
-                vCamera.LookAt = PlayerManager.Instance.GetPlayerTransform();
+                PlayerManager.Instance.SetPlayerCamera();
             }
 
             if(room.roomType == Room.RoomType.Exit)
             {
-                GameObject exit = Instantiate(exitPrefab);
-                exit.transform.localPosition = room.RoomCenter + Vector2.one * 0.5f;
-                roomManager.ExitReference = exit;
+                ExitPoint.Instance.SpawnExitPoint();
+                ExitPoint.Instance.SetExitPosition(room.RoomCenter + Vector2.one * 0.5f);
             }
         }
     }
@@ -83,7 +82,7 @@ public class EntitySpawner : MonoBehaviour
     private void SpawnEnemies(Room room)
     {
         //TODO, remove this and update it with the GM's level 
-        int playerLevel = 5;
+        int playerLevel = PlayerManager.Instance.Level;
 
         switch (room.roomType)
         {
@@ -171,6 +170,13 @@ public class EntitySpawner : MonoBehaviour
             }
         }
     }
+
+    //TODO
+    internal void SetEnemyData()
+    {
+
+    }
+
 }
 
 /// <summary>

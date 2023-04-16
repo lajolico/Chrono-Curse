@@ -6,8 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    private bool isCrashSaveExists = false;
-    private string crashSaveFileName = "CrashSave.json";
+
+    private DungeonGenerator dungeonGenerator;
+
+    private PlayerData playerData;
+    private DungeonData dungeonData;
+    private PropData propData;
 
     public static GameManager Instance
     {
@@ -24,50 +28,69 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
 
-    private void Start()
-    {
-       
-    }
-
-    /// <summary>
-    /// In charge of reseting our game.
-    /// </summary>
-    public void ResetGame()
-    {
-
-    }
-
-    /// <summary>
-    /// Start out game
-    /// </summary>
-    public void StartGame()
+    public void LoadDungeonScene(bool startNewGame)
     {
         SceneManager.LoadScene("Dungeon");
-
-    } 
-
-    public void SaveGame()
-    {
-        //SaveManager.Instance.SaveGame();
+        if (startNewGame)
+        {
+            StartCoroutine(NewGameCoroutine());
+          
+        }
+        else
+        {
+            // Load the saved game data
+            StartCoroutine(LoadSavedGameCoroutine(SaveManager.Instance.LoadGame()));
+        }
     }
 
-    public void RestAreaStart()
+    public void DungeonComplete()
     {
-        SceneManager.LoadScene("RestArea");
+        LoadRestAreaScene();
     }
 
-    /// <summary>
-    /// End our game
-    /// </summary>
-    public void EndGame()
+    private void LoadRestAreaScene()
     {
         SceneManager.LoadScene("MainMenu");
+        playerData = PlayerManager.Instance.GetPlayerData();
+        SaveGameData saveData = new SaveGameData(playerData);
+        SaveManager.Instance.SaveGame(saveData);
+    }
+
+    public void PlayerDied()
+    {
+        SaveManager.Instance.DeleteSaveGame();
+        PlayerManager.Instance.ResetPlayerAttributes();
+
+        SceneManager.LoadScene("MainMenu"); //TODO you died scene
     }
 
 
+    private IEnumerator NewGameCoroutine()
+    {
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null || PropManager.Instance != null);
 
-        
+        DungeonGenerator.Instance.GenerateDungeon();
+    }
+
+    private IEnumerator LoadSavedGameCoroutine(SaveGameData saveData)
+    {
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null);
+        DungeonGenerator.Instance.SetDungeonData(saveData.dungeonData, saveData.propData);
+        PlayerManager.Instance.LoadPlayerData(saveData.playerData);
+        ExitPoint.Instance.LoadExitPoint(saveData.exitPointData);
+    }
+
+    public void SaveDungeon()
+    {
+        DungeonData dungeonData = DungeonGenerator.Instance.GetDungeonData();
+        PropData propData = PropManager.Instance.GetPropData();
+        PlayerData playerData = PlayerManager.Instance.GetPlayerData();
+        ExitPointData exitPointData = ExitPoint.Instance.GetExitPointData();
+
+        SaveGameData saveData = new SaveGameData(playerData, propData, dungeonData, exitPointData);
+        SaveManager.Instance.SaveGame(saveData);
+    }
+
 }

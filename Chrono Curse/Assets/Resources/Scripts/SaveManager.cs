@@ -29,88 +29,59 @@ public class SaveManager : MonoBehaviour
         savePath = Path.Combine(Application.persistentDataPath, saveFile);
     }
 
+    public SaveGameData LoadGame()
+    {
+        SaveGameData loadedGameData = null;
+        if (File.Exists(savePath))
+        {
+            try
+            {
+                string json = File.ReadAllText(savePath);
+                loadedGameData = JsonUtility.FromJson<SaveGameData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error loading game: " + e.Message);
+            }
+        }
+        return loadedGameData;
+    }
+
+    public void DeleteSaveGame()
+    {
+        if (File.Exists(savePath))
+        {
+            File.Delete(Application.persistentDataPath + saveFile);
+        }
+    }
+
+    public bool SaveFileExists()
+    {
+        if(File.Exists(savePath))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     //Disallow external implementation of our class
     private SaveManager() { }
 
-    public void SaveGameOnExit()
+    public void SaveGame(SaveGameData saveData)
     {
-        PlayerData playerData = PlayerManager.Instance.GetPlayerData();
-        PropData propData = PropManager.Instance.GetPropData();
-        DungeonData dungeonData = DungeonGenerator.Instance.GetDungeonData();
 
-        SaveGameData saveData = new SaveGameData(playerData, propData, dungeonData);
-
-        if (propData != null)
+        if (File.Exists(savePath))
         {
-            saveData.propData = propData;
+            // If the save file already exists, load the existing data and overwrite the playerData portion
+            string existingData = File.ReadAllText(savePath);
+            SaveGameData saveGameData = JsonUtility.FromJson<SaveGameData>(existingData);
+            saveGameData.playerData = saveData.playerData;
         }
-
-        if (dungeonData != null)
-        {
-            saveData.dungeonData = dungeonData;
-        }
-
-        // Convert the SaveGameData to a JSON string
-        string json = JsonUtility.ToJson(saveData);
-
-        // Save the JSON string to a file
-        File.WriteAllText(savePath, json);
-    }
-
-    public void SaveGame(string fileName, SaveGameData saveData)
-    {
-        PlayerData playerData= PlayerManager.Instance.GetPlayerData();
-
-        SaveGameData saveData = new SaveGameData(playerData);
 
         string json = JsonUtility.ToJson(saveData);
 
         File.WriteAllText(savePath, json);
-    }
-
-    public void LoadGame(string fileName)
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, fileName);
-
-        if (File.Exists(filePath))
-        {
-            string json = File.ReadAllText(filePath);
-            SaveGameData saveData = JsonUtility.FromJson<SaveGameData>(json);
-
-            // Load player data
-            if (saveData.playerData != null)
-            {
-                PlayerManager.Instance.LoadPlayerData(saveData.playerData);
-            }
-            else
-            {
-                Debug.Log("No player data found in save file.");
-            }
-
-            // Load dungeon data
-            if (saveData.dungeonData != null)
-            {
-                //DungeonGenerator.Instance.LoadRooms(saveData.dungeonData.rooms);
-            }
-            else
-            {
-                Debug.Log("No dungeon data found in save file.");
-            }
-
-            // Load prop data
-            if (saveData.propData != null)
-            {
-                PropManager.Instance.LoadPropData(saveData.propData);
-            }
-            else
-            {
-                Debug.Log("No prop data found in save file.");
-            }
-        }
-        else
-        {
-            Debug.Log("Save file does not exist.");
-        }
     }
 }
 
@@ -118,14 +89,16 @@ public class SaveManager : MonoBehaviour
 public class SaveGameData
 {
     public PlayerData playerData;
+    public ExitPointData exitPointData;
     public PropData propData;
     public DungeonData dungeonData;
 
-    public SaveGameData (PlayerData playerData, PropData propData = null, DungeonData dungeonData = null)
+    public SaveGameData (PlayerData playerData, PropData propData = null, DungeonData dungeonData = null, ExitPointData exitPointData = null)
     {
         this.playerData = playerData;
         this.propData = propData;
         this.dungeonData = dungeonData;
+        this.exitPointData = exitPointData;
     }
 }
 
@@ -140,12 +113,6 @@ public class PlayerData
     public float stamina;
     public int level;
     public Vector3 position;
-}
-
-[System.Serializable]
-public class PropData
-{
-    public List<GameObject> props = new List<GameObject>();
 }
 
 [System.Serializable]
@@ -167,4 +134,41 @@ public class TileSaveData
         this.tileBase = tileBase;
     }
 }
+
+[System.Serializable]
+public class PropData
+{
+    public List<PropInfo> propSaveData = new List<PropInfo>();
+}
+
+[System.Serializable]
+public class PropInfo
+{
+    public string prefabName;
+    public Vector3 position;
+    public Quaternion rotation;
+    public Sprite sprite;
+    public bool hasCollider;
+    public bool hasTrigger;
+    public List<string> scriptNames = new List<string>();
+    public Vector3 spritePosition;
+    public Vector2 ColliderSize;
+
+    public float triggerRadius;
+    public Vector2 triggerOffset;
+}
+
+
+[System.Serializable]
+public class ExitPointData
+{
+    public Vector3 position;  
+}
+
+
+public class EnemyData
+{ 
+    
+}
+
 

@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Cinemachine;
+
 
 public class PlayerManager : MonoBehaviour
 {
@@ -14,8 +15,13 @@ public class PlayerManager : MonoBehaviour
 
     public float Stamina { get; private set; } = 120.0f;
 
+    public bool isPlayerSpawned { get; private set; } = false;
+
     [SerializeField]
     public GameObject playerPrefab;
+
+    [SerializeField]
+    private CinemachineVirtualCamera vCamera;
 
     //Ensure that our player persists between scene changes
     private GameObject playerInstance;
@@ -129,13 +135,33 @@ public class PlayerManager : MonoBehaviour
         return playerData;
     }
 
+    /// <summary>
+    /// This is utilized when we want to reload our game from a SaveFile
+    /// </summary>
+    /// <param name="playerData">Our players data</param>
     public void LoadPlayerData (PlayerData playerData)
     {
-        playerInstance.transform.position = playerData.position;
+        SpawnPlayer();
+        SetPlayerPosition(playerData.position);
+        SetPlayerCamera();
+
         Health = playerData.health;
         Gold = playerData.gold;
         Stamina = playerData.stamina;
         Level = playerData.level;  
     }
 
+    public void ResetPlayerAttributes()
+    {
+        Health = 100;
+        Gold = 0;
+        Stamina = 100.0f;
+        Level = 1;
+    }
+
+    public void SetPlayerCamera()
+    {
+        vCamera.Follow = GetPlayerTransform();
+        vCamera.LookAt = GetPlayerTransform();
+    }
 }

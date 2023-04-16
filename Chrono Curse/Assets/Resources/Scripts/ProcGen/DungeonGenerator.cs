@@ -10,14 +10,12 @@ using UnityEngine.Tilemaps;
 /// <summary>
 /// Generates our rooms and corridors, linking those rooms. Using the MapGenerator to assist in this.
 /// </summary>
-public class DungeonGenerator : AbstractDungeons
+public class DungeonGenerator : MonoBehaviour
 {
     public static DungeonGenerator Instance { get; private set; }
 
     [SerializeField]
     protected RoomMaker roomParams;
-
-    private RoomManager roomManager;
 
     [SerializeField]
     private int minRoomWidth = 10, minRoomHeight = 10; 
@@ -25,8 +23,11 @@ public class DungeonGenerator : AbstractDungeons
     //How large our dungeon should be when spliting it into other rooms.
     [SerializeField]
     private int dungeonWidth = 60, dungeonHeight = 60;
-   
 
+    private TilemapUtil tilemapUtil;
+
+    [SerializeField]
+    protected Vector2Int startPos = Vector2Int.zero;
 
     [SerializeField]
     [Range(1,3)]
@@ -55,43 +56,46 @@ public class DungeonGenerator : AbstractDungeons
         {
             Destroy(gameObject);
         }
+       
     }
 
-    /// <summary>
-    /// Check if our required gameobjects are attacked to our DungeonGenerator Object
-    /// Important ones such as DungeonManager and the TilempaUtil
-    /// </summary>
-    private void InitDungeon()
-    {
-        roomManager = RoomManager.Instance;
 
-        tilemapUtil = FindObjectOfType<TilemapUtil>();
+    private void Start()
+    {
+        tilemapUtil = GetComponent<TilemapUtil>();
         if (tilemapUtil == null)
         {
             tilemapUtil = gameObject.AddComponent<TilemapUtil>();
         }
     }
+    /// <summary>
+    /// Reset our dungeon and clear it.
+    /// </summary>
+    internal void ResetDungeon()
+    {
+        tilemapUtil.Clear();
+        RoomManager.Instance.Reset();
+        PropManager.Instance.Reset();
+        PlayerManager.Instance.DestroyPlayer();
+        ExitPoint.Instance.DestroyExit();
+    }
+
 
     /// <summary>
     /// Entry point for our Dungeon Generator
     /// </summary>
-    protected override void RunProceduralGeneration()
+    public void GenerateDungeon()
     {
-        InitDungeon();
-        tilemapUtil.Clear();
-        roomManager.Reset();
-        PropManager.Instance.Reset();
-        
+        ResetDungeon();
         CreateRooms();
-        roomManager.GatherRoomData();
+        RoomManager.Instance.GatherRoomData();
         Invoke("RunEvent", 1);
     }
 
-    public void RunEvent()
+    private void RunEvent()
     {
         FinishedGeneration?.Invoke();
     }
-
 
     /// <summary>
     /// As the name says, create our rooms.
@@ -104,21 +108,21 @@ public class DungeonGenerator : AbstractDungeons
 
         for(int i = 0; i < rooms.Count; i++)
         {
-            roomManager.Rooms.Add(GenerateRooms(rooms[i], (Vector2Int)Vector3Int.RoundToInt(rooms[i].center)));
+            RoomManager.Instance.Rooms.Add(GenerateRooms(rooms[i], (Vector2Int)Vector3Int.RoundToInt(rooms[i].center)));
         }
 
         //Get all the positions of our RoomFloorTiles
-        HashSet<Vector2Int> floor = roomManager.GetRoomFloorTiles();
-        HashSet<Vector2Int> corridors = ConnectRooms(roomManager.GetRoomCenters());
+        HashSet<Vector2Int> floor = RoomManager.Instance.GetRoomFloorTiles();
+        HashSet<Vector2Int> corridors = ConnectRooms(RoomManager.Instance.GetRoomCenters());
         
         //Floor will unionwith Corridors for painting
         floor.UnionWith(corridors);
 
         //Pass our corridor positions for use in our room Manager
-        roomManager.Corridors.UnionWith(corridors);
+        RoomManager.Instance.Corridors.UnionWith(corridors);
 
         //Set our room types and find  the locations of where our player and exit will spawn.
-        roomManager.SetRoomTypes(roomManager.Rooms);
+        RoomManager.Instance.SetRoomTypes(RoomManager.Instance.Rooms);
 
         //Paint all of our tiles
         tilemapUtil.PaintFloorTiles(floor);
@@ -177,6 +181,33 @@ public class DungeonGenerator : AbstractDungeons
         }
        
         return new Room(roomCenter, floor);
+    }
+
+   public void SetDungeonData(DungeonData dungeonData, PropData propData)
+   {
+        ResetDungeon();
+
+        foreach (TileSaveData tileSaveData in dungeonData.floorTiles)
+        {
+            tilemapUtil.FloorTilemap.SetTile(tileSaveData.position, tileSaveData.tileBase);
+        }
+
+        // Load wall tiles
+        foreach (TileSaveData tileSaveData in dungeonData.wallTiles)
+        {
+            tilemapUtil.WallTilemap.SetTile(tileSaveData.position, tileSaveData.tileBase);
+
+            // Add colliders to the wall tiles
+            TilemapCollider2D tilemapCollider = tilemapUtil.WallTilemap.GetComponent<TilemapCollider2D>();
+            if (tilemapCollider != null)
+            {
+                tilemapCollider.usedByComposite = true;
+                tilemapCollider.isTrigger = false;
+                tilemapCollider.enabled = true;
+            }
+        }
+
+        PropManager.Instance.LoadPropData(propData);
     }
 
    public DungeonData GetDungeonData()

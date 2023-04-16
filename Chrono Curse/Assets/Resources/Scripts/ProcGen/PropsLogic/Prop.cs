@@ -11,7 +11,6 @@ public class Prop : ScriptableObject
     public Vector2Int Size = Vector2Int.one;
     public bool hasCollider = true;
     public bool isTrigger = false;
-    public bool hasSpecificPrefab = false;
     public GameObject prefab;
 
     [Space, Header("Placement type: ")]

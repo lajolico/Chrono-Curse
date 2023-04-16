@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 
 public class PropManager : MonoBehaviour
 {
-
     public static PropManager Instance { get; private set; }
 
     private static RoomManager roomManager = RoomManager.Instance;
@@ -284,7 +283,7 @@ public class PropManager : MonoBehaviour
     {
         GameObject propHolder;
 
-        if(propToPlace.hasSpecificPrefab && propToPlace.prefab != null)
+        if( propToPlace.prefab != null)
         {
             propHolder = Instantiate(propToPlace.prefab);
 
@@ -358,13 +357,102 @@ public class PropManager : MonoBehaviour
 
     public PropData GetPropData()
     {
-        PropData propData= new PropData();
-        propData.props = allProps;
+        PropData propData = new PropData();
+
+        foreach(GameObject prop in allProps)
+        {
+            PropInfo saveData = new PropInfo();
+            saveData.prefabName = prop.name;
+            saveData.position = prop.transform.localPosition;
+            saveData.rotation = prop.transform.localRotation;
+
+            // Get the sprite from the child object's sprite renderer
+            saveData.sprite = prop.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+
+            saveData.spritePosition = prop.GetComponentInChildren<SpriteRenderer>().transform.localPosition;
+
+            // Check if the prop has a collider
+            CapsuleCollider2D collider = prop.GetComponentInChildren<CapsuleCollider2D>();
+            if (collider != null)
+            {
+                saveData.hasCollider = true;
+                saveData.ColliderSize = collider.size;
+            }
+            else
+            {
+                saveData.hasCollider = false;
+            }
+
+            CircleCollider2D triggerCollider = prop.GetComponent<CircleCollider2D>();
+            if(triggerCollider != null)
+            {
+                saveData.hasTrigger = true;
+                saveData.triggerOffset = triggerCollider.offset;
+                saveData.triggerRadius = triggerCollider.radius;
+            }
+
+            propData.propSaveData.Add(saveData);
+        }
+
         return propData;
     }
 
     internal void LoadPropData(PropData propData)
     {
-        
+
+        foreach (PropInfo saveData in propData.propSaveData)
+        {
+            GameObject prefab = null;
+
+            if (saveData.prefabName.Contains("Chest"))
+            {
+                prefab = Resources.Load<GameObject>("GameObjects/Objects/Props/ChestProp");
+
+            }else
+            {
+                prefab = Resources.Load<GameObject>("GameObjects/Objects/Props/StaticProp");
+            }
+
+            if(prefab == null)
+            {
+                Debug.LogError("Failed to load prefab.");
+                return;
+            }
+
+            GameObject newPropParent = Instantiate(prefab);
+            newPropParent.transform.localPosition = saveData.position;
+            newPropParent.transform.localRotation = saveData.rotation;
+
+            SpriteRenderer propSpriteRenderer = newPropParent.GetComponentInChildren<SpriteRenderer>();
+            propSpriteRenderer.GetComponent<SpriteRenderer>().sprite = saveData.sprite;
+            propSpriteRenderer.transform.localPosition = saveData.spritePosition;
+
+            // Add a collider if the saved data indicated that it had one
+            if (saveData.hasCollider)
+            {
+                CapsuleCollider2D collider = propSpriteRenderer.gameObject.AddComponent<CapsuleCollider2D>();
+
+                //Reset at Vector2(0,0)
+                collider.offset = Vector2.zero;
+
+                if (propSpriteRenderer.sprite.bounds.size.x > propSpriteRenderer.sprite.bounds.size.y)
+                {
+                    collider.direction = CapsuleDirection2D.Horizontal;
+                }
+
+                Vector2 size = saveData.ColliderSize;
+                collider.size = size;
+            }
+
+            if(saveData.hasTrigger)
+            {
+                CircleCollider2D triggerCollider = newPropParent.AddComponent<CircleCollider2D>();
+                triggerCollider.isTrigger = true;
+                triggerCollider.radius = saveData.triggerRadius;
+                triggerCollider.offset = saveData.triggerOffset;
+            }
+
+            allProps.Add(newPropParent);
+        }
     }
 }

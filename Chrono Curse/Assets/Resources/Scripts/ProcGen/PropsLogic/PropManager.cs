@@ -406,11 +406,11 @@ public class PropManager : MonoBehaviour
 
             if (saveData.prefabName.Contains("Chest"))
             {
-                prefab = Resources.Load<GameObject>("GameObjects/Objects/Props/ChestProp");
+                prefab = Resources.Load<GameObject>("Entities/Objects/Props/ChestProp");
 
             }else
             {
-                prefab = Resources.Load<GameObject>("GameObjects/Objects/Props/StaticProp");
+                prefab = Resources.Load<GameObject>("Entities/Objects/Props/StaticProp");
             }
 
             if(prefab == null)

@@ -5,29 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-<<<<<<< HEAD
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 3a2ed3a83410e9147bb21e6736f76126
-  - enabled: 1
-    path: Assets/Scenes/Dungeon.unity
-    guid: 14d57f65773ea0c45bd04077f7ce7767
-  m_configObjects:
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: d79fc7282af28d84784ba28363a5514b, type: 2}
-    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 423601ee75578374494cf150dcadbb4b, type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 3440c03fc7a03d9439e7ae0f94a5dd65, type: 2}
-=======
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: d621e4f22fc744549a92df5d15324cac
   - enabled: 1
-    path: Assets/Scenes/TestingRoom.unity
-    guid: 26ef804af30da9b42b6f01c6f62a8a71
+    path: Assets/Scenes/Dungeon.unity
+    guid: 14d57f65773ea0c45bd04077f7ce7767
   - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: 6c327356b3173eb44985de93b8e430ff
-  m_configObjects: {}
->>>>>>> b4c17ded9aa8a8432ea2a6bc5b9cfe6dd5fb65c9
+    path: Assets/Scenes/RestArea.unity
+    guid: c25a8e9fbd33afc4b8f6a21cdc6d463d
+  m_configObjects:
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 423601ee75578374494cf150dcadbb4b, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 3440c03fc7a03d9439e7ae0f94a5dd65, type: 2}

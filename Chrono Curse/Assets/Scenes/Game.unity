@@ -263,10 +263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 770844728}
   moveSpeed: 5
-  dashed: 0
+  staminaBar: {fileID: 0}
   dashSpeed: 10
-  dashLength: 1
-  dashCooldown: 1
   idleAnimWait: 0.2
   move:
     m_Name: Move
@@ -295,6 +293,18 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  maxPlayerHealth: 100
+  currentPlayerHealth: 0
+  healthBar: {fileID: 0}
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  attackDamage: 40
+  attackRate: 2
+  nextAttackTime: 0
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  playerEffects: {fileID: 0}
 --- !u!50 &770844728
 Rigidbody2D:
   serializedVersion: 4

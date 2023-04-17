@@ -12,7 +12,7 @@ public class EntitySpawner : MonoBehaviour
     public static EntitySpawner Instance { get; private set; }
 
     [SerializeField]
-    private GameObject enemyPrefab, exitPrefab, bossEnemyPrefab;
+    private GameObject enemyPrefab, bossEnemyPrefab;
 
     RoomManager roomManager;
 
@@ -66,6 +66,7 @@ public class EntitySpawner : MonoBehaviour
                 PlayerManager.Instance.SpawnPlayer();
                 PlayerManager.Instance.SetPlayerPosition(room.RoomCenter + Vector2.one * 0.5f);
                 PlayerManager.Instance.SetPlayerCamera();
+                PlayerManager.Instance.SetPlayerInDungeon(true);
             }
 
             if(room.roomType == Room.RoomType.Exit)

@@ -41,29 +41,34 @@ public class GameManager : MonoBehaviour
         else
         {
             // Load the saved game data
-            StartCoroutine(LoadSavedGameCoroutine(SaveManager.Instance.LoadGame()));
+            StartCoroutine(LoadDungeonGameCoroutine(SaveManager.Instance.LoadDungeon(), SaveManager.Instance.LoadPlayerData()));
         }
     }
 
-    public void DungeonComplete()
+    public void LoadRestAreaScene()
     {
-        LoadRestAreaScene();
-    }
-
-    private void LoadRestAreaScene()
-    {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("RestArea");
+        SaveManager.Instance.DeleteDungeonSave();
+        if(SaveManager.Instance.isPlayerInRestArea())
+        {
+            PlayerManager.Instance.SpawnPlayer();
+        }
+        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, 1, 0));
+        PlayerManager.Instance.SetPlayerInDungeon(false);
         playerData = PlayerManager.Instance.GetPlayerData();
-        SaveGameData saveData = new SaveGameData(playerData);
-        SaveManager.Instance.SaveGame(saveData);
+        SavePlayerData saveData = new SavePlayerData(playerData);
+
+        SaveManager.Instance.SavePlayerData(saveData);
     }
 
     public void PlayerDied()
     {
-        SaveManager.Instance.DeleteSaveGame();
+        SaveManager.Instance.DeleteDungeonSave();
+        SaveManager.Instance.DeletePlayerSave();
         PlayerManager.Instance.ResetPlayerAttributes();
+        PlayerManager.Instance.SetPlayerInDungeon(false);
 
-        SceneManager.LoadScene("MainMenu"); //TODO you died scene
+        SceneManager.LoadScene("YouDied"); //TODO you died scene
     }
 
 
@@ -74,23 +79,28 @@ public class GameManager : MonoBehaviour
         DungeonGenerator.Instance.GenerateDungeon();
     }
 
-    private IEnumerator LoadSavedGameCoroutine(SaveGameData saveData)
+    private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData)
     {
         yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null);
-        DungeonGenerator.Instance.SetDungeonData(saveData.dungeonData, saveData.propData);
-        PlayerManager.Instance.LoadPlayerData(saveData.playerData);
-        ExitPoint.Instance.LoadExitPoint(saveData.exitPointData);
+        DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
+        ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);
+
+        PlayerManager.Instance.LoadPlayerData(savePlayerData.playerData);
+
     }
 
     public void SaveDungeon()
     {
         DungeonData dungeonData = DungeonGenerator.Instance.GetDungeonData();
         PropData propData = PropManager.Instance.GetPropData();
-        PlayerData playerData = PlayerManager.Instance.GetPlayerData();
         ExitPointData exitPointData = ExitPoint.Instance.GetExitPointData();
 
-        SaveGameData saveData = new SaveGameData(playerData, propData, dungeonData, exitPointData);
-        SaveManager.Instance.SaveGame(saveData);
+        SaveDungeonData saveData = new SaveDungeonData(propData, dungeonData, exitPointData);
+        SaveManager.Instance.SaveDungeonLevel(saveData);
+
+        PlayerData playerData = PlayerManager.Instance.GetPlayerData();
+        SavePlayerData playerSaveData = new SavePlayerData(playerData);
+        SaveManager.Instance.SavePlayerData(playerSaveData);
     }
 
 }

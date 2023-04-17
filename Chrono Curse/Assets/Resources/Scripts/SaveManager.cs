@@ -10,9 +10,13 @@ public class SaveManager : MonoBehaviour
 
     public static SaveManager Instance { get; private set; }
 
-    private string savePath;
+    private string dungeonSaveFile = "/dungeonsave.json";
 
-    private string saveFile = "savegame.json";
+    private string playerSaveFile = "/playerdata.json";
+
+    private static string dungeonSavePath;
+
+    private static string playerSavePath;
 
     private void Awake()
     {
@@ -26,18 +30,20 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        savePath = Path.Combine(Application.persistentDataPath, saveFile);
-    }
+        dungeonSavePath = Application.persistentDataPath + dungeonSaveFile;
 
-    public SaveGameData LoadGame()
+        playerSavePath = Application.persistentDataPath + playerSaveFile;
+     }
+
+    public SaveDungeonData LoadDungeon()
     {
-        SaveGameData loadedGameData = null;
-        if (File.Exists(savePath))
+        SaveDungeonData loadedGameData = null;
+        if (File.Exists(Application.persistentDataPath + dungeonSaveFile))
         {
             try
             {
-                string json = File.ReadAllText(savePath);
-                loadedGameData = JsonUtility.FromJson<SaveGameData>(json);
+                string json = File.ReadAllText(Application.persistentDataPath + dungeonSaveFile);
+                loadedGameData = JsonUtility.FromJson<SaveDungeonData>(json);
             }
             catch (System.Exception e)
             {
@@ -47,17 +53,43 @@ public class SaveManager : MonoBehaviour
         return loadedGameData;
     }
 
-    public void DeleteSaveGame()
+    public SavePlayerData LoadPlayerData()
     {
-        if (File.Exists(savePath))
+        SavePlayerData loadedGameData = null;
+        if (File.Exists(Application.persistentDataPath + playerSaveFile))
         {
-            File.Delete(Application.persistentDataPath + saveFile);
+            try
+            {
+                string json = File.ReadAllText(Application.persistentDataPath + playerSaveFile);
+                loadedGameData = JsonUtility.FromJson<SavePlayerData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error loading game: " + e.Message);
+            }
+        }
+        return loadedGameData;
+    }
+
+    public void DeleteDungeonSave()
+    {
+        if (File.Exists(dungeonSavePath))
+        {
+            File.Delete(Application.persistentDataPath + dungeonSaveFile);
         }
     }
 
-    public bool SaveFileExists()
+    public void DeletePlayerSave()
     {
-        if(File.Exists(savePath))
+        if (File.Exists(playerSavePath))
+        {
+            File.Delete(Application.persistentDataPath + playerSaveFile);
+        }
+    }
+
+    public bool DungeonSaveExists()
+    {
+        if(File.Exists(dungeonSavePath))
         {
             return true;
         }
@@ -65,40 +97,70 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
+    public bool isPlayerInRestArea()
+    {
+        if(File.Exists(playerSavePath))
+        {
+            PlayerData playerData = new PlayerData();
+            string existingData = File.ReadAllText(playerSavePath);
+            SavePlayerData savePlayerData = JsonUtility.FromJson<SavePlayerData>(existingData);
+            if(!savePlayerData.playerData.isPlayerInDungeon)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Disallow external implementation of our class
     private SaveManager() { }
 
-    public void SaveGame(SaveGameData saveData)
+    public void SavePlayerData(SavePlayerData newPlayerData)
     {
-
-        if (File.Exists(savePath))
+        if (File.Exists(playerSavePath))
         {
             // If the save file already exists, load the existing data and overwrite the playerData portion
-            string existingData = File.ReadAllText(savePath);
-            SaveGameData saveGameData = JsonUtility.FromJson<SaveGameData>(existingData);
-            saveGameData.playerData = saveData.playerData;
+            string existingData = File.ReadAllText(playerSavePath);
+            SavePlayerData savePlayerData = JsonUtility.FromJson<SavePlayerData>(existingData);
+            savePlayerData.playerData = newPlayerData.playerData;
         }
 
+        string json = JsonUtility.ToJson(newPlayerData);
+
+        File.WriteAllText(playerSavePath, json);
+    }
+
+    public void SaveDungeonLevel(SaveDungeonData saveData)
+    {
         string json = JsonUtility.ToJson(saveData);
 
-        File.WriteAllText(savePath, json);
+        File.WriteAllText(dungeonSavePath, json);
     }
 }
 
 [System.Serializable]
-public class SaveGameData
+public class SaveDungeonData
 {
-    public PlayerData playerData;
     public ExitPointData exitPointData;
     public PropData propData;
     public DungeonData dungeonData;
 
-    public SaveGameData (PlayerData playerData, PropData propData = null, DungeonData dungeonData = null, ExitPointData exitPointData = null)
+    public SaveDungeonData (PropData propData, DungeonData dungeonData, ExitPointData exitPointData)
     {
-        this.playerData = playerData;
         this.propData = propData;
         this.dungeonData = dungeonData;
         this.exitPointData = exitPointData;
+    }
+}
+
+[System.Serializable]
+public class SavePlayerData
+{
+    public PlayerData playerData;
+
+    public SavePlayerData(PlayerData playerData)
+    {
+        this.playerData = playerData;
     }
 }
 
@@ -108,6 +170,7 @@ public class SaveGameData
 [System.Serializable]
 public class PlayerData
 {
+    public bool isPlayerInDungeon;
     public int health;
     public int gold;
     public float stamina;

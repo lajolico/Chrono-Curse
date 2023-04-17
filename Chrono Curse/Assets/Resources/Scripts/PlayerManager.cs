@@ -10,17 +10,14 @@ public class PlayerManager : MonoBehaviour
 
     public int Health { get; private set; } = 100;
     public int Gold { get; private set; } = 0;
-
     public int Level { get; private set; } = 1;
-
     public float Stamina { get; private set; } = 120.0f;
 
-    public bool isPlayerSpawned { get; private set; } = false;
+    public bool isPlayerInDungeon { get; private set; } = false;
 
     [SerializeField]
     public GameObject playerPrefab;
-
-    [SerializeField]
+     
     private CinemachineVirtualCamera vCamera;
 
     //Ensure that our player persists between scene changes
@@ -41,6 +38,8 @@ public class PlayerManager : MonoBehaviour
             // If another instance of the class already exists, destroy this one
             Destroy(gameObject);
         }
+
+       
     }
 
     // Public method to get the player's position
@@ -131,6 +130,7 @@ public class PlayerManager : MonoBehaviour
         playerData.gold =  Gold;
         playerData.stamina =  Stamina;
         playerData.level =  Level;
+        playerData.isPlayerInDungeon = isPlayerInDungeon;
 
         return playerData;
     }
@@ -161,7 +161,13 @@ public class PlayerManager : MonoBehaviour
 
     public void SetPlayerCamera()
     {
+        vCamera = playerInstance.GetComponentInChildren<CinemachineVirtualCamera>();
         vCamera.Follow = GetPlayerTransform();
         vCamera.LookAt = GetPlayerTransform();
+    }
+
+    public void SetPlayerInDungeon(bool isInDungeon)
+    {
+        isPlayerInDungeon = isInDungeon;
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -9,28 +11,40 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        Text playButtonText = myPlayButton.GetComponentInChildren<Text>();
+        var playButtonText = myPlayButton.GetComponentInChildren<TextMeshProUGUI>();
 
-
-        if (SaveManager.Instance.SaveFileExists())
+        if (SaveManager.Instance.DungeonSaveExists() || SaveManager.Instance.isPlayerInRestArea())
         {
-            playButtonText.text = "Continue";
+            playButtonText.text = "CONTINUE";
         }
         else
         {
-            playButtonText.text = "Play";
+            playButtonText.text = "PLAY";
         }
 
     }
 
+    /// <summary>
+    /// Handle our Play Button Logic
+    /// </summary>
     public void OnPlayButtonClicked()
     {
-        if(SaveManager.Instance.SaveFileExists())
+        if (SaveManager.Instance.DungeonSaveExists())
         {
             GameManager.Instance.LoadDungeonScene(false);
-        }else
+
+        }else if(SaveManager.Instance.isPlayerInRestArea())
+        {
+            GameManager.Instance.LoadRestAreaScene();
+        }
+        else
         {
             GameManager.Instance.LoadDungeonScene(true);
         }
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
 }

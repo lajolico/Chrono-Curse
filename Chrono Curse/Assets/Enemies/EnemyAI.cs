@@ -14,12 +14,25 @@ public class EnemyAI : MonoBehaviour
     Path path;
     int currentWaypoint = 0;
     bool reachedEndOfPath = false;
+    public bool isInRange = false; // Player in range?
+
+    public float detectionRange = 10f; // Allows setting of player detection range
+    public float detectionCircleOffsetX = -.5f; // Allows setting of offset to make detection range centered on enemy
 
     Seeker seeker;
     Rigidbody2D rb;
 
     public Transform PigSmall;
 
+    // * Stuff for attacking player
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public int attackDamage = 40;
+    public float attackRate = 2f;
+    public float nextAttackTime = 0f;
+    public LayerMask playerLayer;
+    public bool attackPlayer = false;
+    public bool allowedToAttack = false;
     public int maxHealth = 100;
     int currentHealth;
 
@@ -35,13 +48,16 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        var circle = gameObject.GetComponent<CircleCollider2D>();
+        circle.radius = detectionRange;
+        circle.offset = new Vector2(0f, detectionCircleOffsetX);
+
         currentHealth = maxHealth;
 
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
 
         InvokeRepeating("UpdatePath",0f, .5f);
-        
     }
 
     void UpdatePath()
@@ -66,51 +82,119 @@ public class EnemyAI : MonoBehaviour
         myAnimator = smallPig.GetComponent<Animator>();
         mySpriteRenderer = smallPig.GetComponent<SpriteRenderer>(); // Used to make sprite disappear
 
-        if (path == null)
-        {
-            return;
-
+        if (Time.time >= nextAttackTime)
+        {        
+            allowedToAttack = true;
         }
 
-        if (currentWaypoint >= path.vectorPath.Count)
+        if (!attackPlayer)
         {
-            reachedEndOfPath = true;
-            return;
+
+            if (isInRange)
+            {
+
+                if (path == null)
+                {
+                    return;
+
+                }
+
+                if (currentWaypoint >= path.vectorPath.Count)
+                {
+                    reachedEndOfPath = true;
+                    return;
+                }
+                else
+                {
+                    reachedEndOfPath = false;
+                }
+
+                Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position);
+                Vector2 force = direction * speed;
+
+                rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
+
+                
+
+                float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
+
+                if (distance < nextWaypointDistance)
+                {
+                    currentWaypoint++;
+                }
+
+                if (rb.velocity[0] >= 1f) // Left
+                {
+                    EnemyAnimationController(1); // Run Anim
+                    PigSmall.localScale = new Vector3(-1f, 1f, 1f);
+                }
+                else if (rb.velocity[0] <= 1f) // Right
+                {
+                    EnemyAnimationController(1);// Run Anim
+                    PigSmall.localScale = new Vector3(1f, 1f, 1f);
+                }
+                else // Idle
+                {
+                    EnemyAnimationController(0);
+                }
+            }
+            else
+            {
+                StopChasingPlayer();
+            }
         }
-        else
+        else if (attackPlayer && allowedToAttack)
         {
-            reachedEndOfPath = false;
+            // Debug.Log("Here.......");
+            StopChasingPlayer();
+            Attack();
         }
-
-        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position);
-        Vector2 force = direction * speed;
-
-        rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
-
         
+    }
 
-        float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
+    void StopChasingPlayer()
+    {
+        EnemyAnimationController(0);
+        rb.velocity = new Vector2(0, 0);
+    }
 
-        if (distance < nextWaypointDistance)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
         {
-            currentWaypoint++;
+            isInRange = true;
+            // Debug.Log("Player is now in range of enemy");
         }
+    }
+    
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            isInRange = false;
+            // Debug.Log("Player is not in range of enemy");
+        }
+    }
 
-        if (rb.velocity[0] >= 1f) // Left
+    public void AttackingPlayer(bool attack)
+    {
+        attackPlayer = attack;
+        // Debug.Log(attackPlayer);
+    }
+
+    void Attack()
+    {
+        // myAnimator.SetTrigger("Brattack");
+        Debug.Log("Attacking Player bitch!~");
+        Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
+        foreach(Collider2D person in hitplayer)
         {
-            EnemyAnimationController(1); // Run Anim
-            PigSmall.localScale = new Vector3(-1f, 1f, 1f);
+            // Debug.Log("We hit " + person.name);
+            person.GetComponent<Player>().TakeDamage(attackDamage);
         }
-        else if (rb.velocity[0] <= 1f) // Right
-        {
-            EnemyAnimationController(1);// Run Anim
-            PigSmall.localScale = new Vector3(1f, 1f, 1f);
-        }
-        else // Idle
-        {
-            EnemyAnimationController(0);
-        }
-        
+        myAnimator.SetTrigger("Attack");
+        attackPlayer = false;
+        nextAttackTime = Time.time + 1f / attackRate;
     }
 
     public void TakeDamage(int damage)
@@ -123,7 +207,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void EnemyAnimationController(int animStatus)
+    public void EnemyAnimationController(int animStatus) // Sets run or idle animation
     {
         if (animStatus == 1)
         {
@@ -139,7 +223,7 @@ public class EnemyAI : MonoBehaviour
     void Death()
     {
         myAnimator.SetTrigger("Death");
-        Debug.Log("Deadeded");
+        // Debug.Log("Deadeded");
 
         GetComponent<Collider2D>().enabled = false;
     }

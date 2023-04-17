@@ -9,6 +9,29 @@ public class PigSmall : MonoBehaviour
     int currentHealth;
 
     public GameObject smallPig;
+    public GameObject enemyAI;
+
+    private bool isInRange = false;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            isInRange = true;
+            // Debug.Log("Attack!!!");
+            enemyAI.GetComponent<EnemyAI>().AttackingPlayer(isInRange);
+        }
+    }
+    
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            isInRange = false;
+            // Debug.Log("Not attacking...");
+            enemyAI.GetComponent<EnemyAI>().AttackingPlayer(isInRange);
+        }
+    }
 
     void Die()
     {

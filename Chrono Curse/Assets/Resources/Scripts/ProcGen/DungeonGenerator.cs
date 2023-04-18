@@ -81,22 +81,16 @@ public class DungeonGenerator : MonoBehaviour
         ExitPoint.Instance.DestroyExit();
     }
 
-    public void EnumerateDungeon()
-    {
-        StartCoroutine(GenerateDungeon());
-    }
-
     /// <summary>
     /// Entry point for our Dungeon Generator
     /// </summary>
-    public IEnumerator GenerateDungeon()
+    public void GenerateDungeon()
     {
         ResetDungeon();
         CreateRooms();
         RoomManager.Instance.GatherRoomData();
         Invoke("RunEvent", 1);
-        yield return new WaitForSeconds(1);
-    }
+     }
 
     private void RunEvent()
     {

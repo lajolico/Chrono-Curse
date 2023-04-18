@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitUntil(() => DungeonGenerator.Instance != null);
 
-        StartCoroutine(DungeonGenerator.Instance.GenerateDungeon());
+         DungeonGenerator.Instance.GenerateDungeon() ;
     }
 
     private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData)

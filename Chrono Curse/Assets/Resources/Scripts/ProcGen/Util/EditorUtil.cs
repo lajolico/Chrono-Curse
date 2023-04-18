@@ -31,7 +31,7 @@ public class EditorUtil : Editor
         {
             if (generator != null)
             {
-                generator.EnumerateDungeon();
+                generator.GenerateDungeon();
             }
             else if (roomGenerator != null)
             {

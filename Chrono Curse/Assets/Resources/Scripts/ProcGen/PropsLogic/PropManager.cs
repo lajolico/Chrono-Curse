@@ -99,6 +99,7 @@ public class PropManager : MonoBehaviour
         //loop through each of our Scriptable objects of props and set a random range to place them down inside our dungeon
         foreach (Prop propToPlace in props)
         {
+
             int quantity = new int();
 
             if(propToPlace.PlaceRandomly)
@@ -294,6 +295,7 @@ public class PropManager : MonoBehaviour
             propHolder = Instantiate(propPrefabParent);
         }
 
+
         SpriteRenderer propSpriteRenderer = propHolder.GetComponentInChildren<SpriteRenderer>();
 
         propSpriteRenderer.sprite = propToPlace.propSprite;
@@ -343,7 +345,6 @@ public class PropManager : MonoBehaviour
         //Save the prop in the room data (so in the dunbgeon data)
 
         room.PropPositions.Add(position);
-        
         allProps.Add(propHolder);
     }
 

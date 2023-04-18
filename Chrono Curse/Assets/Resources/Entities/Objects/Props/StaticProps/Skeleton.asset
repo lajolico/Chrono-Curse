@@ -16,7 +16,6 @@ MonoBehaviour:
   Size: {x: 1, y: 1}
   hasCollider: 0
   isTrigger: 0
-  hasSpecificPrefab: 0
   prefab: {fileID: 0}
   NearWallUpper: 0
   NearWallBottom: 0
@@ -25,7 +24,7 @@ MonoBehaviour:
   Inner: 0
   OnTopWalls: 1
   roomTypeRestricted: 1
-  allowedRoomTypes: 01000000
+  allowedRoomTypes: 0100000004000000
   PlaceAsGroup: 0
   GroupMinAmount: 1
   GroupMaxAmount: 1

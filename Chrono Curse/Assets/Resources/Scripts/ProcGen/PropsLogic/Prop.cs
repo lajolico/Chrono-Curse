@@ -13,6 +13,10 @@ public class Prop : ScriptableObject
     public bool isTrigger = false;
     public GameObject prefab;
 
+    [Space, Header("Prop Destruction")]
+    public bool Destructible;
+
+
     [Space, Header("Placement type: ")]
     public bool NearWallUpper = false;
     public bool NearWallBottom = false;

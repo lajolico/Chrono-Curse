@@ -86,7 +86,7 @@ public class EnemyAI : MonoBehaviour
 
         if (Time.time >= nextAttackTime)
         {        
-            Debug.Log("Time: " + Time.time + "nextAttackTime: " + nextAttackTime);
+            // Debug.Log("Time: " + Time.time + "nextAttackTime: " + nextAttackTime);
             allowedToAttack = true;
         }
 
@@ -166,7 +166,7 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            // Debug.Log("Player is a rat bitch");
+            Debug.Log("Player is a rat bitch");
         }
     }
     
@@ -233,6 +233,7 @@ public class EnemyAI : MonoBehaviour
 
     void Die()
     {
+        Debug.Log("dued");
         Destroy(mySpriteRenderer);
         // mySpriteRenderer.enabled = false;
     }

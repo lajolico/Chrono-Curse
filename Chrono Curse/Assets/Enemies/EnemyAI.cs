@@ -52,6 +52,8 @@ public class EnemyAI : MonoBehaviour
         circle.radius = detectionRange;
         circle.offset = new Vector2(0f, detectionCircleOffsetX);
 
+        // var attackSquare = smallPig.GetComponent<BoxCollider2D>();
+
         currentHealth = maxHealth;
 
         seeker = GetComponent<Seeker>();
@@ -84,6 +86,7 @@ public class EnemyAI : MonoBehaviour
 
         if (Time.time >= nextAttackTime)
         {        
+            Debug.Log("Time: " + Time.time + "nextAttackTime: " + nextAttackTime);
             allowedToAttack = true;
         }
 
@@ -140,12 +143,12 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
+                // Debug.Log("why we stopping...");
                 StopChasingPlayer();
             }
         }
         else if (attackPlayer && allowedToAttack)
         {
-            // Debug.Log("Here.......");
             StopChasingPlayer();
             Attack();
         }
@@ -158,16 +161,16 @@ public class EnemyAI : MonoBehaviour
         rb.velocity = new Vector2(0, 0);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            // Debug.Log("Player is now in range of enemy");
+            // Debug.Log("Player is a rat bitch");
         }
     }
     
-    private void OnTriggerExit2D(Collider2D collision)
+    void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -179,13 +182,11 @@ public class EnemyAI : MonoBehaviour
     public void AttackingPlayer(bool attack)
     {
         attackPlayer = attack;
-        // Debug.Log(attackPlayer);
     }
 
     void Attack()
     {
         // myAnimator.SetTrigger("Brattack");
-        Debug.Log("Attacking Player bitch!~");
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D person in hitplayer)
         {
@@ -193,7 +194,9 @@ public class EnemyAI : MonoBehaviour
             person.GetComponent<Player>().TakeDamage(attackDamage);
         }
         myAnimator.SetTrigger("Attack");
+        // Debug.Log(isInRange);
         attackPlayer = false;
+        allowedToAttack = false;
         nextAttackTime = Time.time + 1f / attackRate;
     }
 

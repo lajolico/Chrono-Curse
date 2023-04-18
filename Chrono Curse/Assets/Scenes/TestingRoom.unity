@@ -3618,7 +3618,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090277021}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.67, y: -3.9, z: 0}
+  m_LocalPosition: {x: 2.67, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3679,7 +3679,7 @@ MonoBehaviour:
   attackPoint: {fileID: 131789426}
   attackRange: 0.5
   attackDamage: 40
-  attackRate: 2
+  attackRate: 0.2
   nextAttackTime: 0
   playerLayer:
     serializedVersion: 2
@@ -7082,7 +7082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 16
   m_ScaleFactor: 1.75
   m_ReferenceResolution: {x: 800, y: 600}
@@ -7342,7 +7342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1842880964}
-  - component: {fileID: 1842880967}
+  - component: {fileID: 1842880969}
   - component: {fileID: 1842880966}
   - component: {fileID: 1842880965}
   - component: {fileID: 1842880968}
@@ -7440,21 +7440,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1842880967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842880963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bfdb2dd3a63d4c4cbb814da6efc41f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  smallPig: {fileID: 1842880963}
-  enemyAI: {fileID: 1090277021}
 --- !u!61 &1842880968
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7481,6 +7466,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.188202, y: 1.0583223}
   m_EdgeRadius: 0
+--- !u!114 &1842880969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842880963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bfdb2dd3a63d4c4cbb814da6efc41f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  smallPig: {fileID: 1842880963}
+  enemyAI: {fileID: 1090277021}
 --- !u!1 &1846093656
 GameObject:
   m_ObjectHideFlags: 0

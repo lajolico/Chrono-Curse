@@ -194,7 +194,6 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Taking stupid fucking damage retard");
         myAnimator.SetTrigger("Damaged");
         currentPlayerHealth -= damage;
         healthBar.SetHealth(currentPlayerHealth);

@@ -79,7 +79,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89a707fb-c0e3-49fe-9cd6-09a60d312e9f"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -166,7 +166,7 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isInRange = true;
-            Debug.Log("Player is a rat bitch");
+            Debug.Log(Time.time);
         }
     }
     
@@ -220,7 +220,6 @@ public class EnemyAI : MonoBehaviour
         {
             myAnimator.SetInteger("Status", 0);
         }
-
     }
 
     void Death()
@@ -233,7 +232,6 @@ public class EnemyAI : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("dued");
         Destroy(mySpriteRenderer);
         // mySpriteRenderer.enabled = false;
     }

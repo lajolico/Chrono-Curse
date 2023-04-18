@@ -168,3 +168,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55945ce3b899ab147aa09c295778d38a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractProp: 1

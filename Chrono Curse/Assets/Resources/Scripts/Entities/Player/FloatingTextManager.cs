@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class FloatingTextManager : MonoBehaviour
 {
     public static FloatingTextManager Instance { get; private set; }
 
-    public GameObject floatingTextPrefab;
-    public int poolSize = 10;
-    public Transform textParent;
-    private GameObjectPool pool;
+    [SerializeField] private ObjectPooling textPool;
+
+    private float displayTime = 0.9f;
 
     private void Awake()
     {
@@ -23,25 +23,27 @@ public class FloatingTextManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        pool = new GameObjectPool(floatingTextPrefab, textParent);
-
-        for(int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = pool.GetObject();
-            obj.SetActive(false);
-        }
     }
 
-    public void ShowFloatingText(string message, int count)
+    public IEnumerator ShowFloatingText(string message)
     {
         // Instantiate a new instance of the floatingText object
-        GameObject floatingText = pool.GetObject();
+        GameObject textObj = textPool.GetObject();
 
-        floatingText.transform.position = transform.position;
-        floatingText.GetComponentInChildren<TextMesh>().text = message + " x " + count;
-        floatingText.gameObject.SetActive(true);
+        // Set the spawn position to the player's position
+        Vector3 spawnPosition = PlayerManager.Instance.GetPlayerPosition();
 
-        pool.ReturnObject(floatingText);
+        // Add a random offset to the spawn position
+        float spawnRadius = 1.0f; // adjust this value to control the randomness
+        Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
+        spawnPosition += new Vector3(randomOffset.x, randomOffset.y, 0.0f);
+
+        textObj.SetActive(true);
+        textObj.transform.position = spawnPosition;
+        textObj.GetComponent<TextMesh>().text = message;
+
+        yield return new WaitForSeconds(displayTime);
+
+        textPool.ReturnObject(textObj);
     }
 }

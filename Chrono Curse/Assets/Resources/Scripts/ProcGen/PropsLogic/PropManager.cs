@@ -463,6 +463,7 @@ public class PropManager : MonoBehaviour
                 triggerCollider.isTrigger = true;
                 triggerCollider.radius = saveData.triggerRadius;
                 triggerCollider.offset = saveData.triggerOffset;
+                newPropParent.AddComponent<DestructibleObject>();
             }
 
             allProps.Add(newPropParent);

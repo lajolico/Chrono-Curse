@@ -8,13 +8,13 @@ public class ObjectPooling : MonoBehaviour
     private GameObject prefab;
 
     [SerializeField]
-    private int poolSize = 15;
+    private int poolSize = 10;
 
     [SerializeField]
     private bool canGrow = true;
 
     //Where are our pooled objects will go
-    private List<GameObject> pool = new List<GameObject>();
+    private List<GameObject> pool;
 
     /// <summary>
     /// Set up our objectPooling
@@ -61,7 +61,7 @@ public class ObjectPooling : MonoBehaviour
     /// <summary>
     /// Collect out gameOjbect and set it active to false, so we can use it later
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="obj">GameObject we want to set inactive</param>
     public void ReturnObject(GameObject obj)
     {
         obj.SetActive(false);

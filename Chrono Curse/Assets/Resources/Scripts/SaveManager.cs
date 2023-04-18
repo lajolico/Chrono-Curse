@@ -35,7 +35,7 @@ public class SaveManager : MonoBehaviour
         playerSavePath = Application.persistentDataPath + playerSaveFile;
      }
 
-    public SaveDungeonData LoadDungeon()
+    public SaveDungeonData GetDungeonData()
     {
         SaveDungeonData loadedGameData = null;
         if (File.Exists(Application.persistentDataPath + dungeonSaveFile))
@@ -53,7 +53,7 @@ public class SaveManager : MonoBehaviour
         return loadedGameData;
     }
 
-    public SavePlayerData LoadPlayerData()
+    public SavePlayerData GetPlayerData()
     {
         SavePlayerData loadedGameData = null;
         if (File.Exists(Application.persistentDataPath + playerSaveFile))
@@ -139,11 +139,12 @@ public class SaveManager : MonoBehaviour
 }
 
 [System.Serializable]
-public class SaveDungeonData
-{
+public class SaveDungeonData { 
+
+    public DungeonData dungeonData;
     public ExitPointData exitPointData;
     public PropData propData;
-    public DungeonData dungeonData;
+
 
     public SaveDungeonData (PropData propData, DungeonData dungeonData, ExitPointData exitPointData)
     {

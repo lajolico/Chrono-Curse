@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DestructibleObject : MonoBehaviour
 {
+    public bool isInteractProp = false;
     private int maxHealth;
     private int currentHealth;
 
@@ -20,7 +21,11 @@ public class DestructibleObject : MonoBehaviour
         {
             if(currentHealth <= 0 ) 
             {
-                GetComponent<LootContainer>().DropLoot(transform.position);
+                //This if statement ensures that we don't double drop loot, i.e. the chest, when it is destroyed.
+                if(!isInteractProp)
+                {
+                    GetComponent<LootContainer>().DropLoot(transform.position);
+                }
                 Destroy(gameObject);
             }
             else

@@ -37,7 +37,7 @@ public class LootManager : MonoBehaviour
             newLoot.transform.position = position;
             newLoot.GetComponent<LootPickup>().SetLoot(loot);
             newLoot.SetActive(true);
-            newLoot.GetComponent<LootPickup>().CollectAfterDelay(0.1f);
+            newLoot.GetComponent<LootPickup>().CollectAfterDelay(0.01f);
             allLoot.Add(loot);
         }
     }
@@ -56,7 +56,7 @@ public class LootManager : MonoBehaviour
                 Debug.Log("Player Gold :" + PlayerManager.Instance.Gold);
             }
 
-            FloatingTextManager.Instance.ShowFloatingText("Picked up " + lootPickup.Loot.name, 1);
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("Picked up " + lootPickup.Loot.name));
 
             allLoot.Remove(lootPickup.Loot);
             lootPool.ReturnObject(lootPickup.gameObject);

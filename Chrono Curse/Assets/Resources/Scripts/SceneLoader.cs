@@ -48,7 +48,7 @@ public class SceneLoader : MonoBehaviour
     {
         loadingScreen.SetActive(true);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
         while (!operation.isDone)
         {
@@ -57,12 +57,11 @@ public class SceneLoader : MonoBehaviour
             slider.value = progress;
             textProgress.text = $"Loading {Mathf.RoundToInt(progress * 100f)}%";
 
+            yield return new WaitForSeconds(2);
+
             yield return null;
         }
 
         loadingScreen.SetActive(false);
-
-        SceneManager.UnloadSceneAsync("LoadingScreen");
-
     }
 }

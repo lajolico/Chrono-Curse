@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         else
         {
             // Load the saved game data
-            StartCoroutine(LoadDungeonGameCoroutine(SaveManager.Instance.LoadDungeon(), SaveManager.Instance.LoadPlayerData()));
+            StartCoroutine(LoadDungeonGameCoroutine(SaveManager.Instance.GetDungeonData(), SaveManager.Instance.GetPlayerData()));
         }
     }
 
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData)
     {
 
-        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null || PropManager.Instance != null);
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null && PlayerManager.Instance != null && PropManager.Instance != null);
 
         DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
         ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);

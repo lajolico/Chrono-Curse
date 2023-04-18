@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -311,6 +312,7 @@ public class PropManager : MonoBehaviour
 
             Vector2 size = new Vector2(propToPlace.Size.x * 0.8f, propToPlace.Size.y * 0.8f);
             collider.size = size;
+
         }
 
         if (propToPlace.isTrigger)
@@ -321,6 +323,16 @@ public class PropManager : MonoBehaviour
 
             float size = Mathf.Max(propToPlace.Size.x, propToPlace.Size.y) / 2f;
             triggerCollider.radius = size + 0.5f;
+
+            if(propToPlace.Destructible)
+            {
+                propHolder.AddComponent<DestructibleObject>();
+            }
+        }
+
+        if(!propToPlace.Destructible && propToPlace.prefab == null)
+        {
+            Destroy(propHolder.GetComponent<LootContainer>());
         }
 
         propHolder.transform.localPosition = (Vector2)position;

@@ -15,12 +15,17 @@ MonoBehaviour:
   propSprite: {fileID: 1561206863, guid: 618ad7b3376508643a0edfe4215652c1, type: 3}
   Size: {x: 1, y: 1}
   hasCollider: 1
+  isTrigger: 1
+  prefab: {fileID: 0}
+  Destructible: 1
   NearWallUpper: 1
   NearWallBottom: 0
   NearWallRight: 0
   NearWallLeft: 0
   Inner: 0
   OnTopWalls: 0
+  roomTypeRestricted: 0
+  allowedRoomTypes: 
   PlaceAsGroup: 0
   GroupMinAmount: 1
   GroupMaxAmount: 1

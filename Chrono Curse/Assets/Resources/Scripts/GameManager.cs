@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
-    private DungeonGenerator dungeonGenerator;
-
     private PlayerData playerData;
-    private DungeonData dungeonData;
-    private PropData propData;
-
     public static GameManager Instance
     {
         get { return _instance; }
@@ -29,14 +25,17 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+     
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        SceneManager.LoadScene("Dungeon");
+        SceneManager.LoadScene("LoadingScreen");
+
+        StartCoroutine(WaitForLoadingScreen());
+
         if (startNewGame)
         {
-            StartCoroutine(NewGameCoroutine());
-          
+            StartCoroutine(NewGame());
         }
         else
         {
@@ -45,16 +44,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private IEnumerator WaitForLoadingScreen()
+    {
+        while(!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+        {
+            yield return null;
+        }
+
+        SceneLoader.Instance.LoadSceneAsync("Dungeon");
+    }
+
+    private IEnumerator WaitForRestLoadingScreen()
+    {
+        while (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+        {
+            yield return null;
+        }
+
+        SceneLoader.Instance.LoadSceneAsync("RestArea");
+    }
+
     public void LoadRestAreaScene()
     {
-        SceneManager.LoadScene("RestArea");
+
+        if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+        {
+            SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
+        }
+
+        StartCoroutine(WaitForRestLoadingScreen());
+
+        //SceneManager.LoadScene("RestArea");
         SaveManager.Instance.DeleteDungeonSave();
         if(SaveManager.Instance.isPlayerInRestArea())
         {
             PlayerManager.Instance.SpawnPlayer();
         }
-        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, 1, 0));
         PlayerManager.Instance.SetPlayerInDungeon(false);
+        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, 1, 0));
         playerData = PlayerManager.Instance.GetPlayerData();
         SavePlayerData saveData = new SavePlayerData(playerData);
 
@@ -72,16 +99,18 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator NewGameCoroutine()
+    private IEnumerator NewGame()
     {
-        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null || PropManager.Instance != null);
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null);
 
-        DungeonGenerator.Instance.GenerateDungeon();
+        StartCoroutine(DungeonGenerator.Instance.GenerateDungeon());
     }
 
     private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData)
     {
-        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null);
+
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null || PlayerManager.Instance != null || PropManager.Instance != null);
+
         DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
         ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);
 

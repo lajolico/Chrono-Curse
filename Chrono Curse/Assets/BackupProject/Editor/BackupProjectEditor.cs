@@ -148,8 +148,8 @@ public class BackupProjectEditor : Editor
 			break;
 		}
 
-		//save current scene
-		EditorApplication.SaveScene();
+        //save current scene
+        _ = EditorApplication.SaveScene();
 
 		//calculate progress
 		allProgress = Directory.GetFiles(sourcePath, extensions, SearchOption.AllDirectories).Length;

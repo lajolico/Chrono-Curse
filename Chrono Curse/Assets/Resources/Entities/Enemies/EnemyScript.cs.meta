@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Chrono Curse/Assets/Resources/Scripts/DeathScreen.cs.meta
+guid: 0b38f926701092a4793940ccb3b28a7e
+========
+guid: 6286f347337b4a04fbf77fcfdf60be17
+>>>>>>>> main:Chrono Curse/Assets/Resources/Entities/Enemies/EnemyScript.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

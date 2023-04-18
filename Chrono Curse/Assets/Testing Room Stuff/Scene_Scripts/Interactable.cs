@@ -16,6 +16,7 @@ public class Interactable : MonoBehaviour
 
     public bool isOpen = false;
     public DoorCollider passage;
+    public GameObject gameObject;
     public DoorState door;
     // public TextController text;
     

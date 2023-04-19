@@ -8,8 +8,9 @@ public class AttackChecker : MonoBehaviour
     private bool isInRange = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        switch (collision.gameObject.tag)
+    {   
+        // Checks to see if player is within attack range
+        switch (collision.gameObject.tag) 
         {
             case "Player":
                 isInRange = true;
@@ -20,6 +21,7 @@ public class AttackChecker : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        // Checks to see if player is outside attack range
         switch (collision.gameObject.tag)
         {
             case "Player":
@@ -31,6 +33,7 @@ public class AttackChecker : MonoBehaviour
 
     private void UpdateAttackState()
     {
+        // Puts enemy into appropriate attack state as needed
         Enemy enemyComponent = GetComponentInParent<Enemy>();
         if (enemyComponent != null)
         {

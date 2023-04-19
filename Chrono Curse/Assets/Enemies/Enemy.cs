@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
     public bool attackPlayer = false;
     public bool allowedToAttack = false;
     public int maxHealth = 100;
-    private int currentHealth;
+    public int currentHealth;
 
     public GameObject AttackCheckerGFX;
 

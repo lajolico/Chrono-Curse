@@ -14,9 +14,13 @@ public class SaveManager : MonoBehaviour
 
     private string playerSaveFile = "/playerdata.json";
 
+    private string enemySaveFile = "/enemies.json";
+
     private static string dungeonSavePath;
 
     private static string playerSavePath;
+
+    private static string enemySavePath;
 
     private void Awake()
     {
@@ -33,7 +37,12 @@ public class SaveManager : MonoBehaviour
         dungeonSavePath = Application.persistentDataPath + dungeonSaveFile;
 
         playerSavePath = Application.persistentDataPath + playerSaveFile;
+
+        enemySavePath = Application.persistentDataPath + enemySaveFile;
      }
+
+    //Disallow external implementation of our class
+    private SaveManager() { }
 
     public SaveDungeonData GetDungeonData()
     {
@@ -52,6 +61,8 @@ public class SaveManager : MonoBehaviour
         }
         return loadedGameData;
     }
+
+
 
     public SavePlayerData GetPlayerData()
     {
@@ -112,8 +123,7 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
-    //Disallow external implementation of our class
-    private SaveManager() { }
+
 
     public void SavePlayerData(SavePlayerData newPlayerData)
     {
@@ -136,6 +146,14 @@ public class SaveManager : MonoBehaviour
 
         File.WriteAllText(dungeonSavePath, json);
     }
+
+    public void SaveEnemyData(EnemyData enemyData)
+    {
+        string json = JsonUtility.ToJson(enemyData);
+
+        File.WriteAllText(enemySavePath, json);
+    }
+
 }
 
 [System.Serializable]
@@ -230,9 +248,18 @@ public class ExitPointData
 }
 
 
+[System.Serializable]
 public class EnemyData
-{ 
-    
+{
+    public List<EnemyState> enemies;
 }
 
-
+[System.Serializable]
+public class EnemyState
+{
+    public Vector3 position;
+    public Quaternion rotation;
+    public Vector3 scale;
+    public int health;
+    public string prefabName;
+}

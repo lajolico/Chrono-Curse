@@ -12,12 +12,14 @@ public class EntitySpawner : MonoBehaviour
     public static EntitySpawner Instance { get; private set; }
 
     [SerializeField]
-    private GameObject enemyPrefab, bossEnemyPrefab;
+    private GameObject enemyPrefab;
 
     RoomManager roomManager;
 
     [SerializeField]
     private bool showGizmo = false;
+
+ 
 
     private EntitySpawner() { }
      
@@ -34,6 +36,8 @@ public class EntitySpawner : MonoBehaviour
             return;
         } 
         PlaceEntities();
+        AStarEditor.Instance.ResizeGraph(DungeonGenerator.Instance.GetDungeonWidth(),
+            DungeonGenerator.Instance.GetDungeonWidth(), RoomManager.Instance.GetRoomCenters());
         GameManager.Instance.SaveDungeon();
 
     }
@@ -66,6 +70,7 @@ public class EntitySpawner : MonoBehaviour
                 PlayerManager.Instance.SpawnPlayer();
                 PlayerManager.Instance.SetPlayerPosition(room.RoomCenter + Vector2.one * 0.5f);
                 PlayerManager.Instance.SetPlayerCamera();
+
                 PlayerManager.Instance.SetPlayerInDungeon(true);
             }
 
@@ -122,8 +127,8 @@ public class EntitySpawner : MonoBehaviour
                 }
                 break;
             case Room.RoomType.Exit:
-                GameObject boss = Instantiate(bossEnemyPrefab, room.RoomCenter + Vector2.one * 0.8f, Quaternion.identity);
-                roomManager.BossReference = boss;
+               // GameObject boss = Instantiate(bossEnemyPrefab, room.RoomCenter + Vector2.one * 0.8f, Quaternion.identity);
+                //roomManager.BossReference = boss;
 
                 int numExitEnemies = Random.Range(playerLevel + 2, playerLevel + 8);
 

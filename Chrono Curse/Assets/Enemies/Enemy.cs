@@ -91,32 +91,30 @@ public class Enemy : MonoBehaviour
 
         if (!attackPlayer)
         {
-
             if (isInRange)
             {
-
-                if (path == null)
+                if (path == null) // Checks to see if there is a path for the enemy to follow
                 {
                     return;
 
                 }
 
-                if (currentWaypoint >= path.vectorPath.Count)
+                if (currentWaypoint >= path.vectorPath.Count) // Checks to see if the end of the path has been reached (i.e. if there is a player to chase)
                 {
                     reachedEndOfPath = true;
-                    return;
+                    return; // Breaks loop so that enemy stops trying to path
                 }
                 else
                 {
                     reachedEndOfPath = false;
                 }
 
-                Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position);
-                Vector2 force = direction * speed;
+                Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position); // Enemy pathing in correct direction
+                Vector2 force = direction * speed; // Sets enemy's speed
 
-                rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
+                rb.velocity = new Vector2(direction.x * speed, direction.y * speed); 
 
-                float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
+                float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]); // Distance between waypoints
 
                 if (distance < nextWaypointDistance)
                 {
@@ -126,39 +124,38 @@ public class Enemy : MonoBehaviour
                 if (rb.velocity[0] >= 1f) // Left
                 {
                     EnemyAnimationController(1); // Run Anim
-                    PigSmall.localScale = new Vector3(-1f, 1f, 1f);
+                    PigSmall.localScale = new Vector3(-1f, 1f, 1f); // Flips GameObject in correct direction
                 }
                 else if (rb.velocity[0] <= 1f) // Right
                 {
                     EnemyAnimationController(1);// Run Anim
-                    PigSmall.localScale = new Vector3(1f, 1f, 1f);
+                    PigSmall.localScale = new Vector3(1f, 1f, 1f); // Flips GameObject in correct direction
                 }
                 else // Idle
                 {
                     EnemyAnimationController(0);
                 }
             }
-            else
+            else // Puts enemy in idle animation and stops enemy movement
             {
                  StopChasingPlayer();
             }
         }
-        else if (attackPlayer && allowedToAttack)
+        else if (attackPlayer && allowedToAttack) // Enemy attacks player and stops moving if player is within range and enemy is allowed to attack
         {
-            Debug.Log("Attacking");
             StopChasingPlayer();
             Attack();
         }
         
     }
 
-    void StopChasingPlayer()
+    void StopChasingPlayer() // Stops enemy and changes animation to idle if enemy doesn't need to move
     {
         EnemyAnimationController(0);
         rb.velocity = new Vector2(0, 0);
     }
 
-    void OnTriggerStay2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision) // Checks to see if player is in the detection range of the enemy
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -166,7 +163,7 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    void OnTriggerExit2D(Collider2D collision)
+    void OnTriggerExit2D(Collider2D collision) // Checks if the player is not in the detection range of the enemy
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -174,30 +171,28 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void AttackingPlayer(bool attack)
+    public void AttackingPlayer(bool attack) // Function called from AttackChecker to tell enemy that the player is close enough to attack
     {
         attackPlayer = attack;
     }
 
-    void Attack()
+    void Attack() // Attacks player that is in range and deals damage accordingly
     {
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
-            // Debug.Log("We hit " + person.name);
-            player.GetComponent<Player>().TakeDamage(attackDamage);
+            player.GetComponent<Player>().TakeDamage(attackDamage); // Player that is within collider is dealt damage
         }
-        myAnimator.SetTrigger("Attack");
-        attackPlayer = false;
+        myAnimator.SetTrigger("Attack"); // Plays attack animation
         allowedToAttack = false;
-        nextAttackTime = Time.time + 1f / attackRate;
+        nextAttackTime = Time.time + 1f / attackRate; // Sets amount of time enemy has to wait between attacks
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage) // Enemy takes damage from player
     {
         currentHealth -= damage;
-        myAnimator.SetTrigger("Hurt");
-        if (currentHealth <= 0)
+        myAnimator.SetTrigger("Hurt"); // Plays hurt animation
+        if (currentHealth <= 0) // Enemy dies if their health falls low enough
         {
             DestroyEnemy();
         }
@@ -207,15 +202,15 @@ public class Enemy : MonoBehaviour
     {
         if (animStatus == 1)
         {
-            myAnimator.SetInteger("Status", 1);
+            myAnimator.SetInteger("Status", 1); // Run
         }
         else
         {
-            myAnimator.SetInteger("Status", 0);
+            myAnimator.SetInteger("Status", 0); // Idle
         }
     }
 
-    void DestroyEnemy()
+    void DestroyEnemy() // Gets rid of enemy GameObject and collider + plays death animation
     {
         myAnimator.SetTrigger("Death");
         GetComponent<Collider2D>().enabled = false;

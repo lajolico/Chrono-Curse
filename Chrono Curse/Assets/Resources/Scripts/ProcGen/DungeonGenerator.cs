@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using System;
 using UnityEngine.Tilemaps;
 
+
 /// <summary>
 /// Generates our rooms and corridors, linking those rooms. Using the MapGenerator to assist in this.
 /// </summary>
@@ -25,6 +26,8 @@ public class DungeonGenerator : MonoBehaviour
     private int dungeonWidth = 60, dungeonHeight = 60;
 
     private TilemapUtil tilemapUtil;
+
+    public AStarEditor aStarEditor;
 
     [SerializeField]
     protected Vector2Int startPos = Vector2Int.zero;
@@ -240,4 +243,13 @@ public class DungeonGenerator : MonoBehaviour
         return dungeonData;
     }
 
+    public int GetDungeonWidth()
+    {
+        return dungeonWidth;
+    }
+
+    public int GetDungeonHeight()
+    {
+        return dungeonHeight;
+    }
 }

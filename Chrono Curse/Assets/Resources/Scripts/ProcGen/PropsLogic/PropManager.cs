@@ -314,6 +314,10 @@ public class PropManager : MonoBehaviour
             Vector2 size = new Vector2(propToPlace.Size.x * 0.8f, propToPlace.Size.y * 0.8f);
             collider.size = size;
 
+            string layerName = "Obstacles"; // the name of the layer you want to assign
+            int layerNumber = LayerMask.NameToLayer(layerName); // get the index of the layer by its name
+            propHolder.layer = layerNumber; // set the layer of the game object to the specified layer
+
         }
 
         if (propToPlace.isTrigger)

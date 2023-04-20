@@ -1,51 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
-using UnityEditor;
 
-public class EntitySpawner : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
-
-    public static EntitySpawner Instance { get; private set; }
-
-    [SerializeField]
-    private GameObject enemyPrefab;
-
-    RoomManager roomManager;
+    public static EnemyManager Instance { get; private set; }
 
     [SerializeField]
-    private bool showGizmo = false;
+    private List<GameObject> allEnemies = new List<GameObject>();
 
- 
+    [SerializeField]
+    internal List<EnemyObject> enemyDataList = new List<EnemyObject>();
 
-    private EntitySpawner() { }
-     
+    [SerializeField]
+    private GameObject enemyPrefab, bossPrefab;
+
     private void Awake()
     {
-        roomManager = FindObjectOfType<RoomManager>();
-    }
-
-    public void InitEntites()
-    {
-        if (roomManager == null)
+        if (Instance == null)
         {
-            Debug.Log("roomManager is null in Entities Script");
-            return;
-        } 
-        PlaceEntities();
-        AStarEditor.Instance.ResizeGraph(DungeonGenerator.Instance.GetDungeonWidth(),
-            DungeonGenerator.Instance.GetDungeonWidth(), RoomManager.Instance.GetRoomCenters());
-        GameManager.Instance.SaveDungeon();
-
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void PlaceEntities()
+    public void StartEnemySpawn()
     {
         //Get the count of our rooms to loop through start spawning our player and enemies
-        foreach (Room room in roomManager.Rooms)
+        foreach (Room room in RoomManager.Instance.Rooms)
         {
             //Start generating the locations for our dictionary to be used in our pathfinder
             SpawnValidatorAlgorithm spawnGraph = new SpawnValidatorAlgorithm(room.FloorTiles);
@@ -53,7 +41,7 @@ public class EntitySpawner : MonoBehaviour
             //Grab only the rooms tiles WITHOUT intersecting the corridor paths. 
 
             HashSet<Vector2Int> floors = new HashSet<Vector2Int>(room.FloorTiles);
-            floors.IntersectWith(roomManager.Corridors);
+            floors.IntersectWith(RoomManager.Instance.Corridors);
 
             //Run the BFS to find all the tiles in the room accessible from the path
             Dictionary<Vector2Int, Vector2Int> floorMap = spawnGraph.FindSpawnLocations(floors.First(), room.PropPositions);
@@ -63,7 +51,7 @@ public class EntitySpawner : MonoBehaviour
 
             room.PossibleSpawnPostions.Remove(room.RoomCenter);
 
-            SpawnEnemies(room);
+            InitEnemySpawn(room);
 
             if (room.roomType == Room.RoomType.Entrance)
             {
@@ -74,20 +62,21 @@ public class EntitySpawner : MonoBehaviour
                 PlayerManager.Instance.SetPlayerInDungeon(true);
             }
 
-            if(room.roomType == Room.RoomType.Exit)
+            if (room.roomType == Room.RoomType.Exit)
             {
                 ExitPoint.Instance.SpawnExitPoint();
                 ExitPoint.Instance.SetExitPosition(room.RoomCenter + Vector2.one * 0.5f);
             }
         }
+
+        AStarEditor.Instance.ResizeGraph(DungeonGenerator.Instance.GetDungeonWidth(),
+           DungeonGenerator.Instance.GetDungeonWidth(), RoomManager.Instance.GetRoomCenters());
+        GameManager.Instance.SaveDungeon();
+
     }
-    /// <summary>
-    /// Spawns enemies in a room based on its RoomType.
-    /// </summary>
-    /// <param name="room">The Room object to spawn enemies in.</param>
-    private void SpawnEnemies(Room room)
+
+    private void InitEnemySpawn(Room room)
     {
-        //TODO, remove this and update it with the GM's level 
         int playerLevel = PlayerManager.Instance.Level;
 
         switch (room.roomType)
@@ -95,55 +84,17 @@ public class EntitySpawner : MonoBehaviour
             case Room.RoomType.Normal:
                 // Spawn a random number of enemies based on the player's level
                 int numEnemies = Random.Range(playerLevel, playerLevel + 3);
-                for (int i = 0; i < numEnemies; i++)
-                {
-                    if(room.PossibleSpawnPostions.Count <= i)
-                    {
-                        return;
-                    }
-                    // Spawn enemy prefab
-                    GameObject enemy = Instantiate(enemyPrefab, room.PossibleSpawnPostions[i] + Vector2.one * 0.5f, Quaternion.identity);
-                    room.EnemiesInRoom.Add(enemy);
-                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
-                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
-                }
+                SpawnEnemiesInRoom(enemyPrefab, room.PossibleSpawnPostions, room, numEnemies);
                 break;
             case Room.RoomType.Important:
                 // Spawn more enemies than normal rooms
                 int numImportantEnemies = Random.Range(playerLevel + 2, playerLevel + 5);
-                for (int i = 0; i < numImportantEnemies; i++)
-                {
-
-                    if (room.PossibleSpawnPostions.Count <= i)
-                    {
-                        return;
-                    }
-                    // Spawn enemy prefab
-                    GameObject enemy = Instantiate(enemyPrefab);
-                    enemy.transform.localPosition = room.PossibleSpawnPostions[i] + Vector2.one * 0.5f;
-                    room.EnemiesInRoom.Add(enemy);
-                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
-                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
-                }
+                SpawnEnemiesInRoom(enemyPrefab, room.PossibleSpawnPostions, room, numImportantEnemies);
                 break;
             case Room.RoomType.Exit:
-               // GameObject boss = Instantiate(bossEnemyPrefab, room.RoomCenter + Vector2.one * 0.8f, Quaternion.identity);
-                //roomManager.BossReference = boss;
-
+                // GameObject boss = Instantiate(bossEnemyPrefab, room.RoomCenter + Vector2.one * 0.8f, Quaternion.identity);
                 int numExitEnemies = Random.Range(playerLevel + 2, playerLevel + 8);
-
-                for (int i = 0; i < numExitEnemies; i++) 
-                {
-                    if (room.PossibleSpawnPostions.Count <= i)
-                    {
-                        return;
-                    }
-                    // Spawn enemy prefab
-                    GameObject enemy = Instantiate(enemyPrefab, room.PossibleSpawnPostions[i] + Vector2.one * 0.5f, Quaternion.identity);
-                    room.EnemiesInRoom.Add(enemy);
-                    //Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
-                    room.EnemySpawnPositions.Add(room.PossibleSpawnPostions[i]);
-                }
+                SpawnEnemiesInRoom(enemyPrefab, room.PossibleSpawnPostions, room, numExitEnemies);
                 break;
             case Room.RoomType.Empty:
                 //No enemies
@@ -156,34 +107,91 @@ public class EntitySpawner : MonoBehaviour
                 break;
         }
     }
-    /// <summary>
-    /// Visually help see where everything spawns, very helpful.
-    /// </summary>
-    private void OnDrawGizmosSelected()
+
+    void SpawnEnemiesInRoom(GameObject enemyPrefab, List<Vector2Int> possibleSpawnPositions, Room room, int numEnemies)
     {
-        if (roomManager == null || showGizmo == false)
-            return;
-       
-        Color color = Color.green;
-        color.a = 0.3f;
-        Gizmos.color= color;
- 
-        foreach(Room room in roomManager.Rooms)
+        List<EnemyObject> possibleEnemies = EnemyManager.Instance.enemyDataList;
+
+        for (int i = 0; i < numEnemies; i++)
         {
-            foreach (Vector2Int pos in  room.PossibleSpawnPostions)
+            if (possibleSpawnPositions.Count <= i)
             {
-                Gizmos.DrawCube((Vector2)pos + Vector2.one * 0.5f, Vector2.one);
+                return;
             }
+
+            // Spawn enemy prefab
+            GameObject enemy = Instantiate(enemyPrefab, possibleSpawnPositions[i] + Vector2.one * 0.5f, Quaternion.identity);
+            Enemy_Logan enemyScript = enemy.GetComponent<Enemy_Logan>();
+            enemyScript.SetPropertiesFromObjectData(possibleEnemies[Random.Range(0, possibleEnemies.Count)], 
+                enemy.GetComponent<Animator>(), enemy.GetComponent<SpriteRenderer>(), enemy.GetComponentInChildren<AttackChecker>().gameObject);
+            AddEnemy(enemy);
+
+            // Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
+            room.EnemySpawnPositions.Add(possibleSpawnPositions[i]);
         }
     }
 
-    //TODO
-    internal void SetEnemyData()
+    internal void AddEnemy(GameObject enemy)
     {
-
+        allEnemies.Add(enemy);
     }
 
+    internal void RemoveEnemy(GameObject enemy)
+    {
+        allEnemies.Remove(enemy);
+    }
+
+    public void LoadEnemies(EnemyData enemyData)
+    {
+        // Spawn enemies from the enemy data
+        foreach (EnemyState enemyState in enemyData.enemies)
+        {
+            GameObject enemyPrefab = Resources.Load<GameObject>("Enemies/EnemyPrefab");
+            GameObject enemyObject = Instantiate(enemyPrefab, enemyState.position, Quaternion.identity);
+            
+            Enemy_Logan enemy = enemyObject.GetComponent<Enemy_Logan>();
+            enemy.SetPropertiesFromState(enemyState, enemyObject.GetComponent<Animator>(), enemyObject.GetComponent<SpriteRenderer>(),
+                            enemyObject.GetComponentInChildren<AttackChecker>().gameObject);
+            AddEnemy(enemyObject);
+        }
+        AStarEditor.Instance.ResizeGraph(DungeonGenerator.Instance.GetDungeonWidth(),
+          DungeonGenerator.Instance.GetDungeonWidth(), RoomManager.Instance.GetRoomCenters());
+    }
+
+    public void Reset()
+    {
+        foreach (var enemy in allEnemies)
+        {
+            Destroy(enemy);
+        }
+    }
+
+    public EnemyData GetEnemyData()
+    {
+        EnemyData enemyData = new EnemyData();
+
+        // Populate the enemy data fields from the enemies list
+        enemyData.enemies = new List<EnemyState>();
+        foreach (var enemy in allEnemies)
+        {
+            EnemyState enemyState = new EnemyState();
+            EnemyObject enemyObjectData = enemy.GetComponent<Enemy_Logan>().GetEnemyObjectData();
+            enemyState.sprite = enemyObjectData.sprite;
+            enemyState.animatorController = enemyObjectData.animatorController;
+            enemyState.health = enemyObjectData.health;
+            enemyState.position = enemy.gameObject.transform.position;
+            enemyState.prefabName = enemy.gameObject.name;
+            enemyState.speed = enemyObjectData.speed;
+            enemyState.attackRate = enemyObjectData.attackRate;
+            enemyState.attackRange = enemyObjectData.attackRange;
+            enemyState.nextAttackTime = enemyObjectData.nextAttackTime;
+            enemyData.enemies.Add(enemyState);
+        }
+
+        return enemyData;
+    }
 }
+
 
 /// <summary>
 /// The purpose of this class is to find spawn locations for our entities (enemies) and other objects
@@ -225,7 +233,7 @@ internal class SpawnValidatorAlgorithm
         {
             startPos
         };
- 
+
         Dictionary<Vector2Int, Vector2Int> map = new Dictionary<Vector2Int, Vector2Int>
         {
             { startPos, startPos }
@@ -240,7 +248,7 @@ internal class SpawnValidatorAlgorithm
             //This algorithm tries to find a path between prop positions or obstacles
             foreach (Vector2Int neighbourPosition in neighbours)
             {
-             
+
                 if (visitedNodes.Contains(neighbourPosition) == false &&
                     obstacles.Contains(neighbourPosition) == false)
                 {

@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Dungeon.unity
     guid: 14d57f65773ea0c45bd04077f7ce7767
   - enabled: 1
-    path: Assets/Scenes/RestArea.unity
+    path: Assets/Scenes/Rest Room.unity
     guid: c25a8e9fbd33afc4b8f6a21cdc6d463d
   - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity

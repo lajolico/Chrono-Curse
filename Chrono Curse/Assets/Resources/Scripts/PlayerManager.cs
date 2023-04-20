@@ -13,6 +13,8 @@ public class PlayerManager : MonoBehaviour
     public int Level { get; private set; } = 1;
     public float Stamina { get; private set; } = 120.0f;
 
+    public int Kills { get; private set; } = 0;
+
     public int attackDamage { get; private set; } = 2;
 
     public bool isPlayerInDungeon { get; private set; } = false;
@@ -133,6 +135,7 @@ public class PlayerManager : MonoBehaviour
         playerData.stamina =  Stamina;
         playerData.level =  Level;
         playerData.isPlayerInDungeon = isPlayerInDungeon;
+        playerData.kills = Kills;
 
         return playerData;
     }
@@ -176,5 +179,10 @@ public class PlayerManager : MonoBehaviour
     public void SetAttackDamage(int attackDamage)
     {
         this.attackDamage = attackDamage;
+    }
+
+    public void AddKill(int amount)
+    {
+        this.Kills++;
     }
 }

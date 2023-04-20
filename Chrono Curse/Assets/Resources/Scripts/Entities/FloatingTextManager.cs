@@ -11,8 +11,6 @@ public class FloatingTextManager : MonoBehaviour
 
     [SerializeField] private ObjectPooling textPool;
 
-    private float displayTime = 0.9f;
-
     private void Awake()
     {
         if (Instance == null && Instance != this)
@@ -25,13 +23,15 @@ public class FloatingTextManager : MonoBehaviour
         }
     }
 
-    public IEnumerator ShowFloatingText(string message)
+    private void Start()
+    {
+
+    }
+
+    public IEnumerator ShowFloatingText(string message, Vector3 spawnPosition, float displayTime)
     {
         // Instantiate a new instance of the floatingText object
         GameObject textObj = textPool.GetObject();
-
-        // Set the spawn position to the player's position
-        Vector3 spawnPosition = PlayerManager.Instance.GetPlayerPosition();
 
         // Add a random offset to the spawn position
         float spawnRadius = 1.0f; // adjust this value to control the randomness

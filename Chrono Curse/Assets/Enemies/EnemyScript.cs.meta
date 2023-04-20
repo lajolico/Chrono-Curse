@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Chrono Curse/Assets/Enemies/AttackChecker.cs.meta
+guid: cccff6a611dfb234c9a5a3289cb4c18f
+========
+guid: 6286f347337b4a04fbf77fcfdf60be17
+>>>>>>>> c5bc95ca1a54a1ae9e920a1b41735f50f694666b:Chrono Curse/Assets/Enemies/EnemyScript.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

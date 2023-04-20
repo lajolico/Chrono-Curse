@@ -186,16 +186,20 @@ public class Enemy : MonoBehaviour
         attackPlayer = attack;
     }
 
-    void Attack() // Attacks player that is in range and deals damage accordingly
+    void Attack() // PLays attack animation and changes enemy logic to wait for next available attack
+    {
+        myAnimator.SetTrigger("Attack"); // Plays attack animation
+        allowedToAttack = false;
+        nextAttackTime = Time.time + 1f / attackRate; // Sets amount of time enemy has to wait between attacks
+    }
+
+    public void DoPlayerDamage() // Attacks player that is in range and deals damage accordingly
     {
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
             player.GetComponent<Player>().TakeDamage(attackDamage); // Player that is within collider is dealt damage
         }
-        myAnimator.SetTrigger("Attack"); // Plays attack animation
-        allowedToAttack = false;
-        nextAttackTime = Time.time + 1f / attackRate; // Sets amount of time enemy has to wait between attacks
     }
 
     public void TakeDamage(int damage) // Enemy takes damage from player

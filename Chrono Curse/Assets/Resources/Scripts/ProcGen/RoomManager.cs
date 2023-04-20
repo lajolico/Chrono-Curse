@@ -18,8 +18,6 @@ public class RoomManager : MonoBehaviour
     public HashSet<Vector2Int> Corridors { get; private set; } = new HashSet<Vector2Int>();
 
     public HashSet<Vector2Int> Walls = new HashSet<Vector2Int>();
-
-    public GameObject BossReference { get; set; }
     private RoomManager() { }
 
     private void Awake()
@@ -45,14 +43,12 @@ public class RoomManager : MonoBehaviour
             }
 
             room.PropPositions.Clear();
-            room.EnemiesInRoom.Clear();
         }
 
         Rooms = new();
         Corridors = new();
         Walls = new();
         PlayerManager.Instance.DestroyPlayer();
-        Destroy(BossReference);
     }
 
     /// <summary>

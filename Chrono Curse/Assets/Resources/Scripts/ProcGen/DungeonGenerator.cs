@@ -27,8 +27,6 @@ public class DungeonGenerator : MonoBehaviour
 
     private TilemapUtil tilemapUtil;
 
-    public AStarEditor aStarEditor;
-
     [SerializeField]
     protected Vector2Int startPos = Vector2Int.zero;
 
@@ -81,7 +79,9 @@ public class DungeonGenerator : MonoBehaviour
         RoomManager.Instance.Reset();
         PropManager.Instance.Reset();
         PlayerManager.Instance.DestroyPlayer();
+        EnemyManager.Instance.Reset();
         ExitPoint.Instance.DestroyExit();
+
     }
 
     /// <summary>

@@ -40,7 +40,9 @@ public class GameManager : MonoBehaviour
         else
         {
             // Load the saved game data
-            StartCoroutine(LoadDungeonGameCoroutine(SaveManager.Instance.GetDungeonData(), SaveManager.Instance.GetPlayerData()));
+            StartCoroutine(LoadDungeonGameCoroutine(SaveManager.Instance.GetDungeonData(),
+                                                   SaveManager.Instance.GetPlayerData(),
+                                                   SaveManager.Instance.GetEnemyData()));
         }
     }
 
@@ -76,6 +78,7 @@ public class GameManager : MonoBehaviour
 
         //SceneManager.LoadScene("RestArea");
         SaveManager.Instance.DeleteDungeonSave();
+        SaveManager.Instance.DeleteEnemySave();
         if(SaveManager.Instance.isPlayerInRestArea())
         {
             PlayerManager.Instance.SpawnPlayer();
@@ -91,11 +94,12 @@ public class GameManager : MonoBehaviour
     public void PlayerDied()
     {
         SaveManager.Instance.DeleteDungeonSave();
-        SaveManager.Instance.DeletePlayerSave();
+        SaveManager.Instance.DeleteEnemySave();
         PlayerManager.Instance.ResetPlayerAttributes();
         PlayerManager.Instance.SetPlayerInDungeon(false);
+        SceneManager.LoadScene("YouDied");
+        SaveManager.Instance.DeletePlayerSave(); //TEST THIS
 
-        SceneManager.LoadScene("YouDied"); //TODO you died scene
     }
 
 
@@ -106,14 +110,15 @@ public class GameManager : MonoBehaviour
          DungeonGenerator.Instance.GenerateDungeon() ;
     }
 
-    private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData)
+    private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData, SaveEnemyData saveEnemyData)
     {
 
-        yield return new WaitUntil(() => DungeonGenerator.Instance != null && PlayerManager.Instance != null && PropManager.Instance != null);
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null && PlayerManager.Instance != null 
+        && PropManager.Instance != null && EnemyManager.Instance != null);
 
         DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
+        EnemyManager.Instance.LoadEnemies(saveEnemyData.enemyData);
         ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);
-
         PlayerManager.Instance.LoadPlayerData(savePlayerData.playerData);
 
     }
@@ -123,9 +128,13 @@ public class GameManager : MonoBehaviour
         DungeonData dungeonData = DungeonGenerator.Instance.GetDungeonData();
         PropData propData = PropManager.Instance.GetPropData();
         ExitPointData exitPointData = ExitPoint.Instance.GetExitPointData();
+        EnemyData enemyData = EnemyManager.Instance.GetEnemyData();
 
         SaveDungeonData saveData = new SaveDungeonData(propData, dungeonData, exitPointData);
         SaveManager.Instance.SaveDungeonLevel(saveData);
+
+        SaveEnemyData saveEnemyData = new SaveEnemyData(enemyData);
+        SaveManager.Instance.SaveEnemyData(saveEnemyData);
 
         PlayerData playerData = PlayerManager.Instance.GetPlayerData();
         SavePlayerData playerSaveData = new SavePlayerData(playerData);

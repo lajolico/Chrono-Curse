@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using System;
 
 public class Enemy : MonoBehaviour
 {
+    private Transform target;
 
-    public Transform target;
-
-    public float speed = 200f;
-    public float nextWaypointDistance = 3f;
+    private float speed;
+    public float nextWaypointDistance;
 
     Path path;
     int currentWaypoint = 0;
@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     Seeker seeker;
     Rigidbody2D rb;
 
-    public Transform PigSmall;
+    public Transform enemyTransform;
 
     // * Stuff for attacking player
     public Transform attackPoint;
@@ -38,13 +38,19 @@ public class Enemy : MonoBehaviour
 
     public GameObject AttackCheckerGFX;
 
-    public Animator myAnimator;
+    public Animator AttackCheckerAnimator;
     public SpriteRenderer mySpriteRenderer;
 
     private void Awake()
     {
-        mySpriteRenderer = AttackCheckerGFX.GetComponent<SpriteRenderer>();
-        myAnimator = AttackCheckerGFX.GetComponent<Animator>();
+        SetPropertiesFromData();
+        
+    }
+
+    private void SetPropertiesFromData()
+    {
+         mySpriteRenderer = AttackCheckerGFX.GetComponent<SpriteRenderer>();
+         AttackCheckerAnimator = AttackCheckerGFX.GetComponent<Animator>();
     }
 
     void Start()
@@ -60,6 +66,8 @@ public class Enemy : MonoBehaviour
 
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
+
+        target = PlayerManager.Instance.GetPlayerTransform();
 
         InvokeRepeating("UpdatePath",0f, .5f);
     }
@@ -124,11 +132,13 @@ public class Enemy : MonoBehaviour
                 if (rb.velocity[0] >= 1f) // Left
                 {
                     EnemyAnimationController(1); // Run Anim
+
                     PigSmall.localScale = new Vector3(-1f, 1f, 1f); // Flips GameObject in correct direction
                 }
                 else if (rb.velocity[0] <= 1f) // Right
                 {
                     EnemyAnimationController(1);// Run Anim
+
                     PigSmall.localScale = new Vector3(1f, 1f, 1f); // Flips GameObject in correct direction
                 }
                 else // Idle
@@ -194,7 +204,7 @@ public class Enemy : MonoBehaviour
         myAnimator.SetTrigger("Hurt"); // Plays hurt animation
         if (currentHealth <= 0) // Enemy dies if their health falls low enough
         {
-            DestroyEnemy();
+            Die();
         }
     }
 
@@ -212,7 +222,9 @@ public class Enemy : MonoBehaviour
 
     void DestroyEnemy() // Gets rid of enemy GameObject and collider + plays death animation
     {
-        myAnimator.SetTrigger("Death");
+        PlayerManager.Instance.AddKill(1);
+        AttackCheckerAnimator.SetTrigger("Death");
+        gameObject.SetActive(false);
         GetComponent<Collider2D>().enabled = false;
         Destroy(this.gameObject, 1.0f);
     }

@@ -40,4 +40,12 @@ public class AttackChecker : MonoBehaviour
         } 
     }
 
+    public void EnemyAttacksPlayer() // Uses enemy animation controller to make attack results on player show at the appropriate time
+    {
+        Enemy enemyComponent = GetComponentInParent<Enemy>();
+        if (enemyComponent != null)
+        {
+            enemyComponent.DoPlayerDamage();
+        } 
+    }
 }

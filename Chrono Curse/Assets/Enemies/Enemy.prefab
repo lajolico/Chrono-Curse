@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5397174596957896485}
   - component: {fileID: 5397174596957896486}
-  - component: {fileID: 5397174596957896495}
+  - component: {fileID: 2248960272229333955}
   - component: {fileID: 5397174596957896483}
   - component: {fileID: 5397174596957896481}
   - component: {fileID: 5397174596957896480}
@@ -98,7 +98,7 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
---- !u!114 &5397174596957896495
+--- !u!114 &2248960272229333955
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,29 +107,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5397174596957896474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e6cfd0eb90d144fba274cc5be9b5b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 942201af2f8db3d4cb5d2ac33f843133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextWaypointDistance: 3
   isInRange: 0
   detectionRange: 10
-  detectionCircleOffsetX: -0.5
+  nextWaypointDistance: 3
   enemyTransform: {fileID: 5397174596957896485}
   attackPoint: {fileID: 5397174595931948021}
-  attackRange: 0.5
-  attackDamage: 40
-  attackRate: 0.5
-  nextAttackTime: 0
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  attackPlayer: 0
-  allowedToAttack: 0
-  maxHealth: 100
-  currentHealth: 0
-  AttackCheckerGFX: {fileID: 5397174597710483524}
-  AttackCheckerAnimator: {fileID: 5397174597710483522}
-  mySpriteRenderer: {fileID: 5397174597710483521}
 --- !u!58 &5397174596957896483
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -266,7 +254,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5397174597710483523}
-  - component: {fileID: 5397174597710483534}
+  - component: {fileID: 7820348370550149828}
   - component: {fileID: 5397174597710483521}
   - component: {fileID: 5397174597710483522}
   - component: {fileID: 5397174597710483535}
@@ -292,7 +280,7 @@ Transform:
   m_Father: {fileID: 5397174596957896485}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5397174597710483534
+--- !u!114 &7820348370550149828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

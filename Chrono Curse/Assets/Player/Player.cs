@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
     }
 
     // ! Sprite rendering components
-    void FixedUpdate()
+    void Update()
     {
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
@@ -185,10 +185,10 @@ public class Player : MonoBehaviour
         myAnimator.SetTrigger("Brattack");
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-        Enemy enemy;
+        Enemy_Logan enemy;
         foreach(Collider2D enemyCollider in hitEnemies)
         {
-            enemy = enemyCollider.GetComponent<Enemy>();
+            enemy = enemyCollider.GetComponent<Enemy_Logan>();
             if(enemy != null) 
             {
                 enemy.TakeDamage(PlayerManager.Instance.attackDamage);

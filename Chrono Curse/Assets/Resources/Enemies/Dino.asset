@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b7047022bf7d448bee0d2ddbeefc73, type: 3}
+  m_Name: Dino
+  m_EditorClassIdentifier: 
+  _health: 100
+  _speed: 2
+  _attackDamage: 20
+  _sprite: {fileID: -1241403865, guid: 92634c8959c625648a29427d062b91aa, type: 3}
+  _attackRange: 0.5
+  _attackRate: 0
+  _nextAttackTime: 0
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _animatorController: {fileID: 9100000, guid: 458594fa0f804b8459e90c16373dd443, type: 2}

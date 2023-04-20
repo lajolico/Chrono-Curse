@@ -4,11 +4,18 @@ using UnityEngine;
 using Pathfinding;
 using System;
 
-public class Enemy_Logan : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     private EnemyObject enemyObject;
 
     private Transform target;
+
+    public enum EnemyType
+    {
+        Normal,
+        Elite,
+        Boss
+    }
 
     /// <summary>
     ///AI
@@ -36,7 +43,9 @@ public class Enemy_Logan : MonoBehaviour
     public LayerMask playerLayer;
     private int currentHealth;
     private float speed;
-
+    private EnemyType enemyType;
+    public int baseAttackDamage = 10;
+    private bool isDead;
 
     /// <summary>
     /// Attack Checker for our EnemyAI
@@ -45,7 +54,7 @@ public class Enemy_Logan : MonoBehaviour
     private SpriteRenderer attackCheckerRenderer;
 
     public void SetPropertiesFromObjectData(EnemyObject enemyObjData, 
-        Animator _enemyAnimator, SpriteRenderer _spriteRenderer, GameObject _attackCheckerGFX)
+        Animator _enemyAnimator, GameObject _attackCheckerGFX)
     {
         mainEnemyAnimator = _enemyAnimator.GetComponent<Animator>();
         attackCheckerAnimator = _attackCheckerGFX.GetComponent<Animator>();
@@ -59,14 +68,14 @@ public class Enemy_Logan : MonoBehaviour
         this.speed = enemyObjData.speed;
         this.maxHealth = enemyObjData.health;
         currentHealth = this.maxHealth;
-        this.attackDamage = enemyObjData.attackDamage;
         this.attackRange = enemyObjData.attackRange;
         this.attackRate = enemyObjData.attackRate;
         this.nextAttackTime = enemyObjData.nextAttackTime;
+        this.enemyType = enemyObjData.enemyType;
         enemyObject = enemyObjData;
     }
 
-    public void SetPropertiesFromState(EnemyState state, Animator _enemyAnimator, SpriteRenderer _spriteRenderer, GameObject _attackCheckerGFX)
+    public void SetPropertiesFromState(EnemyState state, Animator _enemyAnimator, GameObject _attackCheckerGFX)
     {
         mainEnemyAnimator = _enemyAnimator.GetComponent<Animator>();
         attackCheckerAnimator = _attackCheckerGFX.GetComponent<Animator>();
@@ -83,7 +92,17 @@ public class Enemy_Logan : MonoBehaviour
         this.attackRange = state.attackRange;
         this.attackRate = state.attackRate;
         this.nextAttackTime = state.nextAttackTime;
+        this.enemyType = state.enemyType;
     }
+
+
+    public void SetAttackDamage(int playerLevel)
+    {
+        // Calculate the enemy's attack damage based on the player's level
+        float damageMultiplier = 1.0f + ((float)playerLevel / 10.0f); // Increase damage by 10% for every player level
+        attackDamage = Mathf.RoundToInt(baseAttackDamage * damageMultiplier);
+    }
+
 
     public EnemyObject GetEnemyObjectData()
     {
@@ -224,8 +243,8 @@ public class Enemy_Logan : MonoBehaviour
         foreach(Collider2D player in hitplayer)
         {
             player.GetComponent<Player>().TakeDamage(attackDamage);
-            Debug.Log("Player Hit!");
-            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(attackDamage.ToString(), PlayerManager.Instance.GetPlayerPosition(), 0.6f));
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(attackDamage.ToString(), 
+                PlayerManager.Instance.GetPlayerPosition() + new Vector3(0, 1, 0), 0.5f, FloatingTextType.DamagePlayer));
         }
         attackCheckerAnimator.SetTrigger("Attack");
         attackPlayer = false;
@@ -237,10 +256,13 @@ public class Enemy_Logan : MonoBehaviour
     {
         currentHealth -= damage;
         attackCheckerAnimator.SetTrigger("Hurt");
-        StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(damage.ToString(), gameObject.transform.position, 0.6f));
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(damage.ToString(), transform.position, 0.3f, FloatingTextType.DamageEnemy));
         }
     }
 
@@ -258,12 +280,32 @@ public class Enemy_Logan : MonoBehaviour
 
     private void Die()
     {
-        PlayerManager.Instance.AddKill(1);
+        StopAllCoroutines();
+        GetComponent<Collider2D>().enabled = false;
+        attackCheckerRenderer.enabled = false;
+        AddToPlayer(enemyType);
         EnemyManager.Instance.RemoveEnemy(this.gameObject);
         attackCheckerAnimator.SetTrigger("Death");
-        gameObject.SetActive(false);
-        GetComponent<Collider2D>().enabled = false;
-        Destroy(this.gameObject, 1.0f);
+        Destroy(this.gameObject);
+    }
+
+    public void AddToPlayer(EnemyType type)
+    {
+        int xpToAdd = 0;
+        switch (type)
+        {
+            case EnemyType.Normal:
+                xpToAdd = 50;
+                break;
+            case EnemyType.Elite:
+                xpToAdd = 100;
+                break;
+            case EnemyType.Boss:
+                xpToAdd = 500;
+                break;
+        }
+        PlayerManager.Instance.AddXP(xpToAdd);
+        PlayerManager.Instance.AddKill(1);
     }
 
     public int GetHealth()
@@ -276,4 +318,8 @@ public class Enemy_Logan : MonoBehaviour
         this.maxHealth = health;
     }
 
+    public int GetAttackDamage()
+    {
+        return this.attackDamage;
+    }
 }

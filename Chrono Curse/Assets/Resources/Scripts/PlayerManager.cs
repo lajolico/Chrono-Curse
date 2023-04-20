@@ -7,15 +7,21 @@ using Cinemachine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
-
     public int Health { get; private set; } = 100;
     public int Gold { get; private set; } = 0;
-    public int Level { get; private set; } = 1;
     public float Stamina { get; private set; } = 120.0f;
 
     public int Kills { get; private set; } = 0;
 
-    public int attackDamage { get; private set; } = 2;
+    public int currentXP { get; private set; } = 0;
+    public int currentLevel { get; private set; } = 1;
+
+    private int xpToLevelUp = 100;
+    public int baseXPToLevelUp = 100;
+    public float xpToLevelUpMultiplier = 1.5f;
+    public int baseDamage = 20;
+
+    public int attackDamage { get; private set; }
 
     public bool isPlayerInDungeon { get; private set; } = false;
 
@@ -133,9 +139,10 @@ public class PlayerManager : MonoBehaviour
         playerData.health =  Health;
         playerData.gold =  Gold;
         playerData.stamina =  Stamina;
-        playerData.level =  Level;
+        playerData.level =  currentLevel;
         playerData.isPlayerInDungeon = isPlayerInDungeon;
         playerData.kills = Kills;
+        playerData.xp = currentXP;
 
         return playerData;
     }
@@ -153,7 +160,11 @@ public class PlayerManager : MonoBehaviour
         Health = playerData.health;
         Gold = playerData.gold;
         Stamina = playerData.stamina;
-        Level = playerData.level;  
+        currentLevel = playerData.level;
+        currentXP = playerData.xp;
+        Kills = playerData.kills;
+        xpToLevelUp = Mathf.RoundToInt(baseXPToLevelUp * Mathf.Pow(xpToLevelUpMultiplier, currentLevel - 1));
+        SetAttackDamage(currentLevel);
     }
 
     public void ResetPlayerAttributes()
@@ -161,7 +172,7 @@ public class PlayerManager : MonoBehaviour
         Health = 100;
         Gold = 0;
         Stamina = 100.0f;
-        Level = 1;
+        currentLevel = 1;
     }
 
     public void SetPlayerCamera()
@@ -176,13 +187,39 @@ public class PlayerManager : MonoBehaviour
         isPlayerInDungeon = isInDungeon;
     }
 
-    public void SetAttackDamage(int attackDamage)
-    {
-        this.attackDamage = attackDamage;
-    }
-
     public void AddKill(int amount)
     {
         this.Kills++;
     }
+
+    public void AddXP(int amount)
+    {
+        currentXP += amount;
+        Debug.Log("CurrentXP: " + currentXP);
+        if (currentXP >= xpToLevelUp)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        currentLevel++;
+        currentXP = 0;
+        xpToLevelUp = Mathf.RoundToInt(baseXPToLevelUp * Mathf.Pow(xpToLevelUpMultiplier, currentLevel - 1));
+        SetAttackDamage(currentLevel);
+    }
+
+    public void SetAttackDamage(int playerLevel)
+    {
+        // Calculate the player's damage output based on their level
+        float damageMultiplier = 1.0f + ((float)playerLevel / 20.0f); // Increase damage by 5% for every 2 player levels
+        attackDamage = Mathf.RoundToInt(baseDamage * damageMultiplier);
+    }
+
+    public int GetLevel()
+    {
+        return currentLevel;
+    }
+
 }

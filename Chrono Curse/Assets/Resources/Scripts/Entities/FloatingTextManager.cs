@@ -23,12 +23,7 @@ public class FloatingTextManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-    }
-
-    public IEnumerator ShowFloatingText(string message, Vector3 spawnPosition, float displayTime)
+    public IEnumerator ShowFloatingText(string message, Vector3 spawnPosition, float displayTime, FloatingTextType type)
     {
         // Instantiate a new instance of the floatingText object
         GameObject textObj = textPool.GetObject();
@@ -42,8 +37,32 @@ public class FloatingTextManager : MonoBehaviour
         textObj.transform.position = spawnPosition;
         textObj.GetComponent<TextMesh>().text = message;
 
+        switch (type)
+        {
+            case FloatingTextType.DamageEnemy:
+                textObj.GetComponent<TextMesh>().color = Color.red;
+                break;
+            case FloatingTextType.XP:
+                textObj.GetComponent<TextMesh>().color = Color.green;
+                break;
+            case FloatingTextType.DamagePlayer:
+                textObj.GetComponent<TextMesh>().color = Color.yellow;
+                break;
+            case FloatingTextType.Loot:
+                textObj.GetComponent<TextMesh>().color = Color.white;
+                break;
+        }
+
         yield return new WaitForSeconds(displayTime);
 
         textPool.ReturnObject(textObj);
     }
+}
+
+public enum FloatingTextType
+{
+    DamageEnemy,
+    XP,
+    DamagePlayer,
+    Loot
 }

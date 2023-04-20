@@ -33,8 +33,6 @@ public class AttackChecker : MonoBehaviour
 
     private void UpdateAttackState()
     {
-        //Enemy_Logan enemyComponent = GetComponentInParent<Enemy_Logan>();
-        // Puts enemy into appropriate attack state as needed
         Enemy enemyComponent = GetComponentInParent<Enemy>();
         if (enemyComponent != null)
         {

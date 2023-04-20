@@ -56,7 +56,7 @@ public class LootManager : MonoBehaviour
                 Debug.Log("Player Gold :" + PlayerManager.Instance.Gold);
             }
 
-            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("Picked up " + lootPickup.Loot.name));
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(("Picked up " + lootPickup.Loot.name), PlayerManager.Instance.GetPlayerPosition(), 0.9f));
 
             allLoot.Remove(lootPickup.Loot);
             lootPool.ReturnObject(lootPickup.gameObject);

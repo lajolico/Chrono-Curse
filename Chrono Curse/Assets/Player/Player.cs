@@ -191,8 +191,7 @@ public class Player : MonoBehaviour
             enemy = enemyCollider.GetComponent<Enemy>();
             if(enemy != null) 
             {
-                enemy.TakeDamage(attackDamage);
-                    
+                enemy.TakeDamage(PlayerManager.Instance.attackDamage);
             }
         }
     }

@@ -31,7 +31,7 @@ public class AttackChecker : MonoBehaviour
 
     private void UpdateAttackState()
     {
-        Enemy enemyComponent = GetComponentInParent<Enemy>();
+        Enemy_Logan enemyComponent = GetComponentInParent<Enemy_Logan>();
         if (enemyComponent != null)
         {
             enemyComponent.AttackingPlayer(isInRange);

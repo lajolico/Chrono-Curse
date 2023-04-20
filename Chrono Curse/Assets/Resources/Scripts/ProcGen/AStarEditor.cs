@@ -7,11 +7,7 @@ using System.Drawing;
 
 public class AStarEditor : MonoBehaviour
 {
-
     public static AStarEditor Instance { get; private set; }
-
-    [SerializeField]
-    private int offset = 25;
 
     // Get the AstarData instance
     private AstarData data;
@@ -47,7 +43,7 @@ public class AStarEditor : MonoBehaviour
         gridGraph.SetDimensions(width*2, height*2, gridGraph.nodeSize);
 
         // Center the graph at the specified position
-        gridGraph.center = (Vector3)(Vector3Int)centerPosition + new Vector3(0, 1.5f, 0);
+        gridGraph.center = (Vector3)(Vector3Int)centerPosition + new Vector3(0, -1, 0);
 
         // Update the graph
         AstarPath.active.Scan();

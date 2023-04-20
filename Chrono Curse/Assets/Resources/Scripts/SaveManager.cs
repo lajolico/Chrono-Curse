@@ -63,7 +63,6 @@ public class SaveManager : MonoBehaviour
     }
 
 
-
     public SavePlayerData GetPlayerData()
     {
         SavePlayerData loadedGameData = null;
@@ -73,6 +72,24 @@ public class SaveManager : MonoBehaviour
             {
                 string json = File.ReadAllText(Application.persistentDataPath + playerSaveFile);
                 loadedGameData = JsonUtility.FromJson<SavePlayerData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error loading game: " + e.Message);
+            }
+        }
+        return loadedGameData;
+    }
+
+    public SaveEnemyData GetEnemyData()
+    {
+        SaveEnemyData loadedGameData = null;
+        if (File.Exists(Application.persistentDataPath + enemySaveFile))
+        {
+            try
+            {
+                string json = File.ReadAllText(Application.persistentDataPath + enemySaveFile);
+                loadedGameData = JsonUtility.FromJson<SaveEnemyData>(json);
             }
             catch (System.Exception e)
             {
@@ -98,6 +115,13 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    public void DeleteEnemySave()
+    {
+        if(File.Exists(enemySavePath))
+        {
+            File.Delete(Application.persistentDataPath + enemySaveFile);
+        }
+    }
     public bool DungeonSaveExists()
     {
         if(File.Exists(dungeonSavePath))
@@ -147,7 +171,7 @@ public class SaveManager : MonoBehaviour
         File.WriteAllText(dungeonSavePath, json);
     }
 
-    public void SaveEnemyData(EnemyData enemyData)
+    public void SaveEnemyData(SaveEnemyData enemyData)
     {
         string json = JsonUtility.ToJson(enemyData);
 
@@ -183,6 +207,19 @@ public class SavePlayerData
     }
 }
 
+[System.Serializable]
+public class SaveEnemyData
+{
+    public EnemyData enemyData;
+
+    public SaveEnemyData(EnemyData enemyData)
+    {
+        this.enemyData = enemyData;
+    }
+
+}
+
+
 /// <summary>
 /// Our player data
 /// </summary>
@@ -195,6 +232,7 @@ public class PlayerData
     public float stamina;
     public int level;
     public Vector3 position;
+    public int kills;
 }
 
 [System.Serializable]
@@ -258,8 +296,13 @@ public class EnemyData
 public class EnemyState
 {
     public Vector3 position;
-    public Quaternion rotation;
-    public Vector3 scale;
     public int health;
     public string prefabName;
+    public Sprite sprite;
+    public RuntimeAnimatorController animatorController;
+    public int attackDamage;
+    public float speed;
+    public float attackRate;
+    public float attackRange;
+    public float nextAttackTime;
 }

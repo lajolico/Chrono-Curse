@@ -58,7 +58,7 @@ public class EnemyManager : MonoBehaviour
                 PlayerManager.Instance.SpawnPlayer();
                 PlayerManager.Instance.SetPlayerPosition(room.RoomCenter + Vector2.one * 0.5f);
                 PlayerManager.Instance.SetPlayerCamera();
-
+                PlayerManager.Instance.SetAttackDamage(PlayerManager.Instance.GetLevel());  
                 PlayerManager.Instance.SetPlayerInDungeon(true);
             }
 
@@ -77,7 +77,7 @@ public class EnemyManager : MonoBehaviour
 
     private void InitEnemySpawn(Room room)
     {
-        int playerLevel = PlayerManager.Instance.Level;
+        int playerLevel = PlayerManager.Instance.currentLevel;
 
         switch (room.roomType)
         {
@@ -121,9 +121,10 @@ public class EnemyManager : MonoBehaviour
 
             // Spawn enemy prefab
             GameObject enemy = Instantiate(enemyPrefab, possibleSpawnPositions[i] + Vector2.one * 0.5f, Quaternion.identity);
-            Enemy_Logan enemyScript = enemy.GetComponent<Enemy_Logan>();
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            enemyScript.SetAttackDamage(PlayerManager.Instance.currentLevel);
             enemyScript.SetPropertiesFromObjectData(possibleEnemies[Random.Range(0, possibleEnemies.Count)], 
-                enemy.GetComponent<Animator>(), enemy.GetComponent<SpriteRenderer>(), enemy.GetComponentInChildren<AttackChecker>().gameObject);
+                enemy.GetComponent<Animator>(), enemy.GetComponentInChildren<AttackChecker>().gameObject);
             AddEnemy(enemy);
 
             // Save our enemy spawn positions, so we can spawn other items, such as portals or other things.
@@ -149,8 +150,8 @@ public class EnemyManager : MonoBehaviour
             GameObject enemyPrefab = Resources.Load<GameObject>("Enemies/EnemyPrefab");
             GameObject enemyObject = Instantiate(enemyPrefab, enemyState.position, Quaternion.identity);
             
-            Enemy_Logan enemy = enemyObject.GetComponent<Enemy_Logan>();
-            enemy.SetPropertiesFromState(enemyState, enemyObject.GetComponent<Animator>(), enemyObject.GetComponent<SpriteRenderer>(),
+            Enemy enemy = enemyObject.GetComponent<Enemy>();
+            enemy.SetPropertiesFromState(enemyState, enemyObject.GetComponent<Animator>(),
                             enemyObject.GetComponentInChildren<AttackChecker>().gameObject);
             AddEnemy(enemyObject);
         }
@@ -175,13 +176,14 @@ public class EnemyManager : MonoBehaviour
         foreach (var enemy in allEnemies)
         {
             EnemyState enemyState = new EnemyState();
-            EnemyObject enemyObjectData = enemy.GetComponent<Enemy_Logan>().GetEnemyObjectData();
+            EnemyObject enemyObjectData = enemy.GetComponent<Enemy>().GetEnemyObjectData();
             enemyState.sprite = enemyObjectData.sprite;
             enemyState.animatorController = enemyObjectData.animatorController;
             enemyState.health = enemyObjectData.health;
             enemyState.position = enemy.gameObject.transform.position;
             enemyState.prefabName = enemy.gameObject.name;
             enemyState.speed = enemyObjectData.speed;
+            enemyState.attackDamage = enemy.GetComponent<Enemy>().GetAttackDamage();
             enemyState.attackRate = enemyObjectData.attackRate;
             enemyState.attackRange = enemyObjectData.attackRange;
             enemyState.nextAttackTime = enemyObjectData.nextAttackTime;

@@ -233,6 +233,7 @@ public class PlayerData
     public int level;
     public Vector3 position;
     public int kills;
+    public int xp;
 }
 
 [System.Serializable]
@@ -305,4 +306,5 @@ public class EnemyState
     public float attackRate;
     public float attackRange;
     public float nextAttackTime;
+    public Enemy.EnemyType enemyType;
 }

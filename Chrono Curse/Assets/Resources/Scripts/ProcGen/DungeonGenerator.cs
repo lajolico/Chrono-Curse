@@ -18,12 +18,20 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     protected RoomMaker roomParams;
 
+    private int dungeonWidth, dungeonHeight;
+
     [SerializeField]
-    private int minRoomWidth = 10, minRoomHeight = 10; 
-   
+    private int minRoomWidth, minRoomHeight;
+
+    public int minSize = 50;
+    public int maxSize = 120;
+
+    public int minRoomSize = 10;
+    public int maxRoomSize = 30;
+
     //How large our dungeon should be when spliting it into other rooms.
-    [SerializeField]
-    private int dungeonWidth = 60, dungeonHeight = 60;
+
+    private int level;
 
     private TilemapUtil tilemapUtil;
 
@@ -68,6 +76,18 @@ public class DungeonGenerator : MonoBehaviour
         {
             tilemapUtil = gameObject.AddComponent<TilemapUtil>();
         }
+
+        // Get the player's level
+        level = PlayerManager.Instance.GetLevel();
+
+        // Calculate the dungeon size based on the player's level
+        dungeonWidth = Mathf.Clamp(level + 2, minSize, maxSize);
+        dungeonHeight = Mathf.Clamp(level + 2, minSize, maxSize);
+
+        // Calculate the room sizes based on the player's level
+        minRoomWidth = Mathf.Clamp(Mathf.FloorToInt(level / 2) + 2, minRoomSize, maxRoomSize);
+        minRoomHeight = Mathf.Clamp(Mathf.FloorToInt(level / 2) + 2, minRoomSize, maxRoomSize);
+
 
     }
     /// <summary>

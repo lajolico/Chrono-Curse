@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        SceneLoader.Instance.LoadSceneAsync("RestArea");
+        SceneLoader.Instance.LoadSceneAsync("RestRoom");
     }
 
     public void LoadRestAreaScene()

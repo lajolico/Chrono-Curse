@@ -53,10 +53,9 @@ public class LootManager : MonoBehaviour
             if(lootPickup.Loot.minGoldAmount> 0) 
             {
                 PlayerManager.Instance.SetGold(lootPickup.Loot.GenerateGoldAmount());
-                Debug.Log("Player Gold :" + PlayerManager.Instance.Gold);
             }
 
-            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(("Picked up " + lootPickup.Loot.name), PlayerManager.Instance.GetPlayerPosition(), 0.9f));
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(("Picked up " + lootPickup.Loot.name), PlayerManager.Instance.GetPlayerPosition(), 0.9f, FloatingTextType.Loot));
 
             allLoot.Remove(lootPickup.Loot);
             lootPool.ReturnObject(lootPickup.gameObject);

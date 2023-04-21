@@ -43,6 +43,9 @@ public class MainMenu : MonoBehaviour
                 GameManager.Instance.LoadDungeonScene(true);
           }
     }
+
+
+
     public void QuitGame()
     {
         Application.Quit();

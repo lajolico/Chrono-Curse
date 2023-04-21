@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            // DontDestroyOnLoad(gameObject);
+            //  DontDestroyOnLoad(gameObject);
         }else if(_instance != this)
         {
             Destroy(gameObject);
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        SceneManager.LoadScene("Dungeon");
+        // SceneManager.LoadScene(1);
         if (startNewGame)
         {
             StartCoroutine(NewGame());
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
                                                    SaveManager.Instance.GetPlayerData(),
                                                    SaveManager.Instance.GetEnemyData()));
         }
-        loadingScreen.SetActive(false);
+        // loadingScreen.SetActive(false);
     }
 
     // private IEnumerator WaitForLoadingScreen()

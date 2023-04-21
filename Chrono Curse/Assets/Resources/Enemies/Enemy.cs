@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         this.maxHealth = enemyObjData.health;
         currentHealth = this.maxHealth;
         this.attackRange = enemyObjData.attackRange;
-        this.attackRate = enemyObjData.attackRate;
+        this.attackRate = 1 / enemyObjData.attackRate;
         this.nextAttackTime = enemyObjData.nextAttackTime;
         this.enemyType = enemyObjData.enemyType;
         enemyObject = enemyObjData;
@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
         currentHealth = this.maxHealth;
         this.attackDamage = state.attackDamage;
         this.attackRange = state.attackRange;
-        this.attackRate = state.attackRate;
+        this.attackRate = 1 / state.attackRate;
         this.nextAttackTime = state.nextAttackTime;
         this.enemyType = state.enemyType;
     }
@@ -245,6 +245,13 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
+        attackCheckerAnimator.SetTrigger("Attack");
+        allowedToAttack = false;
+        nextAttackTime = Time.time + 1f / attackRate;
+    }
+
+    public void DoPlayerDamage()
+    {
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
@@ -252,10 +259,6 @@ public class Enemy : MonoBehaviour
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(attackDamage.ToString(), 
                 PlayerManager.Instance.GetPlayerPosition() + new Vector3(0, 1, 0), 0.5f, FloatingTextType.DamagePlayer));
         }
-        attackCheckerAnimator.SetTrigger("Attack");
-        attackPlayer = false;
-        allowedToAttack = false;
-        nextAttackTime = Time.time + 1f / attackRate;
     }
 
     public void TakeDamage(int damage)

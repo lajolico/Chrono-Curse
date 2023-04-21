@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadRestAreaScene()
     {
-
         if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
         {
             SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
@@ -99,28 +98,30 @@ public class GameManager : MonoBehaviour
         PlayerManager.Instance.SetPlayerInDungeon(false);
         SceneManager.LoadScene("YouDied");
         SaveManager.Instance.DeletePlayerSave(); //TEST THIS
-
     }
-
 
     private IEnumerator NewGame()
     {
         yield return new WaitUntil(() => DungeonGenerator.Instance != null);
 
-         DungeonGenerator.Instance.GenerateDungeon() ;
+        if(SaveManager.Instance.GetPlayerData() != null)
+        {
+            PlayerManager.Instance.LoadPlayerData(SaveManager.Instance.GetPlayerData().playerData);
+        }
+
+        DungeonGenerator.Instance.GenerateDungeon();
     }
 
     private IEnumerator LoadDungeonGameCoroutine(SaveDungeonData saveDungeonData, SavePlayerData savePlayerData, SaveEnemyData saveEnemyData)
     {
-
         yield return new WaitUntil(() => DungeonGenerator.Instance != null && PlayerManager.Instance != null 
-        && PropManager.Instance != null && EnemyManager.Instance != null);
+        && PropManager.Instance != null && EnemyManager.Instance != null && AStarEditor.Instance != null);
 
         DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
         EnemyManager.Instance.LoadEnemies(saveEnemyData.enemyData);
+        AStarEditor.Instance.LoadGraphData();
         ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);
         PlayerManager.Instance.LoadPlayerData(savePlayerData.playerData);
-
     }
 
     public void SaveDungeon()

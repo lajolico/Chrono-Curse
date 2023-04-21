@@ -51,6 +51,12 @@ public class Enemy : MonoBehaviour
     /// Attack Checker for our EnemyAI
     /// </summary>
     private Animator mainEnemyAnimator, attackCheckerAnimator;
+
+    internal void DamagePlayer()
+    {
+        PlayerManager.Instance.DamagePlayer(this.attackDamage);
+    }
+
     private SpriteRenderer attackCheckerRenderer;
 
     public void SetPropertiesFromObjectData(EnemyObject enemyObjData, 

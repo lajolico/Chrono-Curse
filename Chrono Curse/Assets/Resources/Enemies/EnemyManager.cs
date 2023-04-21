@@ -58,7 +58,8 @@ public class EnemyManager : MonoBehaviour
                 PlayerManager.Instance.SpawnPlayer();
                 PlayerManager.Instance.SetPlayerPosition(room.RoomCenter + Vector2.one * 0.5f);
                 PlayerManager.Instance.SetPlayerCamera();
-                PlayerManager.Instance.SetAttackDamage(PlayerManager.Instance.GetLevel());  
+                PlayerManager.Instance.SetAttackDamage(PlayerManager.Instance.GetLevel());
+                PlayerManager.Instance.SetPlayerHealthPerLevel(PlayerManager.Instance.GetLevel());
                 PlayerManager.Instance.SetPlayerInDungeon(true);
             }
 
@@ -71,6 +72,7 @@ public class EnemyManager : MonoBehaviour
 
         AStarEditor.Instance.ResizeGraph(DungeonGenerator.Instance.GetDungeonWidth(),
            DungeonGenerator.Instance.GetDungeonWidth(), RoomManager.Instance.GetRoomCenters());
+        AStarEditor.Instance.SaveGraphData();
         GameManager.Instance.SaveDungeon();
 
     }

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
+    public GameObject loadingScreen;
+
     private PlayerData playerData;
     public static GameManager Instance
     {
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
                                                    SaveManager.Instance.GetPlayerData(),
                                                    SaveManager.Instance.GetEnemyData()));
         }
+        loadingScreen.SetActive(false);
     }
 
     private IEnumerator WaitForLoadingScreen()
@@ -75,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(WaitForRestLoadingScreen());
 
-        //SceneManager.LoadScene("RestArea");
+        SceneManager.LoadScene("RestArea");
         SaveManager.Instance.DeleteDungeonSave();
         SaveManager.Instance.DeleteEnemySave();
         if(SaveManager.Instance.isPlayerInRestArea())

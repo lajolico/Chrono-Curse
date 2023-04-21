@@ -14,9 +14,9 @@ public class SceneLoader : MonoBehaviour
 
     public Slider slider;
 
-    public Text textProgress;
+    public TextMeshProUGUI textProgress;
 
-    public Text tipText;
+    public TextMeshProUGUI tipText;
 
     private List<string> tips = new List<string> {"Don't die! As you only have one life.", "Save your progress by beating dungeons.",
       "Use potions to replenish health or stamina.",
@@ -28,6 +28,7 @@ public class SceneLoader : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            // LoadSceneAsync("Dungeon");
         }else
         {
             Destroy(gameObject);
@@ -52,6 +53,7 @@ public class SceneLoader : MonoBehaviour
 
         while (!operation.isDone)
         {
+            Debug.Log("What are we doing???");
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
 
             slider.value = progress;

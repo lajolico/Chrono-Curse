@@ -152,10 +152,10 @@ MonoBehaviour:
   nextWaypointDistance: 3
   enemyTransform: {fileID: 5397174596957896485}
   attackPoint: {fileID: 5397174595931948021}
-  maxHealth: 0
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  baseAttackDamage: 10
 --- !u!95 &3725169093391681293
 Animator:
   serializedVersion: 5

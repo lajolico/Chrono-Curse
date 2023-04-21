@@ -89,34 +89,8 @@ public class Player : MonoBehaviour
         interact.Disable();
     }
 
-    // ! Sprite rendering components
-    void FixedUpdate()
+    void Update()
     {
-        myAnimator = GetComponent<Animator>();
-        mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
-
-        moveDirection = move.ReadValue<Vector2>();
-        rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
-        GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
-
-        if (interact.triggered)
-        {
-            Debug.Log("Ha, dummy, you died...");
-            youDeathed.SetActive(true);
-            Debug.Log("You died...");
-            fade = true;
-        }
-
-        if (fade)
-        {
-            youDiedScreen.alpha += Time.deltaTime;
-            if (youDiedScreen.alpha >= 1)
-            {
-                fade = false;
-                SceneManager.LoadScene(4);
-            }
-        }
-
         // ? Triggers attack animation
         // ? ==========================
         if (Time.time >= nextAttackTime)
@@ -133,7 +107,29 @@ public class Player : MonoBehaviour
         {
             staminaBar.GetComponent<StaminaBarScript>().UsingDash();
         }
-        
+    }
+
+    // ! Sprite rendering components
+    void FixedUpdate()
+    {
+        myAnimator = GetComponent<Animator>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
+
+        moveDirection = move.ReadValue<Vector2>();
+        rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
+        GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
+
+        // ? Fades in death scene
+        if (fade)
+        {
+            youDiedScreen.alpha += Time.deltaTime;
+            if (youDiedScreen.alpha >= 1)
+            {
+                fade = false;
+                SceneManager.LoadScene(4);
+            }
+        }
+
         // ? ==========================
         // ? Handles sprite animation/render
         // ? ==========================
@@ -241,27 +237,6 @@ public class Player : MonoBehaviour
         PlayerManager.Instance.HealPlayer(health);
         healthBar.SetHealth(PlayerManager.Instance.Health);
     }
-
-    // public void YouDied()
-    // {
-    //     Debug.Log("Ha, dummy, you died...");
-    //     youDiedScreen.SetActive(true);
-    //     // youDiedScreen.GetComponent<CanvasRenderer>();
-    //     // youDiedScreen.CrossFadeAlpha(.1f, 1f, false);
-    //     // for (float i = 0f; i <= 1f; i += .01f)
-    //     // {
-    //     //     youDiedScreen.GetComponent<CanvasRenderer>().SetAlpha(i);
-    //     // }
-    //     bool fade = true;
-    //     while (fade)
-    //     {
-    //         youDiedScreen.alpha += Time.deltaTime;
-    //         if (youDiedScreen.alpha >= 1)
-    //         {
-    //             fade = false;
-    //         }
-    //     }
-    // }
 
     // ! Shows hit box area for player attack
     void OnDrawGizmosSelected() 

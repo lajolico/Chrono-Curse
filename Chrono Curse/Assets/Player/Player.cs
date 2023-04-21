@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
             if (youDiedScreen.alpha >= 1)
             {
                 fade = false;
-                SceneManager.LoadScene(4);
+                GameManager.Instance.PlayerDied();
             }
         }
 

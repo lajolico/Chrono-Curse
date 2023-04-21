@@ -29,8 +29,6 @@ public class Player : MonoBehaviour
     // * Player attack, damage, and health components
     // * ==========================
     // Health mechanics
-    public int maxPlayerHealth = 100;
-    public int currentPlayerHealth;
     public HealthBarScript healthBar;
     // Attack mechanics
     public Transform attackPoint;
@@ -60,8 +58,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        currentPlayerHealth = maxPlayerHealth;
-        healthBar.SetMaxHealth(maxPlayerHealth);
+        healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
     }
 
     // ! Player controls enabled state
@@ -199,15 +196,15 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         myAnimator.SetTrigger("Damaged");
-        currentPlayerHealth -= damage;
-        healthBar.SetHealth(currentPlayerHealth);
+        PlayerManager.Instance.DamagePlayer(damage);
+        healthBar.SetHealth(PlayerManager.Instance.Health);
     }
 
     public void RecoverHealth(int health)
     {
         myAnimator.SetTrigger("Healing");
-        currentPlayerHealth += health;
-        healthBar.SetHealth(currentPlayerHealth);
+        PlayerManager.Instance.HealPlayer(health);
+        healthBar.SetHealth(PlayerManager.Instance.Health);
     }
 
     // ! Shows hit box area for player attack

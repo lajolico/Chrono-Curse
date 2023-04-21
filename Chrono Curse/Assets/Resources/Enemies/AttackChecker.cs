@@ -45,7 +45,7 @@ public class AttackChecker : MonoBehaviour
         Enemy enemyComponent = GetComponentInParent<Enemy>();
         if (enemyComponent != null)
         {
-            enemyComponent.DoPlayerDamage();
+            enemyComponent.DamagePlayer();
         } 
     }
 }

@@ -7,15 +7,13 @@ using Cinemachine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
-    public int Health { get; private set; } = 100;
+    public int Health { get; private set; }
+    public int MaxHealth { get; private set; }
     public int Gold { get; private set; } = 0;
     public float Stamina { get; private set; } = 120.0f;
-
     public int Kills { get; private set; } = 0;
-
     public int currentXP { get; private set; } = 0;
     public int currentLevel { get; private set; } = 1;
-
     private int xpToLevelUp = 100;
     public int baseXPToLevelUp = 100;
     public float xpToLevelUpMultiplier = 1.5f;
@@ -136,7 +134,7 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerData playerData = new PlayerData();
         playerData.position = GetPlayerPosition();
-        playerData.health =  Health;
+        playerData.health =  MaxHealth;
         playerData.gold =  Gold;
         playerData.stamina =  Stamina;
         playerData.level =  currentLevel;
@@ -153,9 +151,12 @@ public class PlayerManager : MonoBehaviour
     /// <param name="playerData">Our players data</param>
     public void LoadPlayerData (PlayerData playerData)
     {
-        SpawnPlayer();
-        SetPlayerPosition(playerData.position);
-        SetPlayerCamera();
+        if(playerData.isPlayerInDungeon)
+        {
+            SpawnPlayer();
+            SetPlayerPosition(playerData.position);
+            SetPlayerCamera();
+        }
 
         Health = playerData.health;
         Gold = playerData.gold;
@@ -222,4 +223,37 @@ public class PlayerManager : MonoBehaviour
         return currentLevel;
     }
 
+    public void DamagePlayer(int damage)
+    {
+        this.Health -= damage;
+    }
+
+    public void SetPlayerHealthPerLevel(int level)
+    {
+        // Set the player's maximum health based on their level
+        MaxHealth = 100 + (level * 10);
+        // Set the player's current health to the new maximum health
+        Health = MaxHealth;
+    }
+
+
+
+    public void HealPlayer(int amount)
+    {
+        StartCoroutine(HealOverTime(amount));
+    }
+
+    IEnumerator HealOverTime(int amount)
+    {
+        float healPerSecond = amount / 10f; // adjust the divisor to control the time it takes to heal
+        while (Health < MaxHealth)
+        {
+            Health += (int) (healPerSecond * Time.deltaTime);
+            if (Health > MaxHealth)
+            {
+                Health = MaxHealth;
+            }
+            yield return null;
+        }
+    }
 }

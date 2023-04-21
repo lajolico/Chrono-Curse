@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RecoverHealth : MonoBehaviour
+public class RecoverHealth_Extra : MonoBehaviour
 {
 
     public GameObject player;

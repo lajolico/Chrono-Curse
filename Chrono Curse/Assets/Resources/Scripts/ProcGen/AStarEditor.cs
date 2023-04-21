@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-using UnityEngine.Analytics;
-using System.Drawing;
+using System.IO;
+
 
 public class AStarEditor : MonoBehaviour
 {
@@ -11,6 +11,8 @@ public class AStarEditor : MonoBehaviour
 
     // Get the AstarData instance
     private AstarData data;
+
+    private static string graphSaveFile = "/graph.bytes";
 
     private void Awake()
     {
@@ -25,6 +27,7 @@ public class AStarEditor : MonoBehaviour
 
        data = AstarPath.active.data;
     }
+
     public void ResizeGraph(int width, int height, List<Vector2Int> roomCenters)
     {
         // Get the grid graph
@@ -43,10 +46,54 @@ public class AStarEditor : MonoBehaviour
         gridGraph.SetDimensions(width*2, height*2, gridGraph.nodeSize);
 
         // Center the graph at the specified position
-        gridGraph.center = (Vector3)(Vector3Int)centerPosition + new Vector3(0, -1, 0);
+        gridGraph.center = (Vector3Int)centerPosition;
 
         // Update the graph
         AstarPath.active.Scan();
+    }
+
+    /// <summary>
+    /// Save our AStar graph.
+    /// </summary>
+    public void SaveGraphData()
+    {
+        Pathfinding.Serialization.SerializeSettings settings = new Pathfinding.Serialization.SerializeSettings();
+        //Save node info, and output nice JSON
+        settings.nodes = true;
+        // Get the byte data of the graph
+        byte[] graphBytes = data.SerializeGraphs(settings);
+
+        // Create a file path to save the graph data
+        string saveFilePath = Application.persistentDataPath + graphSaveFile;
+
+        // Write the graph data bytes to file
+        File.WriteAllBytes(saveFilePath, graphBytes);
+
+        Debug.Log("Graph data saved to file: " + saveFilePath);
+    }
+
+    public void LoadGraphData()
+    {
+        // Create a file path to load the graph data from
+        string loadFilePath = Application.persistentDataPath + graphSaveFile;
+
+        // Check if the file exists
+        if (File.Exists(loadFilePath))
+        {
+            // Load the graph data bytes from file
+            byte[] graphBytes = File.ReadAllBytes(loadFilePath);
+
+            // Deserialize the graph data and set it as the A* graph data
+            data.DeserializeGraphs(graphBytes);
+
+            Debug.Log("Graph data loaded from file: " + loadFilePath);
+
+            //AstarPath.active.Scan();
+        }
+        else
+        {
+            Debug.LogError("Graph data file does not exist: " + loadFilePath);
+        }
     }
 }
 

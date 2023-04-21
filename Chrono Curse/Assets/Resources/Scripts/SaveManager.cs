@@ -136,7 +136,6 @@ public class SaveManager : MonoBehaviour
     {
         if(File.Exists(playerSavePath))
         {
-            PlayerData playerData = new PlayerData();
             string existingData = File.ReadAllText(playerSavePath);
             SavePlayerData savePlayerData = JsonUtility.FromJson<SavePlayerData>(existingData);
             if(!savePlayerData.playerData.isPlayerInDungeon)
@@ -147,7 +146,14 @@ public class SaveManager : MonoBehaviour
         return false;
     }
 
-
+    public bool PlayerDataExists()
+    {
+        if (File.Exists(playerSavePath))
+        {
+            return true;
+        }
+        return false;
+    }
 
     public void SavePlayerData(SavePlayerData newPlayerData)
     {

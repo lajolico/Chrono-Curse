@@ -57,7 +57,7 @@ public class LootManager : MonoBehaviour
 
             if(lootPickup.Loot.minHealthAmount >  0)
             {
-                PlayerManager.Instance.GetComponentInChildren<Player>().RecoverHealth(lootPickup.Loot.GenerateHealthAmount());
+                //PlayerManager.Instance.GetComponentInChildren<Player>().RecoverHealth(lootPickup.Loot.GenerateHealthAmount());
             }    
 
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(("Picked up " + lootPickup.Loot.name), PlayerManager.Instance.GetPlayerPosition(), 0.9f, FloatingTextType.Loot));

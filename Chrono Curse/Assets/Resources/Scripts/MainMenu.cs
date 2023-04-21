@@ -32,19 +32,21 @@ public class MainMenu : MonoBehaviour
     {
     //     if (SaveManager.Instance.DungeonSaveExists())
     //     {
-    //         GameManager.Instance.LoadDungeonScene(false);
+    //        GameManager.Instance.LoadDungeonScene(false);
 
     //     }else if(SaveManager.Instance.isPlayerInRestArea())
     //     {
     //         GameManager.Instance.LoadRestAreaScene();
     //     }
     //     else
-    //     {
+    //    {
+    //     GameManager.Instance.LoadDungeonScene(true);
+    //     }
         SceneManager.LoadScene(1);
-        // GameManager.Instance.LoadDungeonScene(true);
-        
-        // }
     }
+
+
+
     public void QuitGame()
     {
         Application.Quit();

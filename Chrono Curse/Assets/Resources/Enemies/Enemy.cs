@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
         this.maxHealth = enemyObjData.health;
         currentHealth = this.maxHealth;
         this.attackRange = enemyObjData.attackRange;
-        this.attackRate = enemyObjData.attackRate;
+        this.attackRate = 1 / enemyObjData.attackRate;
         this.nextAttackTime = enemyObjData.nextAttackTime;
         this.enemyType = enemyObjData.enemyType;
         enemyObject = enemyObjData;
@@ -90,7 +90,7 @@ public class Enemy : MonoBehaviour
         currentHealth = this.maxHealth;
         this.attackDamage = state.attackDamage;
         this.attackRange = state.attackRange;
-        this.attackRate = state.attackRate;
+        this.attackRate = 1 / state.attackRate;
         this.nextAttackTime = state.nextAttackTime;
         this.enemyType = state.enemyType;
     }

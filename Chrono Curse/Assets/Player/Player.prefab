@@ -109,7 +109,7 @@ MonoBehaviour:
   rb: {fileID: 549990747429270168}
   moveSpeed: 2
   staminaBar: {fileID: 6338535228193870478}
-  dashSpeed: 0.4
+  dashSpeed: 3
   idleAnimWait: 0.3
   move:
     m_Name: Move
@@ -381,7 +381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &549990747622702908
 Transform:
   m_ObjectHideFlags: 0
@@ -520,6 +520,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 549990747429270172}
     m_Modifications:
+    - target: {fileID: 1511878897211830272, guid: 187af00650e9ec842ae5bf61e2386863, type: 3}
+      propertyPath: myPlayer
+      value: 
+      objectReference: {fileID: 549990747429270162}
+    - target: {fileID: 1511878897211830272, guid: 187af00650e9ec842ae5bf61e2386863, type: 3}
+      propertyPath: dashEffect
+      value: 
+      objectReference: {fileID: 549990747622702909}
     - target: {fileID: 1511878897464754774, guid: 187af00650e9ec842ae5bf61e2386863, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

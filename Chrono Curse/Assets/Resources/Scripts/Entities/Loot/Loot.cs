@@ -27,8 +27,12 @@ public class Loot : ScriptableObject
 
     [Space, Header("Loot Gold Amount: ")]
     [SerializeField] public int minGoldAmount;
-    [SerializeField] public int maxGoldAmount;  
- 
+    [SerializeField] public int maxGoldAmount;
+
+    [Space, Header("Health Amount: ")]
+    [SerializeField] public int minHealthAmount;
+    [SerializeField] public int maxHealthAmount;
+
     public Sprite Sprite => sprite;
 
     /// <summary>
@@ -80,5 +84,10 @@ public class Loot : ScriptableObject
     public int GenerateGoldAmount()
     {
         return Random.Range(minGoldAmount, maxGoldAmount + 1);
+    }
+
+    public int GenerateHealthAmount()
+    {
+        return Random.Range(minHealthAmount, maxHealthAmount + 1);
     }
 }

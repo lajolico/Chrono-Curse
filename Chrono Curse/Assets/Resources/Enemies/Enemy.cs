@@ -239,6 +239,13 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
+        attackCheckerAnimator.SetTrigger("Attack");
+        allowedToAttack = false;
+        nextAttackTime = Time.time + 1f / attackRate;
+    }
+
+    public void DoPlayerDamage()
+    {
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
@@ -246,10 +253,6 @@ public class Enemy : MonoBehaviour
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(attackDamage.ToString(), 
                 PlayerManager.Instance.GetPlayerPosition() + new Vector3(0, 1, 0), 0.5f, FloatingTextType.DamagePlayer));
         }
-        attackCheckerAnimator.SetTrigger("Attack");
-        attackPlayer = false;
-        allowedToAttack = false;
-        nextAttackTime = Time.time + 1f / attackRate;
     }
 
     public void TakeDamage(int damage)

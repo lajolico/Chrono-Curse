@@ -209,7 +209,6 @@ public class Enemy : MonoBehaviour
         }
         else if (attackPlayer && allowedToAttack)
         {
-            Debug.Log("Attacking");
             StopChasingPlayer();
             Attack();
         }

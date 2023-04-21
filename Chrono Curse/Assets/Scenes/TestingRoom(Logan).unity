@@ -3738,6 +3738,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &1649479560 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 4832034632072024878, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
+  m_PrefabInstance: {fileID: 549990746946876839}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657873219
 GameObject:
   m_ObjectHideFlags: 0
@@ -5239,6 +5244,18 @@ PrefabInstance:
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 542328554}
+    - target: {fileID: 549990747429270169, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
+      propertyPath: interact.m_Id
+      value: 88255372-8b94-4b76-90a0-b4482c0a3cf9
+      objectReference: {fileID: 0}
+    - target: {fileID: 549990747429270169, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
+      propertyPath: youDiedScreen
+      value: 
+      objectReference: {fileID: 1649479560}
+    - target: {fileID: 549990747429270169, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
+      propertyPath: interact.m_Name
+      value: Interact
+      objectReference: {fileID: 0}
     - target: {fileID: 549990747429270171, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
       value: 3

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
     public InputAction move;
     public InputAction dash;
     public InputAction attack;
+    public InputAction interact;
     // * ==========================
     // * Player attack, damage, and health components
     // * ==========================
@@ -44,6 +46,10 @@ public class Player : MonoBehaviour
     private SpriteRenderer mySpriteRenderer;
     public GameObject playerEffects;
     private bool dashActive = false;
+
+    public CanvasGroup youDiedScreen;
+    public GameObject youDeathed;
+    private bool fade = false;
     // * ==========================
     // * Player sound effects
     // * ==========================
@@ -70,6 +76,8 @@ public class Player : MonoBehaviour
         dash.Enable();
         attack = PlayerControl.Land.Attack;
         attack.Enable();
+        interact = PlayerControl.Land.Interact;
+        interact.Enable();
     }
 
     // ! Player controls disabled state
@@ -78,6 +86,7 @@ public class Player : MonoBehaviour
         move.Disable();
         dash.Disable();
         attack.Disable();
+        interact.Disable();
     }
 
     // ! Sprite rendering components
@@ -89,6 +98,25 @@ public class Player : MonoBehaviour
         moveDirection = move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
         GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
+
+        if (interact.triggered)
+        {
+            Debug.Log("Ha, dummy, you died...");
+            youDeathed.SetActive(true);
+            Debug.Log("You died...");
+            fade = true;
+        }
+
+        if (fade)
+        {
+            youDiedScreen.alpha += Time.deltaTime;
+            if (youDiedScreen.alpha >= 1)
+            {
+                fade = false;
+                SceneManager.LoadScene(4);
+            }
+        }
+
         // ? Triggers attack animation
         // ? ==========================
         if (Time.time >= nextAttackTime)
@@ -198,6 +226,13 @@ public class Player : MonoBehaviour
         myAnimator.SetTrigger("Damaged");
         PlayerManager.Instance.DamagePlayer(damage);
         healthBar.SetHealth(PlayerManager.Instance.Health);
+
+        if(PlayerManager.Instance.Health <= 0)
+        {
+            youDeathed.SetActive(true);
+            fade = true;
+        }
+
     }
 
     public void RecoverHealth(int health)
@@ -206,6 +241,27 @@ public class Player : MonoBehaviour
         PlayerManager.Instance.HealPlayer(health);
         healthBar.SetHealth(PlayerManager.Instance.Health);
     }
+
+    // public void YouDied()
+    // {
+    //     Debug.Log("Ha, dummy, you died...");
+    //     youDiedScreen.SetActive(true);
+    //     // youDiedScreen.GetComponent<CanvasRenderer>();
+    //     // youDiedScreen.CrossFadeAlpha(.1f, 1f, false);
+    //     // for (float i = 0f; i <= 1f; i += .01f)
+    //     // {
+    //     //     youDiedScreen.GetComponent<CanvasRenderer>().SetAlpha(i);
+    //     // }
+    //     bool fade = true;
+    //     while (fade)
+    //     {
+    //         youDiedScreen.alpha += Time.deltaTime;
+    //         if (youDiedScreen.alpha >= 1)
+    //         {
+    //             fade = false;
+    //         }
+    //     }
+    // }
 
     // ! Shows hit box area for player attack
     void OnDrawGizmosSelected() 

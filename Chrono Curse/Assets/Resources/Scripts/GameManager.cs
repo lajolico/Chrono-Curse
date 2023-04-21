@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            //  DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }else if(_instance != this)
         {
             Destroy(gameObject);
@@ -85,11 +85,11 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDied()
     {
+        SceneManager.LoadScene("YouDied");
         SaveManager.Instance.DeleteDungeonSave();
         SaveManager.Instance.DeleteEnemySave();
         PlayerManager.Instance.ResetPlayerAttributes();
         PlayerManager.Instance.SetPlayerInDungeon(false);
-        SceneManager.LoadScene("YouDied");
         SaveManager.Instance.DeletePlayerSave();
     }
 

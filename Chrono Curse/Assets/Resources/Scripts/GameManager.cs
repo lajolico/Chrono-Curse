@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("LoadingScreen");
 
         StartCoroutine(WaitForLoadingScreen());
-
+        loadingScreen.SetActive(true);
         if (startNewGame)
         {
             StartCoroutine(NewGame());

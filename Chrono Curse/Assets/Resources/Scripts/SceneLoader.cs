@@ -28,7 +28,7 @@ public class SceneLoader : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            // LoadSceneAsync("Dungeon");
+            LoadSceneAsync("Dungeon");
         }else
         {
             Destroy(gameObject);

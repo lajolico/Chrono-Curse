@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
         }else if(_instance != this)
         {
             Destroy(gameObject);
@@ -31,9 +31,9 @@ public class GameManager : MonoBehaviour
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        SceneManager.LoadScene("LoadingScreen");
+        // SceneManager.LoadScene("LoadingScreen");
 
-        StartCoroutine(WaitForLoadingScreen());
+        // StartCoroutine(WaitForLoadingScreen());
         loadingScreen.SetActive(true);
         if (startNewGame)
         {
@@ -49,34 +49,34 @@ public class GameManager : MonoBehaviour
         loadingScreen.SetActive(false);
     }
 
-    private IEnumerator WaitForLoadingScreen()
-    {
-        while(!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-        {
-            yield return null;
-        }
+    // private IEnumerator WaitForLoadingScreen()
+    // {
+    //     while(!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+    //     {
+    //         yield return null;
+    //     }
 
-        SceneLoader.Instance.LoadSceneAsync("Dungeon");
-    }
+    //     SceneLoader.Instance.LoadSceneAsync("Dungeon");
+    // }
 
-    private IEnumerator WaitForRestLoadingScreen()
-    {
-        while (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-        {
-            yield return null;
-        }
+    // private IEnumerator WaitForRestLoadingScreen()
+    // {
+    //     while (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+    //     {
+    //         yield return null;
+    //     }
 
-        SceneLoader.Instance.LoadSceneAsync("RestRoom");
-    }
+    //     SceneLoader.Instance.LoadSceneAsync("RestRoom");
+    // }
 
     public void LoadRestAreaScene()
     {
-        if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-        {
-            SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
-        }
+        // if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+        // {
+        //     SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
+        // }
 
-        StartCoroutine(WaitForRestLoadingScreen());
+        // StartCoroutine(WaitForRestLoadingScreen());
 
         SceneManager.LoadScene("RestArea");
         SaveManager.Instance.DeleteDungeonSave();

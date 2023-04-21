@@ -12,6 +12,8 @@ public class SceneLoader : MonoBehaviour
 
     public GameObject loadingScreen;
 
+    public GameManager loadingDungeon;
+
     public Slider slider;
 
     public TextMeshProUGUI textProgress;
@@ -28,7 +30,8 @@ public class SceneLoader : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            LoadSceneAsync("Dungeon");
+            // LoadSceneAsync("Dungeon");
+            loadingDungeon.LoadDungeonScene(true);
         }else
         {
             Destroy(gameObject);

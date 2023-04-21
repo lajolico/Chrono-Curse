@@ -6,23 +6,22 @@ public class LoadingDungeon : MonoBehaviour
 {
 
     public GameManager myGame;
-    public SaveManager mySaves;
     // Start is called before the first frame update
     void Awake()
     {
-        if (mySaves.DungeonSaveExists())
-        {
-            myGame.LoadDungeonScene(false);
+        // if (mySaves.DungeonSaveExists())
+        // {
+        //     myGame.LoadDungeonScene(false);
 
-        }else if(mySaves.isPlayerInRestArea())
-        {
-            myGame.LoadRestAreaScene();
-        }
-        else
-        {
+        // }else if(mySaves.isPlayerInRestArea())
+        // {
+        //     myGame.LoadRestAreaScene();
+        // }
+        // else
+        // {
         // SceneManager.LoadScene(1);
-            myGame.LoadDungeonScene(true);
-        }
+        myGame.LoadDungeonScene(true);
+        // }
     }
 
 }

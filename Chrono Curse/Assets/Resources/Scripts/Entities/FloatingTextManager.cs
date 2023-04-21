@@ -52,7 +52,6 @@ public class FloatingTextManager : MonoBehaviour
                 textObj.GetComponent<TextMesh>().color = Color.white;
                 break;
         }
-
         yield return new WaitForSeconds(displayTime);
 
         textPool.ReturnObject(textObj);

@@ -236,8 +236,6 @@ public class PlayerManager : MonoBehaviour
         Health = MaxHealth;
     }
 
-
-
     public void HealPlayer(int amount)
     {
         StartCoroutine(HealOverTime(amount));
@@ -256,4 +254,5 @@ public class PlayerManager : MonoBehaviour
             yield return null;
         }
     }
+
 }

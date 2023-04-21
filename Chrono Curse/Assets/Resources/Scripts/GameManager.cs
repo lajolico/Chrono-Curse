@@ -31,10 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        // SceneManager.LoadScene("LoadingScreen");
-
-        // StartCoroutine(WaitForLoadingScreen());
-        loadingScreen.SetActive(true);
+        SceneManager.LoadScene("Dungeon");
         if (startNewGame)
         {
             StartCoroutine(NewGame());
@@ -56,7 +53,7 @@ public class GameManager : MonoBehaviour
     //         yield return null;
     //     }
 
-    //     SceneLoader.Instance.LoadSceneAsync("Dungeon");
+    //     
     // }
 
     // private IEnumerator WaitForRestLoadingScreen()
@@ -71,14 +68,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadRestAreaScene()
     {
-        // if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-        // {
-        //     SceneManager.LoadScene("LoadingScreen", LoadSceneMode.Single);
-        // }
-
-        // StartCoroutine(WaitForRestLoadingScreen());
-
-        SceneManager.LoadScene("RestArea");
+        SceneManager.LoadScene("RestRoom");
         SaveManager.Instance.DeleteDungeonSave();
         SaveManager.Instance.DeleteEnemySave();
         if(SaveManager.Instance.isPlayerInRestArea())
@@ -100,7 +90,7 @@ public class GameManager : MonoBehaviour
         PlayerManager.Instance.ResetPlayerAttributes();
         PlayerManager.Instance.SetPlayerInDungeon(false);
         SceneManager.LoadScene("YouDied");
-        SaveManager.Instance.DeletePlayerSave(); //TEST THIS
+        SaveManager.Instance.DeletePlayerSave();
     }
 
     private IEnumerator NewGame()

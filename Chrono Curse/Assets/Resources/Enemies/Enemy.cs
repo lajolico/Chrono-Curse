@@ -45,7 +45,6 @@ public class Enemy : MonoBehaviour
     private float speed;
     private EnemyType enemyType;
     public int baseAttackDamage = 10;
-    private bool isDead;
 
     /// <summary>
     /// Attack Checker for our EnemyAI

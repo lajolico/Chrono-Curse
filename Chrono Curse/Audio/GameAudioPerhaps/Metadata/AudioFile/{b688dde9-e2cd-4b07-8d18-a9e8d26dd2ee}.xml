@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b688dde9-e2cd-4b07-8d18-a9e8d26dd2ee}">
+		<property name="assetPath">
+			<value>Audio Assets I like/Enemies SFX/More/Creature - Creepy/CC_013.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.442607709750567</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9e1740c7-ca87-41c0-96fe-d961c62059e4}</destination>
+		</relationship>
+	</object>
+</objects>

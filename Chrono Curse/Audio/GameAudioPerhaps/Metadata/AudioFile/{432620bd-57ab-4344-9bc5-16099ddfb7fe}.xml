@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{432620bd-57ab-4344-9bc5-16099ddfb7fe}">
+		<property name="assetPath">
+			<value>Audio Assets I like/Enemies SFX/More/Alarm/Alarm_25.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.75439909297052155</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9e1740c7-ca87-41c0-96fe-d961c62059e4}</destination>
+		</relationship>
+	</object>
+</objects>

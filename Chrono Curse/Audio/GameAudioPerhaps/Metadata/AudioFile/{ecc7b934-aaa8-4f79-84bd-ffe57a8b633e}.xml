@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{ecc7b934-aaa8-4f79-84bd-ffe57a8b633e}">
+		<property name="assetPath">
+			<value>Audio Assets I like/Enemies SFX/More/creature-animal/CCA_042.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.5233333333333334</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9e1740c7-ca87-41c0-96fe-d961c62059e4}</destination>
+		</relationship>
+	</object>
+</objects>

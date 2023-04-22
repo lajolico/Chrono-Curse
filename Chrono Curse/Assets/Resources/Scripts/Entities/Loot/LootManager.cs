@@ -55,9 +55,10 @@ public class LootManager : MonoBehaviour
                 PlayerManager.Instance.SetGold(lootPickup.Loot.GenerateGoldAmount());
             }
 
-            if(lootPickup.Loot.minHealthAmount >  0)
+            if(lootPickup.Loot.minHealthAmount > 0)
             {
-                //PlayerManager.Instance.GetComponentInChildren<Player>().RecoverHealth(lootPickup.Loot.GenerateHealthAmount());
+                Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
+                player.RecoverHealth();
             }    
 
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(("Picked up " + lootPickup.Loot.name), PlayerManager.Instance.GetPlayerPosition(), 0.9f, FloatingTextType.Loot));

@@ -231,10 +231,9 @@ public class Player : MonoBehaviour
 
     }
 
-    public void RecoverHealth(int health)
+    public void RecoverHealth()
     {
-        myAnimator.SetTrigger("Healing");
-        PlayerManager.Instance.HealPlayer(health);
+        PlayerManager.Instance.HealPlayer();
         healthBar.SetHealth(PlayerManager.Instance.Health);
     }
 

@@ -14,6 +14,9 @@ public class AStarEditor : MonoBehaviour
 
     private static string graphSaveFile = "/graph.bytes";
 
+    // Create a file path to save the graph data
+    string loadFilePath;
+
     private void Awake()
     {
         if(Instance== null || Instance != this)
@@ -26,6 +29,8 @@ public class AStarEditor : MonoBehaviour
         }
 
        data = AstarPath.active.data;
+
+        loadFilePath = Application.persistentDataPath + graphSaveFile;
     }
 
     public void ResizeGraph(int width, int height, List<Vector2Int> roomCenters)
@@ -63,13 +68,11 @@ public class AStarEditor : MonoBehaviour
         // Get the byte data of the graph
         byte[] graphBytes = data.SerializeGraphs(settings);
 
-        // Create a file path to save the graph data
-        string saveFilePath = Application.persistentDataPath + graphSaveFile;
 
         // Write the graph data bytes to file
-        File.WriteAllBytes(saveFilePath, graphBytes);
+        File.WriteAllBytes(loadFilePath, graphBytes);
 
-        Debug.Log("Graph data saved to file: " + saveFilePath);
+        Debug.Log("Graph data saved to file: " + loadFilePath);
     }
 
     public void LoadGraphData()
@@ -88,7 +91,19 @@ public class AStarEditor : MonoBehaviour
 
             Debug.Log("Graph data loaded from file: " + loadFilePath);
 
-            //AstarPath.active.Scan();
+            AstarPath.active.Scan();
+        }
+        else
+        {
+            Debug.LogError("Graph data file does not exist: " + loadFilePath);
+        }
+    }
+
+    public void DeleteGraph()
+    {
+        if (File.Exists(loadFilePath))
+        {
+            File.Delete(Application.persistentDataPath + graphSaveFile);
         }
         else
         {

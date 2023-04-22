@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
-    public GameObject loadingScreen;
-
     private PlayerData playerData;
     public static GameManager Instance
     {
@@ -31,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        // SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1);
         if (startNewGame)
         {
             StartCoroutine(NewGame());
@@ -43,7 +41,6 @@ public class GameManager : MonoBehaviour
                                                    SaveManager.Instance.GetPlayerData(),
                                                    SaveManager.Instance.GetEnemyData()));
         }
-        // loadingScreen.SetActive(false);
     }
 
     // private IEnumerator WaitForLoadingScreen()
@@ -76,7 +73,7 @@ public class GameManager : MonoBehaviour
             PlayerManager.Instance.SpawnPlayer();
         }
         PlayerManager.Instance.SetPlayerInDungeon(false);
-        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, 1, 0));
+        PlayerManager.Instance.SetPlayerPosition(new Vector3(-0.5f, -1f, 0f));
         playerData = PlayerManager.Instance.GetPlayerData();
         SavePlayerData saveData = new SavePlayerData(playerData);
 
@@ -88,9 +85,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("YouDied");
         SaveManager.Instance.DeleteDungeonSave();
         SaveManager.Instance.DeleteEnemySave();
-        PlayerManager.Instance.ResetPlayerAttributes();
-        PlayerManager.Instance.SetPlayerInDungeon(false);
         SaveManager.Instance.DeletePlayerSave();
+        AStarEditor.Instance.DeleteGraph();
     }
 
     private IEnumerator NewGame()

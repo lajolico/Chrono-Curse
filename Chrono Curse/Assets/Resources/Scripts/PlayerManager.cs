@@ -236,23 +236,8 @@ public class PlayerManager : MonoBehaviour
         Health = MaxHealth;
     }
 
-    public void HealPlayer(int amount)
+    public void HealPlayer()
     {
-        StartCoroutine(HealOverTime(amount));
+        Health = MaxHealth;
     }
-
-    IEnumerator HealOverTime(int amount)
-    {
-        float healPerSecond = amount / 10f; // adjust the divisor to control the time it takes to heal
-        while (Health < MaxHealth)
-        {
-            Health += (int) (healPerSecond * Time.deltaTime);
-            if (Health > MaxHealth)
-            {
-                Health = MaxHealth;
-            }
-            yield return null;
-        }
-    }
-
 }

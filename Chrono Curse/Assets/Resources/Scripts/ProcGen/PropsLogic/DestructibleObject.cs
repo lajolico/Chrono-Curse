@@ -11,7 +11,7 @@ public class DestructibleObject : MonoBehaviour
 
     private void Start()
     {
-        maxHealth = Random.Range(0, 4);
+        maxHealth = Random.Range(1, 4);
         currentHealth = maxHealth;
     }
 
@@ -30,8 +30,7 @@ public class DestructibleObject : MonoBehaviour
             }
             else
             {
-                Debug.Log("Attacked!");
-                currentHealth -= PlayerManager.Instance.attackDamage;
+                currentHealth -= Random.Range(1,2);
             }
         }
     }

@@ -19,3 +19,5 @@ MonoBehaviour:
   rarityLevel: 0
   minGoldAmount: 0
   maxGoldAmount: 0
+  minHealthAmount: 20
+  maxHealthAmount: 100

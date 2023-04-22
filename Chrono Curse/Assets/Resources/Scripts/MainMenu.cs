@@ -30,17 +30,17 @@ public class MainMenu : MonoBehaviour
     // /// </summary>
     public void OnPlayButtonClicked()
     {
-           if (SaveManager.Instance.DungeonSaveExists())
+          if (SaveManager.Instance.DungeonSaveExists())
           {
               GameManager.Instance.LoadDungeonScene(false);
 
-         }else if(SaveManager.Instance.isPlayerInRestArea())
-          {
+          }else if(SaveManager.Instance.isPlayerInRestArea()){
+
               GameManager.Instance.LoadRestAreaScene();
           }
           else
           {
-                GameManager.Instance.LoadDungeonScene(true);
+              GameManager.Instance.LoadDungeonScene(true);
           }
     }
 

@@ -243,7 +243,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        attackCheckerAnimator.SetTrigger("Attack");
+        attackCheckerAnimator.Play("Attack");
         allowedToAttack = false;
         nextAttackTime = Time.time + 1f / attackRate;
     }
@@ -254,8 +254,8 @@ public class Enemy : MonoBehaviour
         foreach(Collider2D player in hitplayer)
         {
             player.GetComponent<Player>().TakeDamage(attackDamage);
-            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(attackDamage.ToString(), 
-                PlayerManager.Instance.GetPlayerPosition() + new Vector3(0, 1, 0), 0.5f, FloatingTextType.DamagePlayer));
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+attackDamage.ToString(), 
+                PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
         }
     }
 
@@ -263,14 +263,13 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         attackCheckerAnimator.SetTrigger("Hurt");
-        Debug.Log("Hurt enemy!");
         if (currentHealth <= 0)
         {
             Die();
         }
         else
         {
-            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText(damage.ToString(), transform.position, 0.3f, FloatingTextType.DamageEnemy));
+            StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+damage.ToString(), transform.position, 0.3f, FloatingTextType.DamageEnemy));
         }
     }
 

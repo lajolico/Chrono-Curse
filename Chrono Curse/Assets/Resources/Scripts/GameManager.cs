@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadDungeonScene(bool startNewGame)
     {
-        // SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1);
         if (startNewGame)
         {
             StartCoroutine(NewGame());
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
             PlayerManager.Instance.SpawnPlayer();
         }
         PlayerManager.Instance.SetPlayerInDungeon(false);
-        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, 1, 0));
+        PlayerManager.Instance.SetPlayerPosition(new Vector3(1, -3, 0));
         playerData = PlayerManager.Instance.GetPlayerData();
         SavePlayerData saveData = new SavePlayerData(playerData);
 

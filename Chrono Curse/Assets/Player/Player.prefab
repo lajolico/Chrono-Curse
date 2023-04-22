@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 549990747429270172}
   - component: {fileID: 549990747429270173}
+  - component: {fileID: 8260365726737078277}
   - component: {fileID: 549990747429270169}
   - component: {fileID: 549990747429270160}
   - component: {fileID: 549990747429270161}
@@ -94,6 +95,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8260365726737078277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549990747429270162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c03458f9bf6d7f47910429b8bb055bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundAsset1: event:/footstepDirt1
+  soundAsset2: event:/footstepDirt2
+  soundAsset3: event:/footstepDirt3
+  footStepSpeed: 0.3
 --- !u!114 &549990747429270169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +179,7 @@ MonoBehaviour:
   playerEffects: {fileID: 549990747622702909}
   youDiedScreen: {fileID: 4832034632072024878}
   youDeathed: {fileID: 2783917752139041080}
+  audioForPlayer: {fileID: 8260365726737078277}
 --- !u!114 &549990747429270160
 MonoBehaviour:
   m_ObjectHideFlags: 0

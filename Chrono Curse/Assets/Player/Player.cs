@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
     // * Player sound effects
     // * ==========================
     // public AudioSource audioSrc;
-
+    public PlayerAudio audioForPlayer;
     // ! Initializes on player activation
     private void Awake()
     {
@@ -108,6 +108,7 @@ public class Player : MonoBehaviour
         {
             staminaBar.GetComponent<StaminaBarScript>().UsingDash();
         }
+
     }
 
     // ! Sprite rendering components
@@ -129,6 +130,15 @@ public class Player : MonoBehaviour
                 fade = false;
                 GameManager.Instance.PlayerDied();
             }
+        }
+
+        if ((rb.velocity[0] > 0.01f) || (rb.velocity[1] > 0.01f) || (rb.velocity[0] < -0.01f) || (rb.velocity[1] < -0.01f))
+        {
+            audioForPlayer.PlayerMovementStatus(true);
+        }
+        else
+        {
+            audioForPlayer.PlayerMovementStatus(false);
         }
 
         // ? ==========================

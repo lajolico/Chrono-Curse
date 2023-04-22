@@ -35,6 +35,7 @@ public class PlayerAudio : MonoBehaviour
 
     public void PlayerMovementStatus(bool status)
     {
+        // Debug.Log("fdhiaofhdoiashfdas");
         playerIsMoving = status;
         if (playerIsMoving)
         {

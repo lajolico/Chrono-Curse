@@ -6,19 +6,36 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    // * Player movement components
-    // * ==========================
-    // Normal movement
+
     Vector2 moveDirection = Vector2.zero;
     public Rigidbody2D rb;
     public float moveSpeed = 0.2f; // Base player speed
     private float activeMoveSpeed = 0.2f; // Current player move speed at any given time
-    public StaminaBarScript staminaBar;
     public float dashSpeed = 0.4f;
-    // Idle animation handling
-    public float idleAnimWait = .3f;
-    private float idleAnimWaitCounter;
-    // * ==========================
+    public StaminaBarScript staminaBar;
+
+    private Animator myAnimator;
+    private SpriteRenderer mySpriteRenderer;
+    public GameObject playerEffects;
+    private bool dashActive = false;
+
+    public HealthBarScript healthBar;
+
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public float attackRate = 2f;
+    public int attackDamage = 40;
+    public float nextAttackTime = 0f;
+
+    public CanvasGroup youDiedScreen;
+    public GameObject youDeathed;
+    private bool fade = false;
+
+    public PlayerAudio audioForPlayer;
+
+    public LayerMask enemyLayers;
+    public LayerMask itemLayers;
+
     // * Player controls
     // * ==========================
     public PlayerControls PlayerControl;
@@ -28,34 +45,6 @@ public class Player : MonoBehaviour
     public InputAction attack;
     public InputAction interact;
     // * ==========================
-    // * Player attack, damage, and health components
-    // * ==========================
-    // Health mechanics
-    public HealthBarScript healthBar;
-    // Attack mechanics
-    public Transform attackPoint;
-    public float attackRange = 0.5f;
-    public int attackDamage = 40;
-    public float attackRate = 2f;
-    public float nextAttackTime = 0f;
-    public LayerMask enemyLayers;
-    public LayerMask itemLayers;
-    // * ==========================
-    // * Animation control aspects
-    // * ==========================
-    private Animator myAnimator;
-    private SpriteRenderer mySpriteRenderer;
-    public GameObject playerEffects;
-    private bool dashActive = false;
-
-    public CanvasGroup youDiedScreen;
-    public GameObject youDeathed;
-    private bool fade = false;
-    // * ==========================
-    // * Player sound effects
-    // * ==========================
-    // public AudioSource audioSrc;
-    public PlayerAudio audioForPlayer;
     // ! Initializes on player activation
     private void Awake()
     {
@@ -98,7 +87,6 @@ public class Player : MonoBehaviour
         {
             if(attack.triggered)
             {
-                // FindObjectOfType<AudioManager>().Play("PlayerWalking");
                 Attack();
                 nextAttackTime = Time.time + 1f / attackRate;
             }
@@ -132,6 +120,7 @@ public class Player : MonoBehaviour
             }
         }
 
+        // ! Plays footstep audio
         if ((rb.velocity[0] > 0.01f) || (rb.velocity[1] > 0.01f) || (rb.velocity[0] < -0.01f) || (rb.velocity[1] < -0.01f))
         {
             audioForPlayer.PlayerMovementStatus(true);

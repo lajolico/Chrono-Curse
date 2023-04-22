@@ -1052,6 +1052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c04ffb050eb4ee44bc75b12ccf44b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingScreen: {fileID: 0}
 --- !u!4 &721319132
 Transform:
   m_ObjectHideFlags: 0
@@ -2157,6 +2158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b3831cc020def4094f2228cf181824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseXPToLevelUp: 100
+  xpToLevelUpMultiplier: 1.5
+  baseDamage: 20
   playerPrefab: {fileID: 549990747429270162, guid: 71c8a41b87937f049a986523f98e6cca, type: 3}
 --- !u!4 &1848254859
 Transform:

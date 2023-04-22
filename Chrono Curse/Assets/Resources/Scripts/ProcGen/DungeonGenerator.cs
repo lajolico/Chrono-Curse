@@ -80,6 +80,9 @@ public class DungeonGenerator : MonoBehaviour
         // Get the player's level
         level = PlayerManager.Instance.GetLevel();
 
+        // dungeonWidth = 1500;
+        // dungeonHeight = 1500;
+
         // Calculate the dungeon size based on the player's level
         dungeonWidth = Mathf.Clamp(level + 2, minSize, maxSize);
         dungeonHeight = Mathf.Clamp(level + 2, minSize, maxSize);

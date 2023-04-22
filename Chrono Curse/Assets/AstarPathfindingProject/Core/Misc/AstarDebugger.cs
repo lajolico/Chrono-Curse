@@ -12,7 +12,7 @@ namespace Pathfinding {
 	/// and the whole game as well to some extent.
 	///
 	/// Clarification of the labels shown when enabled.
-	/// All memory related things profiles <b>the whole game</b> not just the A* Pathfinding System.\n
+	/// All memory related things profiles <b>the whole game</b> not just the A* Pathfinding System.
 	/// - Currently allocated: memory the GC (garbage collector) says the application has allocated right now.
 	/// - Peak allocated: maximum measured value of the above.
 	/// - Last collect peak: the last peak of 'currently allocated'.
@@ -34,7 +34,7 @@ namespace Pathfinding {
 	///
 	/// TODO: Add field showing how many graph updates are being done right now
 	/// </summary>
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_astar_debugger.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_astar_debugger.php")]
 	public class AstarDebugger : VersionedMonoBehaviour {
 		public int yOffset = 5;
 
@@ -115,6 +115,13 @@ namespace Pathfinding {
 
 		PathTypeDebug[] debugTypes = new PathTypeDebug[] {
 			new PathTypeDebug("ABPath", () => PathPool.GetSize(typeof(ABPath)), () => PathPool.GetTotalCreated(typeof(ABPath)))
+			,
+			new PathTypeDebug("MultiTargetPath", () => PathPool.GetSize(typeof(MultiTargetPath)), () => PathPool.GetTotalCreated(typeof(MultiTargetPath))),
+			new PathTypeDebug("RandomPath", () => PathPool.GetSize(typeof(RandomPath)), () => PathPool.GetTotalCreated(typeof(RandomPath))),
+			new PathTypeDebug("FleePath", () => PathPool.GetSize(typeof(FleePath)), () => PathPool.GetTotalCreated(typeof(FleePath))),
+			new PathTypeDebug("ConstantPath", () => PathPool.GetSize(typeof(ConstantPath)), () => PathPool.GetTotalCreated(typeof(ConstantPath))),
+			new PathTypeDebug("FloodPath", () => PathPool.GetSize(typeof(FloodPath)), () => PathPool.GetTotalCreated(typeof(FloodPath))),
+			new PathTypeDebug("FloodPathTracer", () => PathPool.GetSize(typeof(FloodPathTracer)), () => PathPool.GetTotalCreated(typeof(FloodPathTracer)))
 		};
 
 		struct PathTypeDebug {

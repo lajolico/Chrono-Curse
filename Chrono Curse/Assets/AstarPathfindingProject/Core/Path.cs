@@ -78,7 +78,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Current state of the path.
-		/// \bug This may currently be set to Complete before the path has actually been fully calculated. In particular the vectorPath and path lists may not have been fully constructed.
+		/// Bug: This may currently be set to Complete before the path has actually been fully calculated. In particular the vectorPath and path lists may not have been fully constructed.
 		/// This can lead to race conditions when using multithreading. Try to avoid using this method to check for if the path is calculated right now, use <see cref="IsDone"/> instead.
 		/// </summary>
 		public PathCompleteState CompleteState {
@@ -275,7 +275,7 @@ namespace Pathfinding {
 		/// Note: Do not confuse this with AstarPath.WaitForPath. This one will wait using yield until it has been calculated
 		/// while AstarPath.WaitForPath will halt all operations until the path has been calculated.
 		///
-		/// \throws System.InvalidOperationException if the path is not started. Send the path to Seeker.StartPath or AstarPath.StartPath before calling this function.
+		/// Throws: System.InvalidOperationException if the path is not started. Send the path to Seeker.StartPath or AstarPath.StartPath before calling this function.
 		///
 		/// See: <see cref="BlockUntilCalculated"/>
 		/// See: https://docs.unity3d.com/Manual/Coroutines.html
@@ -322,10 +322,19 @@ namespace Pathfinding {
 			switch (heuristic) {
 			case Heuristic.Euclidean:
 				h = (uint)(((GetHTarget() - node.position).costMagnitude)*heuristicScale);
+				// Inlining this check and the return
+				// for each case saves an extra jump.
+				// This code is pretty hot
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			case Heuristic.Manhattan:
 				Int3 p2 = node.position;
 				h = (uint)((System.Math.Abs(hTarget.x-p2.x) + System.Math.Abs(hTarget.y-p2.y) + System.Math.Abs(hTarget.z-p2.z))*heuristicScale);
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			case Heuristic.DiagonalManhattan:
 				Int3 p = GetHTarget() - node.position;
@@ -335,6 +344,9 @@ namespace Pathfinding {
 				int diag = System.Math.Min(p.x, p.z);
 				int diag2 = System.Math.Max(p.x, p.z);
 				h = (uint)((((14*diag)/10) + (diag2-diag) + p.y) * heuristicScale);
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			}
 			return 0U;
@@ -405,9 +417,9 @@ namespace Pathfinding {
 		///
 		/// Note: The callback for the path might not have been called yet.
 		///
-		/// \since Added in 3.0.8
+		/// Since: Added in 3.0.8
 		///
-		/// See: \reflink{Seeker.IsDone} which also takes into account if the %path %callback has been called and had modifiers applied.
+		/// See: <see cref="Seeker.IsDone"/> which also takes into account if the path callback has been called and had modifiers applied.
 		/// </summary>
 		public bool IsDone () {
 			return PipelineState > PathState.Processing;
@@ -665,8 +677,8 @@ namespace Pathfinding {
 			while (c != null) {
 				c = c.parent;
 				count++;
-				if (count > 2048) {
-					Debug.LogWarning("Infinite loop? >2048 node path. Remove this message if you really have that long paths (Path.cs, Trace method)");
+				if (count > 16384) {
+					Debug.LogWarning("Infinite loop? >16384 node path. Remove this message if you really have that long paths (Path.cs, Trace method)");
 					break;
 				}
 			}

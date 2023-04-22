@@ -2,9 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding {
 #if NETFX_CORE
@@ -128,7 +126,9 @@ namespace Pathfinding {
 
 			public GraphUpdateLock (PathProcessor pathProcessor, bool block) {
 				this.pathProcessor = pathProcessor;
+				Profiler.BeginSample("Pausing pathfinding");
 				id = pathProcessor.Lock(block);
+				Profiler.EndSample();
 			}
 
 			/// <summary>
@@ -308,10 +308,6 @@ namespace Pathfinding {
 				// Access the internal implementation methods
 				IPathInternals ipath = (IPathInternals)path;
 
-				// Trying to prevent simple modding to allow more than one thread
-				if (pathHandler.threadID > 0) {
-					throw new System.Exception("Thread Error");
-				}
 
 				AstarProfiler.StartFastProfile(0);
 				ipath.PrepareBase(pathHandler);

@@ -8,6 +8,9 @@ namespace Pathfinding {
 
 	/// <summary>
 	/// AI for following paths.
+	///
+	/// [Open online documentation to see images]
+	///
 	/// This AI is the default movement script which comes with the A* Pathfinding Project.
 	/// It is in no way required by the rest of the system, so feel free to write your own. But I hope this script will make it easier
 	/// to set up movement for the characters in your game.
@@ -301,6 +304,15 @@ namespace Pathfinding {
 			// Replace the old path
 			path = p;
 
+			// The RandomPath and MultiTargetPath do not have a well defined destination that could have been
+			// set before the paths were calculated. So we instead set the destination here so that some properties
+			// like #reachedDestination and #remainingDistance work correctly.
+			if (path is RandomPath rpath) {
+				destination = rpath.originalEndPoint;
+			} else if (path is MultiTargetPath mpath) {
+				destination = mpath.originalEndPoint;
+			}
+
 			// Make sure the path contains at least 2 points
 			if (path.vectorPath.Count == 1) path.vectorPath.Add(path.vectorPath[0]);
 			interpolator.SetPath(path.vectorPath);
@@ -395,6 +407,19 @@ namespace Pathfinding {
 
 			ApplyGravity(deltaTime);
 
+			if (rvoController != null && rvoController.enabled) {
+				// Send a message to the RVOController that we want to move
+				// with this velocity. In the next simulation step, this
+				// velocity will be processed and it will be fed back to the
+				// rvo controller and finally it will be used by this script
+				// when calling the CalculateMovementDelta method below
+
+				// Make sure that we don't move further than to the end point
+				// of the path. If the RVO simulation FPS is low and we did
+				// not do this, the agent might overshoot the target a lot.
+				var rvoTarget = currentPosition + movementPlane.ToWorld(Vector2.ClampMagnitude(velocity2D, distanceToEnd), 0f);
+				rvoController.SetTarget(rvoTarget, velocity2D.magnitude, maxSpeed);
+			}
 
 			// Set how much the agent wants to move during this frame
 			var delta2D = lastDeltaPosition = CalculateDeltaToMoveThisFrame(movementPlane.ToPlane(currentPosition), distanceToEnd, deltaTime);
@@ -405,7 +430,16 @@ namespace Pathfinding {
 		protected virtual void CalculateNextRotation (float slowdown, out Quaternion nextRotation) {
 			if (lastDeltaTime > 0.00001f && enableRotation) {
 				Vector2 desiredRotationDirection;
-				desiredRotationDirection = velocity2D;
+				if (rvoController != null && rvoController.enabled) {
+					// When using local avoidance, use the actual velocity we are moving with if that velocity
+					// is high enough, otherwise fall back to the velocity that we want to move with (velocity2D).
+					// The local avoidance velocity can be very jittery when the character is close to standing still
+					// as it constantly makes small corrections. We do not want the rotation of the character to be jittery.
+					var actualVelocity = lastDeltaPosition/lastDeltaTime;
+					desiredRotationDirection = Vector2.Lerp(velocity2D, actualVelocity, 4 * actualVelocity.magnitude / (maxSpeed + 0.0001f));
+				} else {
+					desiredRotationDirection = velocity2D;
+				}
 
 				// Rotate towards the direction we are moving in.
 				// Don't rotate when we are very close to the target.
@@ -434,6 +468,12 @@ namespace Pathfinding {
 					// so that the velocity only goes along the direction of the wall, not into it
 					velocity2D -= difference * Vector2.Dot(difference, velocity2D) / sqrDifference;
 
+					// Make sure the RVO system knows that there was a collision here
+					// Otherwise other agents may think this agent continued
+					// to move forwards and avoidance quality may suffer
+					if (rvoController != null && rvoController.enabled) {
+						rvoController.SetCollisionNormal(difference);
+					}
 					positionChanged = true;
 					// Return the new position, but ignore any changes in the y coordinate from the ClampToNavmesh method as the y coordinates in the navmesh are rarely very accurate
 					return position + movementPlane.ToWorld(difference);

@@ -46,6 +46,8 @@ public class Enemy : MonoBehaviour
     private EnemyType enemyType;
     public int baseAttackDamage = 10;
 
+    public GameObject circleDetector;
+
     /// <summary>
     /// Attack Checker for our EnemyAI
     /// </summary>
@@ -116,9 +118,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        var circle = gameObject.GetComponent<CircleCollider2D>();
-        circle.radius = detectionRange;
-        circle.offset = new Vector2(0f, -0.5f);
+        circleDetector.GetComponent<PlayerDetector>().SetRange(detectionRange);
+        // var circle = gameObject.GetComponent<CircleCollider2D>();
+        // circle.radius = detectionRange;
+        // circle.offset = new Vector2(0f, -0.5f);
 
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
@@ -220,21 +223,26 @@ public class Enemy : MonoBehaviour
         rb.velocity = new Vector2(0, 0);
     }
 
-    void OnTriggerStay2D(Collider2D collision)
+    public void PlayerInRange(bool inRange)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isInRange = true;
-        }
+        isInRange = inRange;
     }
+
+    // void OnTriggerStay2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Player"))
+    //     {
+    //         isInRange = true;
+    //     }
+    // }
     
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isInRange = false;
-        }
-    }
+    // void OnTriggerExit2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Player"))
+    //     {
+    //         isInRange = false;
+    //     }
+    // }
 
     public void AttackingPlayer(bool attack)
     {

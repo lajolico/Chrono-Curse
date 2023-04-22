@@ -1,13 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding {
 	/// <summary>
 	/// Handles path calls for a single unit.
-	/// \ingroup relevant
+	///
 	/// This is a component which is meant to be attached to a single unit (AI, Robot, Player, whatever) to handle its pathfinding calls.
 	/// It also handles post-processing of paths using modifiers.
 	///
@@ -17,7 +15,7 @@ namespace Pathfinding {
 	/// See: modifiers (view in online documentation for working links)
 	/// </summary>
 	[AddComponentMenu("Pathfinding/Seeker")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_seeker.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_seeker.php")]
 	public class Seeker : VersionedMonoBehaviour {
 		/// <summary>
 		/// Enables drawing of the last calculated path using Gizmos.
@@ -107,7 +105,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Callback for when a path is completed.
-		/// Movement scripts should register to this delegate.\n
+		/// Movement scripts should register to this delegate.
 		/// A temporary callback can also be set when calling StartPath, but that delegate will only be called for that path
 		/// </summary>
 		public OnPathDelegate pathCallback;
@@ -136,6 +134,8 @@ namespace Pathfinding {
 
 		/// <summary>Cached delegate to avoid allocating one every time a path is started</summary>
 		private readonly OnPathDelegate onPathDelegate;
+		/// <summary>Cached delegate to avoid allocating one every time a path is started</summary>
+		private readonly OnPathDelegate onPartialPathDelegate;
 
 		/// <summary>Temporary callback only called for the current path. This value is set by the StartPath functions</summary>
 		private OnPathDelegate tmpPathCallback;
@@ -154,6 +154,7 @@ namespace Pathfinding {
 
 		public Seeker () {
 			onPathDelegate = OnPathComplete;
+			onPartialPathDelegate = OnPartialPathComplete;
 		}
 
 		/// <summary>Initializes a few variables</summary>
@@ -244,7 +245,7 @@ namespace Pathfinding {
 		/// This will run any modifiers attached to this GameObject on the path.
 		/// This is identical to calling RunModifiers(ModifierPass.PostProcess, path)
 		/// See: RunModifiers
-		/// \since Added in 3.2
+		/// Since: Added in 3.2
 		/// </summary>
 		public void PostProcess (Path path) {
 			RunModifiers(ModifierPass.PostProcess, path);
@@ -274,7 +275,7 @@ namespace Pathfinding {
 		/// Note: Do not confuse this with Pathfinding.Path.IsDone. They usually return the same value, but not always
 		/// since the path might be completely calculated, but it has not yet been processed by the Seeker.
 		///
-		/// \since Added in 3.0.8
+		/// Since: Added in 3.0.8
 		/// Version: Behaviour changed in 3.2
 		/// </summary>
 		public bool IsDone () {
@@ -339,10 +340,22 @@ namespace Pathfinding {
 			}
 		}
 
+		/// <summary>
+		/// Called for each path in a MultiTargetPath.
+		/// Only post processes the path, does not return it.
+		/// </summary>
+		void OnPartialPathComplete (Path p) {
+			OnPathComplete(p, true, false);
+		}
+
+		/// <summary>Called once for a MultiTargetPath. Only returns the path, does not post process.</summary>
+		void OnMultiPathComplete (Path p) {
+			OnPathComplete(p, false, true);
+		}
 
 		/// <summary>
 		/// Returns a new path instance.
-		/// The path will be taken from the path pool if path recycling is turned on.\n
+		/// The path will be taken from the path pool if path recycling is turned on.
 		/// This path can be sent to <see cref="StartPath(Path,OnPathDelegate,int)"/> with no change, but if no change is required <see cref="StartPath(Vector3,Vector3,OnPathDelegate)"/> does just that.
 		/// <code>
 		/// var seeker = GetComponent<Seeker>();
@@ -372,7 +385,7 @@ namespace Pathfinding {
 		/// <summary>
 		/// Call this function to start calculating a path.
 		///
-		/// callback will be called when the path has completed.
+		/// The callback will be called when the path has been calculated (which may be several frames into the future).
 		/// Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		/// </summary>
 		/// <param name="start">The start point of the path</param>
@@ -385,7 +398,7 @@ namespace Pathfinding {
 		/// <summary>
 		/// Call this function to start calculating a path.
 		///
-		/// callback will be called when the path has completed.
+		/// The callback will be called when the path has been calculated (which may be several frames into the future).
 		/// Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		/// </summary>
 		/// <param name="start">The start point of the path</param>
@@ -440,7 +453,20 @@ namespace Pathfinding {
 
 		/// <summary>Internal method to start a path and mark it as the currently active path</summary>
 		void StartPathInternal (Path p, OnPathDelegate callback) {
-			p.callback += onPathDelegate;
+			var mtp = p as MultiTargetPath;
+			if (mtp != null) {
+				// TODO: Allocation, cache
+				var callbacks = new OnPathDelegate[mtp.targetPoints.Length];
+
+				for (int i = 0; i < callbacks.Length; i++) {
+					callbacks[i] = onPartialPathDelegate;
+				}
+
+				mtp.callbacks = callbacks;
+				p.callback += OnMultiPathComplete;
+			} else {
+				p.callback += onPathDelegate;
+			}
 
 			p.enabledTags = traversableTags;
 			p.tagPenalties = tagPenalties;
@@ -469,6 +495,72 @@ namespace Pathfinding {
 			AstarPath.StartPath(path);
 		}
 
+		/// <summary>
+		/// Starts a Multi Target Path from one start point to multiple end points.
+		/// A Multi Target Path will search for all the end points in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.
+		///
+		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
+		///
+		/// See: Pathfinding.MultiTargetPath
+		/// See: MultiTargetPathExample.cs (view in online documentation for working links) "Example of how to use multi-target-paths"
+		/// </summary>
+		/// <param name="start">The start point of the path</param>
+		/// <param name="endPoints">The end points of the path</param>
+		/// <param name="pathsForAll">Indicates whether or not a path to all end points should be searched for or only to the closest one</param>
+		/// <param name="callback">The function to call when the path has been calculated</param>
+		/// <param name="graphMask">Mask used to specify which graphs should be searched for close nodes. See Pathfinding.NNConstraint.graphMask.</param>
+		public MultiTargetPath StartMultiTargetPath (Vector3 start, Vector3[] endPoints, bool pathsForAll, OnPathDelegate callback = null, int graphMask = -1) {
+			MultiTargetPath p = MultiTargetPath.Construct(start, endPoints, null, null);
+
+			p.pathsForAll = pathsForAll;
+			StartPath(p, callback, graphMask);
+			return p;
+		}
+
+		/// <summary>
+		/// Starts a Multi Target Path from multiple start points to a single target point.
+		/// A Multi Target Path will search from all start points to the target point in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.
+		///
+		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
+		///
+		/// See: Pathfinding.MultiTargetPath
+		/// See: MultiTargetPathExample.cs (view in online documentation for working links) "Example of how to use multi-target-paths"
+		/// </summary>
+		/// <param name="startPoints">The start points of the path</param>
+		/// <param name="end">The end point of the path</param>
+		/// <param name="pathsForAll">Indicates whether or not a path from all start points should be searched for or only to the closest one</param>
+		/// <param name="callback">The function to call when the path has been calculated</param>
+		/// <param name="graphMask">Mask used to specify which graphs should be searched for close nodes. See Pathfinding.NNConstraint.graphMask.</param>
+		public MultiTargetPath StartMultiTargetPath (Vector3[] startPoints, Vector3 end, bool pathsForAll, OnPathDelegate callback = null, int graphMask = -1) {
+			MultiTargetPath p = MultiTargetPath.Construct(startPoints, end, null, null);
+
+			p.pathsForAll = pathsForAll;
+			StartPath(p, callback, graphMask);
+			return p;
+		}
+
+		/// <summary>
+		/// Starts a Multi Target Path.
+		/// Takes a MultiTargetPath and wires everything up for it to send callbacks to the seeker for post-processing.
+		///
+		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
+		///
+		/// See: Pathfinding.MultiTargetPath
+		/// See: MultiTargetPathExample.cs (view in online documentation for working links) "Example of how to use multi-target-paths"
+		///
+		/// Version: Since 3.8.3 calling this method behaves identically to calling StartPath with a MultiTargetPath.
+		/// Version: Since 3.8.3 this method also sets enabledTags and tagPenalties on the path object.
+		///
+		/// Deprecated: You can use StartPath instead of this method now. It will behave identically.
+		/// </summary>
+		/// <param name="p">The path to start calculating</param>
+		/// <param name="callback">The function to call when the path has been calculated</param>
+		/// <param name="graphMask">Mask used to specify which graphs should be searched for close nodes. See Pathfinding.NNConstraint.graphMask.</param>
+		[System.Obsolete("You can use StartPath instead of this method now. It will behave identically.")]
+		public MultiTargetPath StartMultiTargetPath (MultiTargetPath p, OnPathDelegate callback = null, int graphMask = -1) {
+			StartPath(p, callback, graphMask);
+			return p;
+		}
 
 		/// <summary>Draws gizmos for the Seeker</summary>
 		public void OnDrawGizmos () {

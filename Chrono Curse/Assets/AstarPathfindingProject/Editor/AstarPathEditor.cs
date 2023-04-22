@@ -68,6 +68,8 @@ namespace Pathfinding {
 
 		#endregion
 
+		/// <summary>Holds defines found in script files, used for optimizations.</summary>
+		List<OptimizationHandler.DefineDefinition> defines;
 
 		/// <summary>Enables editor stuff. Loads graphs, reads settings and sets everything up</summary>
 		public void OnEnable () {
@@ -137,80 +139,6 @@ namespace Pathfinding {
 
 		void SetAstarEditorSettings () {
 			EditorPrefs.SetBool("EditorGUILayoutx.fancyEffects", FadeArea.fancyEffects);
-		}
-
-		/// <summary>Checks if JS support is enabled. This is done by checking if the directory 'Assets/AstarPathfindingEditor/Editor' exists</summary>
-		static bool IsJsEnabled () {
-			return System.IO.Directory.Exists(Application.dataPath+"/AstarPathfindingEditor/Editor");
-		}
-
-		/// <summary>
-		/// Enables JS support.
-		/// This is done by restructuring folders in the project.
-		/// See: javascript (view in online documentation for working links)
-		/// </summary>
-		static void EnableJs () {
-			// Path to the project folder (with /Assets at the end)
-			string projectPath = Application.dataPath;
-
-			if (projectPath.EndsWith("/Assets")) {
-				projectPath = projectPath.Remove(projectPath.Length-("Assets".Length));
-			}
-
-			if (!System.IO.Directory.Exists(projectPath + scriptsFolder)) {
-				string error = "Could not enable Js support. AstarPathfindingProject folder did not exist in the default location.\n" +
-							   "If you get this message and the AstarPathfindingProject is not at the root of your Assets folder (i.e at Assets/AstarPathfindingProject)" +
-							   " then you should move it to the root";
-
-				Debug.LogError(error);
-				EditorUtility.DisplayDialog("Could not enable Js support", error, "ok");
-				return;
-			}
-
-			if (!System.IO.Directory.Exists(Application.dataPath+"/AstarPathfindingEditor")) {
-				System.IO.Directory.CreateDirectory(Application.dataPath+"/AstarPathfindingEditor");
-				AssetDatabase.Refresh();
-			}
-			if (!System.IO.Directory.Exists(Application.dataPath+"/Plugins")) {
-				System.IO.Directory.CreateDirectory(Application.dataPath+"/Plugins");
-				AssetDatabase.Refresh();
-			}
-
-
-			AssetDatabase.MoveAsset(scriptsFolder + "/Editor", "Assets/AstarPathfindingEditor/Editor");
-			AssetDatabase.MoveAsset(scriptsFolder, "Assets/Plugins/AstarPathfindingProject");
-			AssetDatabase.Refresh();
-		}
-
-		/// <summary>Disables JS support if it was enabled. This is done by restructuring folders in the project</summary>
-		static void DisableJs () {
-			if (System.IO.Directory.Exists(Application.dataPath+"/Plugins/AstarPathfindingProject")) {
-				string error = AssetDatabase.MoveAsset("Assets/Plugins/AstarPathfindingProject", scriptsFolder);
-				if (error != "") {
-					Debug.LogError("Couldn't disable Js - "+error);
-				} else {
-					try {
-						System.IO.Directory.Delete(Application.dataPath+"/Plugins");
-					} catch (System.Exception) {}
-				}
-			} else {
-				Debug.LogWarning("Could not disable JS - Could not find directory '"+Application.dataPath+"/Plugins/AstarPathfindingProject'");
-			}
-
-			if (System.IO.Directory.Exists(Application.dataPath+"/AstarPathfindingEditor/Editor")) {
-				string error = AssetDatabase.MoveAsset("Assets/AstarPathfindingEditor/Editor", scriptsFolder + "/Editor");
-				if (error != "") {
-					Debug.LogError("Couldn't disable Js - "+error);
-				} else {
-					try {
-						System.IO.Directory.Delete(Application.dataPath+"/AstarPathfindingEditor");
-					} catch (System.Exception) {}
-				}
-			} else {
-				Debug.LogWarning("Could not disable JS - Could not find directory '"+Application.dataPath+"/AstarPathfindingEditor/Editor'");
-			}
-
-			AssetDatabase.Refresh();
 		}
 
 		/// <summary>
@@ -405,11 +333,38 @@ namespace Pathfinding {
 			optimizationSettingsArea.Header("Optimization");
 
 			if (optimizationSettingsArea.BeginFade()) {
-				GUIUtilityx.PushTint(Color.Lerp(Color.yellow, Color.white, 0.5F));
-				if (GUILayout.Button("Optimizations is an A* Pathfinding Project Pro only feature\nThe Pro version can be bought on the A* Pathfinding Project homepage, click here for info", helpBox)) {
-					Application.OpenURL(AstarUpdateChecker.GetURL("astarpro"));
+				defines = defines ?? OptimizationHandler.FindDefines();
+
+				EditorGUILayout.HelpBox("Using C# pre-processor directives, performance and memory usage can be improved by disabling features that you don't use in the project.\n" +
+					"Every change to these settings requires recompiling the scripts", MessageType.Info);
+
+				foreach (var define in defines) {
+					EditorGUILayout.Separator();
+
+					var label = new GUIContent(ObjectNames.NicifyVariableName(define.name), define.description);
+					define.enabled = EditorGUILayout.Toggle(label, define.enabled);
+					EditorGUILayout.HelpBox(define.description, MessageType.None);
+
+					if (!define.consistent) {
+						GUIUtilityx.PushTint(Color.red);
+						EditorGUILayout.HelpBox("This define is not consistent for all build targets, some have it enabled enabled some have it disabled. Press Apply to change them to the same value", MessageType.Error);
+						GUIUtilityx.PopTint();
+					}
 				}
-				GUIUtilityx.PopTint();
+
+				EditorGUILayout.Separator();
+				GUILayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();
+
+				if (GUILayout.Button("Apply", GUILayout.Width(150))) {
+					if (EditorUtility.DisplayDialog("Apply Optimizations", "Applying optimizations requires (in case anything changed) a recompilation of the scripts. The inspector also has to be reloaded. Do you want to continue?", "Ok", "Cancel")) {
+						OptimizationHandler.ApplyDefines(defines);
+						AssetDatabase.Refresh();
+						defines = null;
+					}
+				}
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
 			}
 
 			optimizationSettingsArea.End();
@@ -530,7 +485,9 @@ namespace Pathfinding {
 				}
 			}
 
+#pragma warning disable 0618
 			if (script.prioritizeGraphs) {
+#pragma warning restore 0618
 				var moveUp = GUILayout.Button(new GUIContent("Up", "Increase the graph priority"), GUILayout.Width(40));
 				var moveDown = GUILayout.Button(new GUIContent("Down", "Decrease the graph priority"), GUILayout.Width(40));
 
@@ -883,9 +840,9 @@ namespace Pathfinding {
 			EditorGUI.EndDisabledGroup();
 
 			int threads = AstarPath.CalculateThreadCount(script.threadCount);
-			if (threads > 0) EditorGUILayout.HelpBox("Using " + threads +" thread(s)" + (script.threadCount < 0 ? " on your machine" : "") + ".\n" +
-				"The free version of the A* Pathfinding Project is limited to at most one thread.", MessageType.None);
+			if (threads > 0) EditorGUILayout.HelpBox("Using " + threads +" thread(s)" + (script.threadCount < 0 ? " on your machine" : ""), MessageType.None);
 			else EditorGUILayout.HelpBox("Using a single coroutine (no threads)" + (script.threadCount < 0 ? " on your machine" : ""), MessageType.None);
+			if (threads > SystemInfo.processorCount) EditorGUILayout.HelpBox("Using more threads than there are CPU cores may not have a positive effect on performance", MessageType.Warning);
 
 			if (script.threadCount == ThreadCount.None) {
 				script.maxFrameTime = EditorGUILayout.FloatField(new GUIContent("Max Frame Time", "Max number of milliseconds to use for path calculation per frame"), script.maxFrameTime);
@@ -924,6 +881,7 @@ namespace Pathfinding {
 				script.navmeshUpdates.updateInterval = EditorGUILayout.FloatField(new GUIContent("Navmesh Cutting Update Interval (s)", "How often to check if any navmesh cut has changed."), script.navmeshUpdates.updateInterval);
 			}
 
+#pragma warning disable 0618
 			script.prioritizeGraphs = EditorGUILayout.Toggle(new GUIContent("Prioritize Graphs", "Normally, the system will search for the closest node in all graphs and choose the closest one" +
 				"but if Prioritize Graphs is enabled, the first graph which has a node closer than Priority Limit will be chosen and additional search (e.g for the closest WALKABLE node) will be carried out on that graph only"),
 				script.prioritizeGraphs);
@@ -932,6 +890,7 @@ namespace Pathfinding {
 				script.prioritizeGraphsLimit = EditorGUILayout.FloatField("Priority Limit", script.prioritizeGraphsLimit);
 				EditorGUI.indentLevel--;
 			}
+#pragma warning restore 0618
 
 			script.fullGetNearestSearch = EditorGUILayout.Toggle(new GUIContent("Full Get Nearest Node Search", "Forces more accurate searches on all graphs. " +
 				"Normally only the closest graph in the initial fast check will perform additional searches, " +
@@ -943,7 +902,39 @@ namespace Pathfinding {
 		}
 
 		void DrawHeuristicOptimizationSettings () {
-			// Pro only feature
+			script.euclideanEmbedding.mode = (HeuristicOptimizationMode)EditorGUILayout.EnumPopup(new GUIContent("Heuristic Optimization"), script.euclideanEmbedding.mode);
+
+			EditorGUI.indentLevel++;
+			if (script.euclideanEmbedding.mode == HeuristicOptimizationMode.Random) {
+				script.euclideanEmbedding.spreadOutCount = EditorGUILayout.IntField(new GUIContent("Count", "Number of optimization points, higher numbers give better heuristics and could make it faster, " +
+					"but too many could make the overhead too great and slow it down. Try to find the optimal value for your map. Recommended value < 100"), script.euclideanEmbedding.spreadOutCount);
+			} else if (script.euclideanEmbedding.mode == HeuristicOptimizationMode.Custom) {
+				script.euclideanEmbedding.pivotPointRoot = EditorGUILayout.ObjectField(new GUIContent("Pivot point root",
+					"All children of this transform are going to be used as pivot points. " +
+					"Recommended count < 100"), script.euclideanEmbedding.pivotPointRoot, typeof(Transform), true) as Transform;
+				if (script.euclideanEmbedding.pivotPointRoot == null) {
+					EditorGUILayout.HelpBox("Please assign an object", MessageType.Error);
+				}
+			} else if (script.euclideanEmbedding.mode == HeuristicOptimizationMode.RandomSpreadOut) {
+				script.euclideanEmbedding.pivotPointRoot = EditorGUILayout.ObjectField(new GUIContent("Pivot point root",
+					"All children of this transform are going to be used as pivot points. " +
+					"They will seed the calculation of more pivot points. " +
+					"Recommended count < 100"), script.euclideanEmbedding.pivotPointRoot, typeof(Transform), true) as Transform;
+
+				if (script.euclideanEmbedding.pivotPointRoot == null) {
+					EditorGUILayout.HelpBox("No root is assigned. A random node will be choosen as the seed.", MessageType.Info);
+				}
+
+				script.euclideanEmbedding.spreadOutCount = EditorGUILayout.IntField(new GUIContent("Count", "Number of optimization points, higher numbers give better heuristics and could make it faster, " +
+					"but too many could make the overhead too great and slow it down. Try to find the optimal value for your map. Recommended value < 100"), script.euclideanEmbedding.spreadOutCount);
+			}
+
+			if (script.euclideanEmbedding.mode != HeuristicOptimizationMode.None) {
+				EditorGUILayout.HelpBox("Heuristic optimization assumes the graph remains static. No graph updates, dynamic obstacles or similar should be applied to the graph " +
+					"when using heuristic optimization.", MessageType.Info);
+			}
+
+			EditorGUI.indentLevel--;
 		}
 
 		/// <summary>Opens the A* Inspector and shows the section for editing tags</summary>
@@ -981,16 +972,6 @@ namespace Pathfinding {
 
 			if (editorSettingsArea.BeginFade()) {
 				FadeArea.fancyEffects = EditorGUILayout.Toggle("Smooth Transitions", FadeArea.fancyEffects);
-
-				if (IsJsEnabled()) {
-					if (GUILayout.Button(new GUIContent("Disable Js Support", "Revert to only enable pathfinding calls from C#"))) {
-						DisableJs();
-					}
-				} else {
-					if (GUILayout.Button(new GUIContent("Enable Js Support", "Folders can be restructured to enable pathfinding calls from Js instead of just from C#"))) {
-						EnableJs();
-					}
-				}
 			}
 
 			editorSettingsArea.End();
@@ -1386,6 +1367,10 @@ namespace Pathfinding {
 						lastMessageTime = Time.realtimeSinceStartup;
 					}
 				}
+
+				// Repaint the game view in addition to just the scene view.
+				// In case the user only has the game view open it's nice to refresh it so they can see the graph.
+				UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
 			} catch (System.Exception e) {
 				Debug.LogError("There was an error generating the graphs:\n"+e+"\n\nIf you think this is a bug, please contact me on forum.arongranberg.com (post a new thread)\n");
 				EditorUtility.DisplayDialog("Error Generating Graphs", "There was an error when generating graphs, check the console for more info", "Ok");

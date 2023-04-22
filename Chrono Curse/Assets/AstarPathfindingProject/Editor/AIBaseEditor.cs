@@ -16,15 +16,15 @@ namespace Pathfinding {
 				var modeValue = (AutoRepathPolicy.Mode)mode.enumValueIndex;
 				EditorGUI.indentLevel++;
 				if (modeValue == AutoRepathPolicy.Mode.EveryNSeconds) {
-					FloatField("autoRepath.interval", min: 0f);
+					FloatField("autoRepath.period", min: 0f);
 				} else if (modeValue == AutoRepathPolicy.Mode.Dynamic) {
-					var maxInterval = FindProperty("autoRepath.maximumInterval");
+					var maxInterval = FindProperty("autoRepath.maximumPeriod");
 					FloatField(maxInterval, min: 0f);
 					Slider("autoRepath.sensitivity", 1.0f, 20.0f);
 					if (PropertyField("autoRepath.visualizeSensitivity")) {
 						EditorGUILayout.HelpBox("When the game is running the sensitivity will be visualized as a magenta circle. The path will be recalculated immediately if the destination is outside the circle and more quickly if it is close to the edge.", MessageType.None);
 					}
-					EditorGUILayout.HelpBox("The path will be recalculated at least every " + maxInterval.floatValue.ToString("0.0") + " seconds, but more often if the destination changes a lot", MessageType.None);
+					EditorGUILayout.HelpBox("The path will be recalculated at least every " + maxInterval.floatValue.ToString("0.0") + " seconds, but more often if the destination changes quickly", MessageType.None);
 				}
 				EditorGUI.indentLevel--;
 			}
@@ -155,6 +155,11 @@ namespace Pathfinding {
 			DebugInspector();
 			if ((rigid != null || rigid2D != null) && (controller != null && controller.enabled)) {
 				EditorGUILayout.HelpBox("You are using both a Rigidbody and a Character Controller. Those components are not really designed for that. Please use only one of them.", MessageType.Warning);
+			}
+
+			var isRichAI = typeof(RichAI).IsAssignableFrom(target.GetType());
+			if (isRichAI && Application.isPlaying && AstarPath.active != null && AstarPath.active.graphs.Length > 0 && AstarPath.active.data.recastGraph == null && AstarPath.active.data.navmesh == null) {
+				EditorGUILayout.HelpBox("This script only works with a navmesh or recast graph. If you are using some other graph type you might want to use another movement script.", MessageType.Warning);
 			}
 		}
 	}

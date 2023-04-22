@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{e648233c-0569-4cd8-83bd-62c5045cfded}">
+		<property name="assetPath">
+			<value>Audio Assets I like/UI/SoupTonic UI1 SFX Pack 1 - mp3/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9e1740c7-ca87-41c0-96fe-d961c62059e4}</destination>
+		</relationship>
+	</object>
+</objects>

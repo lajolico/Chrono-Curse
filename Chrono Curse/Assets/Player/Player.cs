@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     public float attackRate = 2f;
     public float nextAttackTime = 0f;
     public LayerMask enemyLayers;
+    public LayerMask itemLayers;
     // * ==========================
     // * Animation control aspects
     // * ==========================
@@ -54,7 +55,7 @@ public class Player : MonoBehaviour
     // * Player sound effects
     // * ==========================
     // public AudioSource audioSrc;
-
+    public PlayerAudio audioForPlayer;
     // ! Initializes on player activation
     private void Awake()
     {
@@ -107,6 +108,7 @@ public class Player : MonoBehaviour
         {
             staminaBar.GetComponent<StaminaBarScript>().UsingDash();
         }
+
     }
 
     // ! Sprite rendering components
@@ -128,6 +130,15 @@ public class Player : MonoBehaviour
                 fade = false;
                 GameManager.Instance.PlayerDied();
             }
+        }
+
+        if ((rb.velocity[0] > 0.01f) || (rb.velocity[1] > 0.01f) || (rb.velocity[0] < -0.01f) || (rb.velocity[1] < -0.01f))
+        {
+            audioForPlayer.PlayerMovementStatus(true);
+        }
+        else
+        {
+            audioForPlayer.PlayerMovementStatus(false);
         }
 
         // ? ==========================
@@ -213,6 +224,30 @@ public class Player : MonoBehaviour
             if(enemy != null) 
             {
                 enemy.TakeDamage(PlayerManager.Instance.attackDamage);
+            }
+        }
+
+        Collider2D[] hitProps = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, itemLayers);
+        Crate crate;
+        Barrel barrel;
+        Pot pot;
+        foreach(Collider2D propCollider in hitProps)
+        {
+            crate = propCollider.GetComponent<Crate>();
+            barrel = propCollider.GetComponent<Barrel>();
+            pot = propCollider.GetComponent<Pot>();
+            if(crate != null) 
+            {
+                crate.TakeDamage(attackDamage);
+                // enemy.TakeDamage(PlayerManager.Instance.attackDamage);
+            }
+            if(barrel != null)
+            {
+                barrel.TakeDamage(attackDamage);
+            }
+            if(pot != null)
+            {
+                pot.TakeDamage(attackDamage);
             }
         }
     }

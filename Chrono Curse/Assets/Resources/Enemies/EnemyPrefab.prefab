@@ -194,7 +194,7 @@ Animator:
   m_GameObject: {fileID: 5397174596957896474}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 88c259258e6160d4c9a15e70773b4278, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -291,6 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5397174597710483523}
   - component: {fileID: 5397174597710483534}
+  - component: {fileID: 6861469365677666520}
   - component: {fileID: 5397174597710483521}
   - component: {fileID: 5397174597710483535}
   - component: {fileID: 27560793864200249}
@@ -328,6 +329,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cccff6a611dfb234c9a5a3289cb4c18f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6861469365677666520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5397174597710483524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31650664980f8db4f99b92f35b0d1ed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationBridge: {fileID: 5397174596957896474}
 --- !u!212 &5397174597710483521
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -416,7 +430,7 @@ Animator:
   m_GameObject: {fileID: 5397174597710483524}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 88c259258e6160d4c9a15e70773b4278, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

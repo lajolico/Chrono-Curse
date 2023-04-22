@@ -119,9 +119,6 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         circleDetector.GetComponent<PlayerDetector>().SetRange(detectionRange);
-        // var circle = gameObject.GetComponent<CircleCollider2D>();
-        // circle.radius = detectionRange;
-        // circle.offset = new Vector2(0f, -0.5f);
 
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
@@ -228,22 +225,6 @@ public class Enemy : MonoBehaviour
         isInRange = inRange;
     }
 
-    // void OnTriggerStay2D(Collider2D collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Player"))
-    //     {
-    //         isInRange = true;
-    //     }
-    // }
-    
-    // void OnTriggerExit2D(Collider2D collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Player"))
-    //     {
-    //         isInRange = false;
-    //     }
-    // }
-
     public void AttackingPlayer(bool attack)
     {
         attackPlayer = attack;
@@ -295,12 +276,16 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        attackCheckerAnimator.SetTrigger("Death");
+    }
+
+    public void DestroyEnemy()
+    {
         StopAllCoroutines();
         GetComponent<Collider2D>().enabled = false;
         attackCheckerRenderer.enabled = false;
         AddToPlayer(enemyType);
         EnemyManager.Instance.RemoveEnemy(this.gameObject);
-        attackCheckerAnimator.SetTrigger("Death");
         Destroy(this.gameObject);
     }
 

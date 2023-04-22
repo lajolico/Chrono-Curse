@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using Pathfinding.Util;
-using Pathfinding.Serialization;
-using System.Linq;
 using UnityEngine;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding {
 	/// <summary>
@@ -144,7 +140,13 @@ namespace Pathfinding {
 			AddDirtyNode(node);
 		}
 
-		internal void AddDirtyNode (GraphNode node) {
+		/// <summary>
+		/// Marks this node as dirty because it's connectivity or walkability has changed.
+		/// This must be called by node classes after any connectivity/walkability changes have been made to them.
+		///
+		/// See: <see cref="GraphNode.SetConnectivityDirty"/>
+		/// </summary>
+		public void AddDirtyNode (GraphNode node) {
 			if (!node.IsHierarchicalNodeDirty) {
 				node.IsHierarchicalNodeDirty = true;
 				// While the dirtyNodes array is guaranteed to be large enough to hold all nodes in the graphs

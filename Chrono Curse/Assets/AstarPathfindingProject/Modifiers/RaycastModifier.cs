@@ -6,7 +6,7 @@ namespace Pathfinding {
 
 	/// <summary>
 	/// Simplifies a path using raycasting.
-	/// \ingroup modifiers
+	///
 	/// This modifier will try to remove as many nodes as possible from the path using raycasting (linecasting) to validate the node removal.
 	/// You can use either graph raycasting or Physics.Raycast.
 	/// When using graph raycasting, the graph will be traversed and checked for obstacles. When physics raycasting is used, the Unity physics system
@@ -37,7 +37,7 @@ namespace Pathfinding {
 	[AddComponentMenu("Pathfinding/Modifiers/Raycast Modifier")]
 	[RequireComponent(typeof(Seeker))]
 	[System.Serializable]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_raycast_modifier.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_raycast_modifier.php")]
 	public class RaycastModifier : MonoModifier {
 #if UNITY_EDITOR
 		[UnityEditor.MenuItem("CONTEXT/Seeker/Add Raycast Simplifier Modifier")]
@@ -293,6 +293,9 @@ namespace Pathfinding {
 			}
 
 			if (useGraphRaycasting) {
+#if !ASTAR_NO_GRID_GRAPH
+				bool betweenNodeCenters = n1 != null && n2 != null;
+#endif
 				if (n1 == null) n1 = AstarPath.active.GetNearest(v1, nnConstraint).node;
 				if (n2 == null) n2 = AstarPath.active.GetNearest(v2, nnConstraint).node;
 
@@ -306,6 +309,16 @@ namespace Pathfinding {
 					}
 
 					var rayGraph = graph as IRaycastableGraph;
+#if !ASTAR_NO_GRID_GRAPH
+					GridGraph gg = graph as GridGraph;
+					if (betweenNodeCenters && gg != null) {
+						// If the linecast is exactly between the centers of two nodes on a grid graph then a more optimized linecast can be used.
+						// This method is also more stable when raycasting along a diagonal when the line just touches an obstacle.
+						// The normal linecast method may or may not detect that as a hit depending on floating point errors
+						// however this method never detect it as an obstacle (and that is very good for this component as it improves the simplification).
+						return !gg.Linecast(n1 as GridNodeBase, n2 as GridNodeBase, filter);
+					} else
+#endif
 					if (rayGraph != null) {
 						return !rayGraph.Linecast(v1, v2, out GraphHitInfo _, null, filter);
 					}

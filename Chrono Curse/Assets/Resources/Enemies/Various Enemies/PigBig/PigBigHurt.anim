@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: KillYourself
+  m_Name: PigBigHurt
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,13 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: cb7504e9176024943b938c0e53afe146, type: 3}
+      value: {fileID: 21300000, guid: 574fcc044942ba94584fdad71853cdcc, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 2045b44a3bf2e1f40b81e0bd8f4b3267, type: 3}
+      value: {fileID: 21300000, guid: 25c4cf1c717f76e49a17218cfd64d6e8, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 6a1e2c97eca70704aa805948ac58bb9b, type: 3}
+      value: {fileID: 21300000, guid: 7c4d23e0a44352548b3763eb9b44a8cd, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: c4a8febc80b9ec3488c92df5784de742, type: 3}
+      value: {fileID: 21300000, guid: 844d8db28c40aee4bb53dd0a122ba21e, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,10 +46,10 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: cb7504e9176024943b938c0e53afe146, type: 3}
-    - {fileID: 21300000, guid: 2045b44a3bf2e1f40b81e0bd8f4b3267, type: 3}
-    - {fileID: 21300000, guid: 6a1e2c97eca70704aa805948ac58bb9b, type: 3}
-    - {fileID: 21300000, guid: c4a8febc80b9ec3488c92df5784de742, type: 3}
+    - {fileID: 21300000, guid: 574fcc044942ba94584fdad71853cdcc, type: 3}
+    - {fileID: 21300000, guid: 25c4cf1c717f76e49a17218cfd64d6e8, type: 3}
+    - {fileID: 21300000, guid: 7c4d23e0a44352548b3763eb9b44a8cd, type: 3}
+    - {fileID: 21300000, guid: 844d8db28c40aee4bb53dd0a122ba21e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

@@ -232,7 +232,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        attackCheckerAnimator.Play("Attack");
+        attackCheckerAnimator.SetTrigger("Attack");
         allowedToAttack = false;
         nextAttackTime = Time.time + 1f / attackRate;
     }
@@ -242,6 +242,7 @@ public class Enemy : MonoBehaviour
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
+            Debug.Log("Hitting player " + player);
             player.GetComponent<Player>().TakeDamage(attackDamage);
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+attackDamage.ToString(), 
                 PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
@@ -252,8 +253,10 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         attackCheckerAnimator.SetTrigger("Hurt");
+        Debug.Log("Enemy health: " + currentHealth);
         if (currentHealth <= 0)
         {
+            Debug.Log("DIEEEEE");
             Die();
         }
         else

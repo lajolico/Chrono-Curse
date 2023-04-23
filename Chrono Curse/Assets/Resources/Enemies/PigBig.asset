@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b7047022bf7d448bee0d2ddbeefc73, type: 3}
+  m_Name: PigBig
+  m_EditorClassIdentifier: 
+  _health: 100
+  _speed: 1
+  _sprite: {fileID: 21300000, guid: 5079401ea260b9246bc00576b1b9af68, type: 3}
+  _attackRange: 0.7
+  _attackRate: 5
+  _nextAttackTime: 0
+  _playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _animatorController: {fileID: 9100000, guid: a4e08c58368ced2478f325f4e5268654, type: 2}
+  _enemyType: 0

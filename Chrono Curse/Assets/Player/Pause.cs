@@ -18,7 +18,7 @@ public class Pause : MonoBehaviour
     {
         // toPauseMenu.onClick.AddListener(delegate { Pausing(); });
         // returnToGame.onClick.AddListener(delegate { Resume(); });
-
+        Debug.Log("Starting in-game pause menu...");
         pauseButton.GetComponent<Button>().onClick.AddListener(delegate { Pausing(); });
         pauseScreen.GetComponent<Button>().onClick.AddListener(delegate { Resume(); });
     }

@@ -1907,6 +1907,7 @@ GameObject:
   - component: {fileID: 467187836812776990}
   - component: {fileID: 4542896689067840725}
   - component: {fileID: 4860396579705809427}
+  - component: {fileID: 801231269700928951}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Player
@@ -1990,7 +1991,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6132749267428230120}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -2015,3 +2016,15 @@ MonoBehaviour:
   pauseUI: {fileID: 5263900783877169916}
   pauseButton: {fileID: 1319134677496882583}
   pauseScreen: {fileID: 4471436128954041845}
+--- !u!225 &801231269700928951
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6132749267428230120}
+  m_Enabled: 0
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -9,7 +9,9 @@ public class FloatingTextManager : MonoBehaviour
 {
     public static FloatingTextManager Instance { get; private set; }
 
-    [SerializeField] private ObjectPooling textPool;
+    [SerializeField]
+    private ObjectPooling textPool;
+    public int textFontSize = 12;
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class FloatingTextManager : MonoBehaviour
         textObj.SetActive(true);
         textObj.transform.position = spawnPosition;
         textObj.GetComponent<TextMesh>().text = message;
+        textObj.GetComponent<TextMesh>().fontSize = textFontSize;
 
         switch (type)
         {

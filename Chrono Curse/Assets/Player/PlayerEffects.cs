@@ -21,7 +21,6 @@ public class PlayerEffects : MonoBehaviour
 
     public void DashingEffect()
     {
-        Debug.Log("Dashing effect");
         effects.SetTrigger("Dashing");
     }
 }

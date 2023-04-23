@@ -125,9 +125,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 549990747429270168}
   moveSpeed: 2
-  staminaBar: {fileID: 6338535228193870478}
   dashSpeed: 3
-  idleAnimWait: 0.3
+  staminaBar: {fileID: 6338535228193870478}
+  playerEffects: {fileID: 549990747622702909}
+  healthBar: {fileID: 6338535229850211131}
+  attackPoint: {fileID: 549990748156006154}
+  attackRange: 0.5
+  attackRate: 2
+  attackDamage: 40
+  nextAttackTime: 0
+  youDiedScreen: {fileID: 6463204819910254578}
+  youDeathed: {fileID: 6008564907582149218}
+  audioForPlayer: {fileID: 5572101225948553390}
+  pauseMenuPrefab: {fileID: 6132749267428230120, guid: 187af00650e9ec842ae5bf61e2386863, type: 3}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  itemLayers:
+    serializedVersion: 2
+    m_Bits: 512
   move:
     m_Name: Move
     m_Type: 0
@@ -164,22 +180,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  healthBar: {fileID: 6338535229850211131}
-  attackPoint: {fileID: 549990748156006154}
-  attackRange: 0.5
-  attackDamage: 40
-  attackRate: 2
-  nextAttackTime: 0
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  itemLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  playerEffects: {fileID: 549990747622702909}
-  youDiedScreen: {fileID: 6463204819910254578}
-  youDeathed: {fileID: 6008564907582149218}
-  audioForPlayer: {fileID: 5572101225948553390}
 --- !u!114 &549990747429270160
 MonoBehaviour:
   m_ObjectHideFlags: 0

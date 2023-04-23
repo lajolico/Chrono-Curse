@@ -107,10 +107,10 @@ public class GameManager : MonoBehaviour
         && PropManager.Instance != null && EnemyManager.Instance != null && AStarEditor.Instance != null);
 
         DungeonGenerator.Instance.SetDungeonData(saveDungeonData.dungeonData, saveDungeonData.propData);
+        PlayerManager.Instance.LoadPlayerData(savePlayerData.playerData);
         EnemyManager.Instance.LoadEnemies(saveEnemyData.enemyData);
         AStarEditor.Instance.LoadGraphData();
         ExitPoint.Instance.LoadExitPoint(saveDungeonData.exitPointData);
-        PlayerManager.Instance.LoadPlayerData(savePlayerData.playerData);
     }
 
     public void SaveDungeon()

@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     {
         PlayerControl = new PlayerControls();
         activeMoveSpeed = moveSpeed;
+        healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
     }
 
     void Start()
@@ -246,7 +247,7 @@ public class Player : MonoBehaviour
         myAnimator.SetTrigger("Damaged");
         PlayerManager.Instance.DamagePlayer(damage);
         healthBar.SetHealth(PlayerManager.Instance.Health);
-
+        Debug.Log("Player health: " + PlayerManager.Instance.Health);
         if(PlayerManager.Instance.Health <= 0)
         {
             youDeathed.SetActive(true);

@@ -116,6 +116,11 @@ public class Enemy : MonoBehaviour
         return enemyObject;
     }
 
+    void Awake()
+    {
+        seeker = GetComponent<Seeker>();
+    }
+
     private void Start()
     {
         circleDetector.GetComponent<PlayerDetector>().SetRange(detectionRange);

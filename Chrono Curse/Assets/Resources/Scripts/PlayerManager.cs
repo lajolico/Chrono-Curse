@@ -7,8 +7,8 @@ using Cinemachine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
-    public int Health { get; private set; }
-    public int MaxHealth { get; private set; }
+    public int Health { get; private set; } = 100;
+    public int MaxHealth { get; private set; } = 100;
     public int Gold { get; private set; } = 0;
     public float Stamina { get; private set; } = 120.0f;
     public int Kills { get; private set; } = 0;
@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField]
     public GameObject playerPrefab;
-     
+
     private CinemachineVirtualCamera vCamera;
 
     //Ensure that our player persists between scene changes
@@ -46,11 +46,9 @@ public class PlayerManager : MonoBehaviour
             // If another instance of the class already exists, destroy this one
             Destroy(gameObject);
         }
-
-       
     }
 
-    // Public method to get the player's position
+    /// Public method to get the player's position
     public Vector3 GetPlayerPosition()
     {
         if (playerInstance == null)

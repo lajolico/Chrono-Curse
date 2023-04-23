@@ -664,6 +664,8 @@ MonoBehaviour:
   allEnemies: []
   enemyDataList:
   - {fileID: 11400000, guid: 1ca251f74207269458c0fee822f8b2d8, type: 2}
+  - {fileID: 11400000, guid: a694a13285ae74c45980694398364c70, type: 2}
+  - {fileID: 11400000, guid: 39e6bd64fa901d44d8bf679429a9a1f3, type: 2}
   enemyPrefab: {fileID: 5397174596957896474, guid: d1adab25bd44add4784c8d3ae729c38b, type: 3}
   bossPrefab: {fileID: 0}
 --- !u!4 &682359824

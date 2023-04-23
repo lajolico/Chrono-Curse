@@ -64,7 +64,7 @@ public class AStarEditor : MonoBehaviour
     {
         Pathfinding.Serialization.SerializeSettings settings = new Pathfinding.Serialization.SerializeSettings();
         //Save node info, and output nice JSON
-        settings.nodes = true;
+        settings.nodes = false;
         // Get the byte data of the graph
         byte[] graphBytes = data.SerializeGraphs(settings);
 

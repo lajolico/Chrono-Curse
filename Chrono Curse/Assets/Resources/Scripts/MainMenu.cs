@@ -9,7 +9,6 @@ public class MainMenu : MonoBehaviour
 {
     public Button myPlayButton;
     
-
      private void Awake()
      {
          var playButtonText = myPlayButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -19,10 +18,9 @@ public class MainMenu : MonoBehaviour
              playButtonText.text = "CONTINUE";
          }
          else
-          {
-            playButtonText.text = "PLAY";
-          }
-
+         {
+             playButtonText.text = "PLAY";
+         }
     }
 
     // /// <summary>
@@ -44,11 +42,8 @@ public class MainMenu : MonoBehaviour
           }
     }
 
-
-
     public void QuitGame()
     {
-        Application.Quit();
+        GameManager.Instance.QuitGame();
     }
-
 }

@@ -69,7 +69,7 @@ MonoBehaviour:
   Path: Audio/GameAudioPerhaps/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638177502327565188
+  lastModified: 638177517852566565
   FileSizes:
   - Name: Desktop
     Value: 603488
@@ -89,7 +89,7 @@ MonoBehaviour:
   Path: Audio/GameAudioPerhaps/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638177502327580219
+  lastModified: 638177517852566565
   FileSizes:
   - Name: Desktop
     Value: 948
@@ -120,7 +120,7 @@ MonoBehaviour:
   - {fileID: -7108653983772698913}
   StringsBanks:
   - {fileID: -1116461865569573532}
-  cacheTime: 638177502327580219
+  cacheTime: 638177517852566565
   cacheVersion: 131603
 --- !u!114 &337599845467532588
 MonoBehaviour:

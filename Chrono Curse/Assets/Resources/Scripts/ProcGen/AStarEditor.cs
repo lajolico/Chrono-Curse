@@ -16,7 +16,6 @@ public class AStarEditor : MonoBehaviour
 
     // Create a file path to save the graph data
     string loadFilePath;
-
     private void Awake()
     {
         if(Instance== null || Instance != this)
@@ -64,7 +63,7 @@ public class AStarEditor : MonoBehaviour
     {
         Pathfinding.Serialization.SerializeSettings settings = new Pathfinding.Serialization.SerializeSettings();
         //Save node info, and output nice JSON
-        settings.nodes = true;
+        settings.nodes = false;
         // Get the byte data of the graph
         byte[] graphBytes = data.SerializeGraphs(settings);
 
@@ -110,6 +109,7 @@ public class AStarEditor : MonoBehaviour
             Debug.LogError("Graph data file does not exist: " + loadFilePath);
         }
     }
+
 }
 
 

@@ -237,7 +237,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        attackCheckerAnimator.SetTrigger("Attack");
+        attackCheckerAnimator.Play("Attack");
         allowedToAttack = false;
         nextAttackTime = Time.time + 1f / attackRate;
     }
@@ -258,11 +258,9 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         attackCheckerAnimator.SetTrigger("Hurt");
-        Debug.Log("Enemy health: " + currentHealth);
         if (currentHealth <= 0)
         {
-            Debug.Log("DIEEEEE");
-            Die();
+            
         }
         else
         {

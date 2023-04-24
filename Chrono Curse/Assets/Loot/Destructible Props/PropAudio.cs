@@ -5,63 +5,35 @@ using System;
 
 public class PropAudio : MonoBehaviour
 {
-    public FMOD.Studio.EventInstance footsteps;
-    public string soundAsset1;
-    public string soundAsset2;
-    public string soundAsset3;
-    bool playerIsMoving;
-
-    List<string> audioAssetNames;
-    int randNumber;
+    public FMOD.Studio.EventInstance propAudio;
 
     [SerializeField]
-    float footStepSpeed = 0.5f;
+    private List<string> audioAssetNames = new List<string>();
+    public string breakEffect;
+    int randNumber;
 
-    float timer = 0.0f;
-
-    // Start is called before the first frame update
-    void Start()
+    private void PlayAudio(string stepAsset) 
     {
-        audioAssetNames = new List<string> { soundAsset1, soundAsset2, soundAsset3 };
+        propAudio = FMODUnity.RuntimeManager.CreateInstance(stepAsset);
+
+        propAudio.start();
+        propAudio.release();
     }
 
-    public float returnStepSpeed()
+    public void TriggerToPlayAudio(bool notBroken)
     {
-        return footStepSpeed;
-    }
 
-    public void setStepSpeed(float speed)
-    {
-        footStepSpeed = speed;
-    }
-
-    public void PlayerMovementStatus(bool status)
-    {
-        playerIsMoving = status;
-        if (playerIsMoving)
-        {
-            CallFootSteps();
-        }
-    }
-
-    private void PlayFootstep(string stepAsset) 
-    {
-        footsteps = FMODUnity.RuntimeManager.CreateInstance(stepAsset);
-
-        footsteps.start();
-        footsteps.release();
-    }
-
-    public void CallFootSteps()
-    {
-        if (timer > footStepSpeed)
+        if (notBroken)
         {
             var rand = new System.Random();
-            randNumber = rand.Next(3);
+            randNumber = rand.Next(audioAssetNames.Count);
 
-            PlayFootstep(audioAssetNames[randNumber]);
-            timer = 0.0f;
+            PlayAudio(audioAssetNames[randNumber]);
         }
-        timer += Time.deltaTime;
+        else
+        {
+            PlayAudio(breakEffect);
+        }
+
     }
 }

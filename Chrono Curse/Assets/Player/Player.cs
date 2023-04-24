@@ -38,15 +38,13 @@ public class Player : MonoBehaviour
     public LayerMask enemyLayers;
     public LayerMask itemLayers;
 
-    // * Player controls
-    // * ==========================
     public PlayerControls PlayerControl;
-    // Individual actions controlled through inputs
+
     public InputAction move;
     public InputAction dash;
     public InputAction attack;
     public InputAction interact;
-    // * ==========================
+
     // ! Initializes on player activation
     private void Awake()
     {

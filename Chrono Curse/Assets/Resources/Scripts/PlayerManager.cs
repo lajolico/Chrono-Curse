@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     public int Gold { get; private set; } = 0;
     public float Stamina { get; private set; } = 120.0f;
     public int Kills { get; private set; } = 0;
+    public int DamageGiven { get; private set; } = 0;
+    public int DamageTaken { get; private set; } = 0;
     public int currentXP { get; private set; } = 0;
     public int currentLevel { get; private set; } = 1;
     private int xpToLevelUp = 100;
@@ -140,6 +142,8 @@ public class PlayerManager : MonoBehaviour
         playerData.isPlayerInDungeon = isPlayerInDungeon;
         playerData.kills = Kills;
         playerData.xp = currentXP;
+        playerData.damageGiven = DamageGiven;
+        playerData.damageTaken = DamageTaken;
 
         return playerData;
     }
@@ -163,6 +167,8 @@ public class PlayerManager : MonoBehaviour
         currentLevel = playerData.level;
         currentXP = playerData.xp;
         Kills = playerData.kills;
+        DamageGiven = playerData.damageGiven;
+        DamageTaken = playerData.damageTaken;
         xpToLevelUp = Mathf.RoundToInt(baseXPToLevelUp * Mathf.Pow(xpToLevelUpMultiplier, currentLevel - 1));
         SetAttackDamage(currentLevel);
     }
@@ -222,9 +228,15 @@ public class PlayerManager : MonoBehaviour
         return currentLevel;
     }
 
+    public void PlayerDoingDamage(int damage)
+    {
+        this.DamageGiven += damage;
+    }
+
     public void DamagePlayer(int damage)
     {
         this.Health -= damage;
+        this.DamageTaken += damage;
     }
 
     public void SetPlayerHealthPerLevel(int level)

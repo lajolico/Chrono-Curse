@@ -255,9 +255,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Damage taken: " + damage);
         currentHealth -= damage;
-        Debug.Log("Current health: " + currentHealth);
         attackCheckerAnimator.SetTrigger("Hurt");
         if (currentHealth <= 0)
         {

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class DeathScreenManager : MonoBehaviour
 {
 
-    public TextMeshProUGUI Level, Kills, Gold;
+    public TextMeshProUGUI Level, Kills, Gold, DamageTaken, DamageGiven;
 
     private void Start()
     {
@@ -17,11 +17,15 @@ public class DeathScreenManager : MonoBehaviour
             Level.text = "Level: " + PlayerManager.Instance.currentLevel.ToString();
             Kills.text = "Kills: " + PlayerManager.Instance.Kills.ToString();
             Gold.text = "Gold: " + PlayerManager.Instance.Gold.ToString();
+            DamageTaken.text = "Damage Taken: " + PlayerManager.Instance.DamageTaken.ToString();
+            DamageGiven.text = "Damage Given: " + PlayerManager.Instance.DamageGiven.ToString();
         }else
         {
             Level.text = "Level: 0";
             Kills.text = "Kills: 0";
             Gold.text = "Gold: 0";
+            DamageTaken.text = "Damage Taken: " + PlayerManager.Instance.DamageTaken.ToString();
+            DamageGiven.text = "Damage Given: " + PlayerManager.Instance.DamageGiven.ToString();
         }
 
     }

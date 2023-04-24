@@ -13,7 +13,14 @@ public class Chesty : MonoBehaviour
     // {
         
     // }
+
+    public PlayerManager putt;
     private Animator myAnimator;
+
+    void Start()
+    {
+        putt.SetPlayerPosition(new Vector3(-0.5f, -1f, 0f));
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -27,7 +34,6 @@ public class Chesty : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             playerNearItem = true;
-            Debug.Log("Player near destructible object");
             myAnimator.SetTrigger("Bounce");
         }
     }

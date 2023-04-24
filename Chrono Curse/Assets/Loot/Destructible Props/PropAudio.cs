@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerAudio : MonoBehaviour
+public class PropAudio : MonoBehaviour
 {
     public FMOD.Studio.EventInstance footsteps;
     public string soundAsset1;

@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour
         else if (attackPlayer && allowedToAttack)
         {
             StopChasingPlayer();
-            Attack();
+            Attacking();
         }
         
     }
@@ -235,9 +235,9 @@ public class Enemy : MonoBehaviour
         attackPlayer = attack;
     }
 
-    void Attack()
+    void Attacking()
     {
-        attackCheckerAnimator.Play("Attack");
+        attackCheckerAnimator.SetTrigger("Attack");
         allowedToAttack = false;
         nextAttackTime = Time.time + 1f / attackRate;
     }
@@ -247,20 +247,21 @@ public class Enemy : MonoBehaviour
         Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
         foreach(Collider2D player in hitplayer)
         {
-            Debug.Log("Hitting player " + player);
             player.GetComponent<Player>().TakeDamage(attackDamage);
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+attackDamage.ToString(), 
-                PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
+            PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
         }
     }
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("Damage taken: " + damage);
         currentHealth -= damage;
+        Debug.Log("Current health: " + currentHealth);
         attackCheckerAnimator.SetTrigger("Hurt");
         if (currentHealth <= 0)
         {
-            
+            Die();
         }
         else
         {
@@ -282,6 +283,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        Debug.Log("Enemy should have died...");
         attackCheckerAnimator.SetTrigger("Death");
     }
 

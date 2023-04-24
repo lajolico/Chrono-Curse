@@ -167,7 +167,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6977d9e64055b8c41a27e9d8cec64a11, type: 2}
   - {fileID: 11400000, guid: 12a10d613c8add94f92f3cde33bca4e5, type: 2}
   - {fileID: 11400000, guid: 25c3b94e3f69fd749be6fb96566eae1e, type: 2}
-  - {fileID: 11400000, guid: 53bb7c5f5db008347a2a62703f30e401, type: 2}
   propPrefabParent: {fileID: 9044795489249168722, guid: 3752e5a74e36cb6469b7188bfe52a5b0, type: 3}
   allProps: []
   FinishedGeneration:
@@ -322,7 +321,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.14509805, g: 0.07450981, b: 0.10196079, a: 0}
+  m_BackGroundColor: {r: 0.20784314, g: 0.1764706, b: 0.24705882, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -368,6 +367,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 677455553}
+  - {fileID: 1234055500}
+  - {fileID: 935786248}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -666,7 +667,6 @@ MonoBehaviour:
   allEnemies: []
   enemyDataList:
   - {fileID: 11400000, guid: 1ca251f74207269458c0fee822f8b2d8, type: 2}
-  - {fileID: 11400000, guid: a694a13285ae74c45980694398364c70, type: 2}
   - {fileID: 11400000, guid: 39e6bd64fa901d44d8bf679429a9a1f3, type: 2}
   enemyPrefab: {fileID: 5397174596957896474, guid: d1adab25bd44add4784c8d3ae729c38b, type: 3}
   bossPrefab: {fileID: 0}
@@ -845,6 +845,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &935786247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 935786248}
+  m_Layer: 0
+  m_Name: Red'ish - 25131A
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &935786248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935786247}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 335296944}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1122053774
 GameObject:
@@ -5136,6 +5167,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemapUtil: {fileID: 0}
   roomParams: {fileID: 11400000, guid: c211171850196444a8c5e5d031a9ed0f, type: 2}
+--- !u!1 &1234055499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1234055500}
+  m_Layer: 0
+  m_Name: Purple - 352D3F
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1234055500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234055499}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 335296944}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1286787645
 GameObject:
   m_ObjectHideFlags: 0

@@ -108,13 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footAudioAssets:
-  - effect:/footstepDirt1
-  - effect:/footstepDirt2
-  - effect:/footstepDirt3
-  attackAudioAssets:
-  - effect:/07_human_atk_sword_3
-  - effect:/07_human_atk_sword_2
-  - effect:/07_human_atk_sword_1
+  - event:/footstepDirt1
+  - event:/footstepDirt2
+  - event:/footstepDirt3
   footStepSpeed: 0.5
 --- !u!114 &549990747429270169
 MonoBehaviour:

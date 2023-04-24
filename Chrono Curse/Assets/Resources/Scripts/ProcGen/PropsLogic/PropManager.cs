@@ -26,7 +26,7 @@ public class PropManager : MonoBehaviour
 
     //Make sure we can find our roomManager, because it has all of our floors/rooms data
     private void Awake()
-    {
+    {   
         if (Instance == null)
         {
             Instance = this;
@@ -88,7 +88,11 @@ public class PropManager : MonoBehaviour
     private void InitPropsPlacement(Room room, List<Prop> props, HashSet<Vector2Int> freeTiles, PlacementOrigin placement)
     {
         HashSet<Vector2Int> tempPositions = new HashSet<Vector2Int>(freeTiles);
-
+        // Debug.Log("Where is my list??? allProps: " + allProps.Count);
+        // for (int i = 0; i< allProps.Count; i++)
+        // {
+        //     Debug.Log("Props: " + allProps[i]);
+        // }
         //Ensure we have a free path to place items, that does not get in the way of our players and enemies
         tempPositions.ExceptWith(roomManager.Corridors);
 

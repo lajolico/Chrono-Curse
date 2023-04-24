@@ -240,6 +240,8 @@ public class PlayerData
     public Vector3 position;
     public int kills;
     public int xp;
+    public int damageGiven;
+    public int damageTaken;
 }
 
 [System.Serializable]

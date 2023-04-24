@@ -218,6 +218,7 @@ public class Player : MonoBehaviour
             if(enemy != null) 
             {
                 enemy.TakeDamage(PlayerManager.Instance.attackDamage);
+                PlayerManager.Instance.PlayerDoingDamage( PlayerManager.Instance.attackDamage);
             }
         }
 

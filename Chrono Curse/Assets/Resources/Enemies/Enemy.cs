@@ -258,14 +258,9 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         attackCheckerAnimator.SetTrigger("Hurt");
-<<<<<<< Updated upstream
-        Debug.Log("Enemy health: " + currentHealth);
-=======
->>>>>>> Stashed changes
         if (currentHealth <= 0)
         {
-            Debug.Log("DIEEEEE");
-            Die();
+            
         }
         else
         {

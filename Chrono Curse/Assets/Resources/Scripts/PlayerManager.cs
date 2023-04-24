@@ -97,6 +97,7 @@ public class PlayerManager : MonoBehaviour
             Destroy(playerInstance);
             playerInstance = null;
         }
+
     }
 
     public Transform GetPlayerTransform()

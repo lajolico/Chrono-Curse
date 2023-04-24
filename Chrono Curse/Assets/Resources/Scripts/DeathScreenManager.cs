@@ -34,6 +34,5 @@ public class DeathScreenManager : MonoBehaviour
     {
         GameManager.Instance.QuitGame();
     }
-    
 
 }

@@ -16,7 +16,6 @@ public class AStarEditor : MonoBehaviour
 
     // Create a file path to save the graph data
     string loadFilePath;
-
     private void Awake()
     {
         if(Instance== null || Instance != this)

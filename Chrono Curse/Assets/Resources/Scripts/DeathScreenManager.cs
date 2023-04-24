@@ -10,7 +10,6 @@ public class DeathScreenManager : MonoBehaviour
 
     public TextMeshProUGUI Level, Kills, Gold;
 
-
     private void Start()
     {
         if(PlayerManager.Instance != null)
@@ -26,7 +25,6 @@ public class DeathScreenManager : MonoBehaviour
         }
 
     }
-
     public void LoadMainMenu()
     {
         SceneManager.LoadScene("MainMenu");

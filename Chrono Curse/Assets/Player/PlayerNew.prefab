@@ -137,7 +137,6 @@ MonoBehaviour:
   youDiedScreen: {fileID: 6463204819910254578}
   youDeathed: {fileID: 6008564907582149218}
   audioForPlayer: {fileID: 5572101225948553390}
-  pauseMenuPrefab: {fileID: 6132749267428230120, guid: 187af00650e9ec842ae5bf61e2386863, type: 3}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256

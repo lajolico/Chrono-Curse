@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private bool fade = false;
 
     public PlayerAudio audioForPlayer;
+    public float footStepWalkSpeed;
+    public float dashStepWalkSpeed = 0.15f;
 
     public LayerMask enemyLayers;
     public LayerMask itemLayers;
@@ -51,12 +53,13 @@ public class Player : MonoBehaviour
         PlayerControl = new PlayerControls();
         activeMoveSpeed = moveSpeed;
         healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
+        footStepWalkSpeed = audioForPlayer.returnStepSpeed();
     }
 
-    void Start()
-    {
-        healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
-    }
+    // void Start()
+    // {
+    //     healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
+    // }
 
     // ! Player controls enabled state
     private void OnEnable()
@@ -106,6 +109,7 @@ public class Player : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
 
+        // Debug.Log(move.ReadValue<Vector2>());
         moveDirection = move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
         GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
@@ -193,10 +197,12 @@ public class Player : MonoBehaviour
         if (!dashActive)
         {
             activeMoveSpeed = moveSpeed;
+            audioForPlayer.setStepSpeed(footStepWalkSpeed);
         }
         else
         {
             activeMoveSpeed = dashSpeed;
+            audioForPlayer.setStepSpeed(dashStepWalkSpeed);
         }
         
     }

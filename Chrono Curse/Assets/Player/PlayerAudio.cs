@@ -25,17 +25,20 @@ public class PlayerAudio : MonoBehaviour
     void Start()
     {
         audioAssetNames = new List<string> { soundAsset1, soundAsset2, soundAsset3 };
-        // InvokeRepeating("CallFootsteps", 0, movingSpeed);
     }
 
-    // public void PlayerMovementSpeed(float speed)
-    // {
-    //     movingSpeed = speed;
-    // }
+    public float returnStepSpeed()
+    {
+        return footStepSpeed;
+    }
+
+    public void setStepSpeed(float speed)
+    {
+        footStepSpeed = speed;
+    }
 
     public void PlayerMovementStatus(bool status)
     {
-        // Debug.Log("fdhiaofhdoiashfdas");
         playerIsMoving = status;
         if (playerIsMoving)
         {
@@ -46,8 +49,7 @@ public class PlayerAudio : MonoBehaviour
     private void PlayFootstep(string stepAsset) 
     {
         footsteps = FMODUnity.RuntimeManager.CreateInstance(stepAsset);
-        // footsteps.setParameterByName("Terrain", terrain);
-        // footsteps.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+
         footsteps.start();
         footsteps.release();
     }
@@ -62,7 +64,6 @@ public class PlayerAudio : MonoBehaviour
             PlayFootstep(audioAssetNames[randNumber]);
             timer = 0.0f;
         }
-
         timer += Time.deltaTime;
     }
 }

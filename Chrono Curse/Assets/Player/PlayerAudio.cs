@@ -5,8 +5,6 @@ using System;
 
 public class PlayerAudio : MonoBehaviour
 {
-
-    // [FMODUnity.EventReference]
     public FMOD.Studio.EventInstance footsteps;
     public string soundAsset1;
     public string soundAsset2;

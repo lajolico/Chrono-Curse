@@ -128,112 +128,117 @@ public class EnemyAI : MonoBehaviour
 
                 if (rb.velocity[0] >= 1f) // Left
                 {
-                    EnemyAnimationController(1); // Run Anim
+                    // EnemyAnimationController(1); // Run Anim
                     PigSmall.localScale = new Vector3(-1f, 1f, 1f);
                 }
                 else if (rb.velocity[0] <= 1f) // Right
                 {
-                    EnemyAnimationController(1);// Run Anim
+                    // EnemyAnimationController(1);// Run Anim
                     PigSmall.localScale = new Vector3(1f, 1f, 1f);
                 }
                 else // Idle
                 {
-                    EnemyAnimationController(0);
+                    // EnemyAnimationController(0);
                 }
             }
             else
             {
                 // Debug.Log("why we stopping...");
-                StopChasingPlayer();
+                // StopChasingPlayer();
             }
         }
-        else if (attackPlayer && allowedToAttack)
-        {
-            StopChasingPlayer();
-            Attack();
-        }
+        // else if (attackPlayer && allowedToAttack)
+        // {
+        //     StopChasingPlayer();
+        //     Attack();
+        // }
         
     }
 
-    void StopChasingPlayer()
-    {
-        EnemyAnimationController(0);
-        rb.velocity = new Vector2(0, 0);
-    }
 
-    void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isInRange = true;
-            // Debug.Log("Player is a rat bitch");
-        }
-    }
+
+
+
+
+    // void StopChasingPlayer()
+    // {
+    //     EnemyAnimationController(0);
+    //     rb.velocity = new Vector2(0, 0);
+    // }
+
+    // void OnTriggerStay2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Player"))
+    //     {
+    //         isInRange = true;
+    //         // Debug.Log("Player is a rat bitch");
+    //     }
+    // }
     
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            isInRange = false;
-            // Debug.Log("Player is not in range of enemy");
-        }
-    }
+    // void OnTriggerExit2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Player"))
+    //     {
+    //         isInRange = false;
+    //         // Debug.Log("Player is not in range of enemy");
+    //     }
+    // }
 
-    public void AttackingPlayer(bool attack)
-    {
-        attackPlayer = attack;
-    }
+    // public void AttackingPlayer(bool attack)
+    // {
+    //     attackPlayer = attack;
+    // }
 
-    void Attack()
-    {
-        // myAnimator.SetTrigger("Brattack");
-        Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
-        foreach(Collider2D person in hitplayer)
-        {
-            // Debug.Log("We hit " + person.name);
-            person.GetComponent<Player>().TakeDamage(attackDamage);
-        }
-        myAnimator.SetTrigger("Attack");
-        // Debug.Log(isInRange);
-        attackPlayer = false;
-        allowedToAttack = false;
-        nextAttackTime = Time.time + 1f / attackRate;
-    }
+    // void Attack()
+    // {
+    //     // myAnimator.SetTrigger("Brattack");
+    //     Collider2D[] hitplayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
+    //     foreach(Collider2D person in hitplayer)
+    //     {
+    //         // Debug.Log("We hit " + person.name);
+    //         person.GetComponent<Player>().TakeDamage(attackDamage);
+    //     }
+    //     myAnimator.SetTrigger("Attack");
+    //     // Debug.Log(isInRange);
+    //     attackPlayer = false;
+    //     allowedToAttack = false;
+    //     nextAttackTime = Time.time + 1f / attackRate;
+    // }
 
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        myAnimator.SetTrigger("Hurt");
-        if (currentHealth <= 0)
-        {
-            Death();
-        }
-    }
+    // public void TakeDamage(int damage)
+    // {
+    //     currentHealth -= damage;
+    //     myAnimator.SetTrigger("Hurt");
+    //     if (currentHealth <= 0)
+    //     {
+    //         Death();
+    //     }
+    // }
 
-    public void EnemyAnimationController(int animStatus) // Sets run or idle animation
-    {
-        if (animStatus == 1)
-        {
-            myAnimator.SetInteger("Status", 1);
-        }
-        else
-        {
-            myAnimator.SetInteger("Status", 0);
-        }
+    // public void EnemyAnimationController(int animStatus) // Sets run or idle animation
+    // {
+    //     if (animStatus == 1)
+    //     {
+    //         myAnimator.SetInteger("Status", 1);
+    //     }
+    //     else
+    //     {
+    //         myAnimator.SetInteger("Status", 0);
+    //     }
 
-    }
+    // }
 
-    void Death()
-    {
-        myAnimator.SetTrigger("Death");
-        // Debug.Log("Deadeded");
+    // void Death()
+    // {
+    //     myAnimator.SetTrigger("Death");
+    //     // Debug.Log("Deadeded");
 
-        GetComponent<Collider2D>().enabled = false;
-    }
+    //     GetComponent<Collider2D>().enabled = false;
+    // }
 
-    void Die()
-    {
-        Destroy(mySpriteRenderer);
-        // mySpriteRenderer.enabled = false;
-    }
+    // void Die()
+    // {
+    //     Destroy(mySpriteRenderer);
+    //     // mySpriteRenderer.enabled = false;
+    // }
 }

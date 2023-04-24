@@ -131,4 +131,10 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance.SavePlayerData(playerSaveData);
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+   
+    }
+
 }

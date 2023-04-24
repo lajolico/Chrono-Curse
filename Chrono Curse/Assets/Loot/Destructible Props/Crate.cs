@@ -5,8 +5,10 @@ using UnityEngine;
 public class Crate : MonoBehaviour
 {
     public int itemHealth = 240;
+    public PropAudio propAudio;
     public LayerMask playerLayer;
     private Animator myAnimator;
+    bool playAudioAtCorrectMoment = false;
 
     void FixedUpdate()
     {
@@ -21,6 +23,19 @@ public class Crate : MonoBehaviour
         }
     }
 
+    public void PlayPropAudio()
+    {
+        if (itemHealth <= 0)
+        {
+            propAudio.TriggerToPlayAudio(false);
+        }
+        else if (playAudioAtCorrectMoment)
+        {
+            propAudio.TriggerToPlayAudio(true);
+            playAudioAtCorrectMoment = false;
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         itemHealth -= damage;
@@ -30,6 +45,7 @@ public class Crate : MonoBehaviour
         }
         else
         {
+            playAudioAtCorrectMoment = true;
             myAnimator.SetTrigger("Bounce");
         }
     }

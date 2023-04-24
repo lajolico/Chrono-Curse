@@ -8,24 +8,32 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public Button myPlayButton;
-    
-     private void Awake()
+    private void Awake()
      {
-         var playButtonText = myPlayButton.GetComponentInChildren<TextMeshProUGUI>();
-
-         if (SaveManager.Instance.DungeonSaveExists() || SaveManager.Instance.isPlayerInRestArea())
-         {
-             playButtonText.text = "CONTINUE";
-         }
-         else
-         {
-             playButtonText.text = "PLAY";
-         }
+        if (SaveManager.Instance.DungeonSaveExists() || SaveManager.Instance.isPlayerInRestArea())
+        {
+            TextForPlayerButton(true);
+        }
+        else
+        {
+            TextForPlayerButton(false);             
+        }
     }
 
-    // /// <summary>
-    // /// Handle our Play Button Logic
-    // /// </summary>
+    public void TextForPlayerButton(bool saveExists)
+    {
+        var playButtonText = myPlayButton.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (saveExists)
+        {
+            playButtonText.text = "CONTINUE";
+        }
+        else
+        {
+            playButtonText.text = "PLAY";            
+        }
+    }
+
     public void OnPlayButtonClicked()
     {
           if (SaveManager.Instance.DungeonSaveExists())

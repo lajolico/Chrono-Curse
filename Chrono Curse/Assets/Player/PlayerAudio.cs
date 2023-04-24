@@ -5,25 +5,20 @@ using System;
 
 public class PlayerAudio : MonoBehaviour
 {
-    public FMOD.Studio.EventInstance footsteps;
-    public string soundAsset1;
-    public string soundAsset2;
-    public string soundAsset3;
-    bool playerIsMoving;
+    public FMOD.Studio.EventInstance playerAudio;
 
-    List<string> audioAssetNames;
+    [SerializeField]
+    private List<string> footAudioAssets = new List<string>();
+
+    // [SerializeField]
+    // private List<string> attackAudioAssets = new List<string>();
+
+    bool playerIsMoving;
     int randNumber;
+    float timer = 0.0f;
 
     [SerializeField]
     float footStepSpeed = 0.5f;
-
-    float timer = 0.0f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        audioAssetNames = new List<string> { soundAsset1, soundAsset2, soundAsset3 };
-    }
 
     public float returnStepSpeed()
     {
@@ -44,12 +39,20 @@ public class PlayerAudio : MonoBehaviour
         }
     }
 
-    private void PlayFootstep(string stepAsset) 
-    {
-        footsteps = FMODUnity.RuntimeManager.CreateInstance(stepAsset);
+    // public void PlayerAttack()
+    // {
+    //     var rand = new System.Random();
+    //     randNumber = rand.Next(attackAudioAssets.Count);
 
-        footsteps.start();
-        footsteps.release();
+    //     PlayAudio(attackAudioAssets[randNumber]);
+    // }
+
+    private void PlayAudio(string stepAsset) 
+    {
+        playerAudio = FMODUnity.RuntimeManager.CreateInstance(stepAsset);
+
+        playerAudio.start();
+        playerAudio.release();
     }
 
     public void CallFootSteps()
@@ -57,9 +60,9 @@ public class PlayerAudio : MonoBehaviour
         if (timer > footStepSpeed)
         {
             var rand = new System.Random();
-            randNumber = rand.Next(3);
+            randNumber = rand.Next(footAudioAssets.Count);
 
-            PlayFootstep(audioAssetNames[randNumber]);
+            PlayAudio(footAudioAssets[randNumber]);
             timer = 0.0f;
         }
         timer += Time.deltaTime;

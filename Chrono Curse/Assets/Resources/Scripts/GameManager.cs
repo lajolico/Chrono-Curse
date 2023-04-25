@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     public void LoadDemoRestScene()
     {
         SceneManager.LoadScene("RestRoom");
+        PlayerManager.Instance.SetPlayerInDungeon(false);
         PlayerManager.Instance.SpawnPlayer();
         PlayerManager.Instance.SetPlayerPosition(new Vector3(-0.5f, -1f, 0f));
     }

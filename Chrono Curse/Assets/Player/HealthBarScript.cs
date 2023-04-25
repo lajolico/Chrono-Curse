@@ -24,7 +24,7 @@ public class HealthBarScript : MonoBehaviour
 
     public void GETFUCKED()
     {
-        healthBar.SetActive(false);
+        // healthBar.SetActive(false);
         Debug.Log("Insane");
     }
 }

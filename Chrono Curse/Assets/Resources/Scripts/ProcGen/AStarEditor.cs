@@ -27,7 +27,7 @@ public class AStarEditor : MonoBehaviour
             Destroy(gameObject);
         }
 
-       data = AstarPath.active.data;
+        data = AstarPath.active.data;
 
         loadFilePath = Application.persistentDataPath + graphSaveFile;
     }
@@ -109,7 +109,6 @@ public class AStarEditor : MonoBehaviour
             Debug.LogError("Graph data file does not exist: " + loadFilePath);
         }
     }
-
 }
 
 

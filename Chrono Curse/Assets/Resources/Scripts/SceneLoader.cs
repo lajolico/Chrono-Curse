@@ -31,7 +31,7 @@ public class SceneLoader : MonoBehaviour
         {
             Instance = this;
             // LoadSceneAsync("Dungeon");
-            loadingDungeon.LoadDungeonScene(true);
+            //loadingDungeon.LoadDungeonScene(true);
         }else
         {
             Destroy(gameObject);

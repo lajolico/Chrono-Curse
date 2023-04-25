@@ -20,7 +20,7 @@ public class LoadingDungeon : MonoBehaviour
         // else
         // {
         // SceneManager.LoadScene(1);
-        myGame.LoadDungeonScene(true);
+        //myGame.LoadDungeonScene(true);
         // }
     }
 

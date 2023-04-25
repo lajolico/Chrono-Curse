@@ -18,20 +18,21 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     protected RoomMaker roomParams;
 
+    [SerializeField]
     private int dungeonWidth, dungeonHeight;
 
     [SerializeField]
     private int minRoomWidth, minRoomHeight;
 
-    public int minSize = 50;
+    /*public int minSize = 50;
     public int maxSize = 120;
 
     public int minRoomSize = 10;
-    public int maxRoomSize = 30;
+    public int maxRoomSize = 30;*/
 
     //How large our dungeon should be when spliting it into other rooms.
 
-    private int level;
+    //private int level;
 
     private TilemapUtil tilemapUtil;
 
@@ -78,18 +79,15 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         // Get the player's level
-        level = PlayerManager.Instance.GetLevel();
+        //level = PlayerManager.Instance.GetLevel();
 
-        // dungeonWidth = 1500;
-        // dungeonHeight = 1500;
-
-        // Calculate the dungeon size based on the player's level
+      /*  // Calculate the dungeon size based on the player's level
         dungeonWidth = Mathf.Clamp(level + 2, minSize, maxSize);
-        dungeonHeight = Mathf.Clamp(level + 2, minSize, maxSize);
+        dungeonHeight = Mathf.Clamp(level + 2, minSize, maxSize);*/
 
-        // Calculate the room sizes based on the player's level
+     /*   // Calculate the room sizes based on the player's level
         minRoomWidth = Mathf.Clamp(Mathf.FloorToInt(level / 2) + 2, minRoomSize, maxRoomSize);
-        minRoomHeight = Mathf.Clamp(Mathf.FloorToInt(level / 2) + 2, minRoomSize, maxRoomSize);
+        minRoomHeight = Mathf.Clamp(Mathf.FloorToInt(level / 2) + 2, minRoomSize, maxRoomSize);*/
 
 
     }
@@ -123,41 +121,59 @@ public class DungeonGenerator : MonoBehaviour
         FinishedGeneration?.Invoke();
     }
 
-    /// <summary>
-    /// As the name says, create our rooms.
-    /// </summary>
+
     private void CreateRooms()
     {
-        List<BoundsInt> rooms = ProcedureAlgorithm.BSP(new BoundsInt((Vector3Int)startPos, new Vector3Int(    
-            dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+        const int maxAttempts = 10;
+        int attemptCount = 0;
 
-
-        for(int i = 0; i < rooms.Count; i++)
+        while (true)
         {
-            RoomManager.Instance.Rooms.Add(GenerateRooms(rooms[i], (Vector2Int)Vector3Int.RoundToInt(rooms[i].center)));
+            List<BoundsInt> rooms = ProcedureAlgorithm.BSP(new BoundsInt((Vector3Int)startPos, new Vector3Int(
+                dungeonWidth, dungeonHeight, 0)), minRoomWidth, minRoomHeight);
+
+            if (rooms.Count > 1)
+            {
+                // Rooms generated successfully
+                for (int i = 0; i < rooms.Count; i++)
+                {
+                    RoomManager.Instance.Rooms.Add(GenerateRooms(rooms[i], (Vector2Int)Vector3Int.RoundToInt(rooms[i].center)));
+                }
+
+                //Get all the positions of our RoomFloorTiles
+                HashSet<Vector2Int> floor = RoomManager.Instance.GetRoomFloorTiles();
+                HashSet<Vector2Int> corridors = ConnectRooms(RoomManager.Instance.GetRoomCenters());
+
+                //Floor will unionwith Corridors for painting
+                floor.UnionWith(corridors);
+
+                //Pass our corridor positions for use in our room Manager
+                RoomManager.Instance.Corridors.UnionWith(corridors);
+
+                //Set our room types and find  the locations of where our player and exit will spawn.
+                RoomManager.Instance.SetRoomTypes(RoomManager.Instance.Rooms);
+
+                //Paint all of our tiles
+                tilemapUtil.PaintFloorTiles(floor);
+                WallUtil.CreateWalls(floor, tilemapUtil);
+
+                //This is for our save file, where we reload the dungeon tiles
+                dungeonFloorTiles.UnionWith(floor);
+                dungeonWallTiles.UnionWith(RoomManager.Instance.Walls);
+
+                return;
+            }
+
+            // Increment attempt count and check if we've exceeded max attempts
+            attemptCount++;
+            if (attemptCount >= maxAttempts)
+            {
+                Debug.LogError("Failed to generate dungeon - could not create any rooms.");
+                return;
+            }
         }
-
-        //Get all the positions of our RoomFloorTiles
-        HashSet<Vector2Int> floor = RoomManager.Instance.GetRoomFloorTiles();
-        HashSet<Vector2Int> corridors = ConnectRooms(RoomManager.Instance.GetRoomCenters());
-        
-        //Floor will unionwith Corridors for painting
-        floor.UnionWith(corridors);
-
-        //Pass our corridor positions for use in our room Manager
-        RoomManager.Instance.Corridors.UnionWith(corridors);
-
-        //Set our room types and find  the locations of where our player and exit will spawn.
-        RoomManager.Instance.SetRoomTypes(RoomManager.Instance.Rooms);
-
-        //Paint all of our tiles
-        tilemapUtil.PaintFloorTiles(floor);
-        WallUtil.CreateWalls(floor, tilemapUtil);
-
-        //This is for our save file, where we reload the dungeon tiles
-        dungeonFloorTiles.UnionWith(floor);
-        dungeonWallTiles.UnionWith(RoomManager.Instance.Walls);
     }
+
 
     /// <summary>
     /// Connects the rooms.

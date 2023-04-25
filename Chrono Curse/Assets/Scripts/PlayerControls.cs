@@ -62,6 +62,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowFirst"",
+                    ""type"": ""Button"",
+                    ""id"": ""df2b3d5c-35e8-4283-88f3-0d822ab10dde"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowSecond"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f9cb3e3-e987-4307-920e-e8f618523f4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShowThird"",
+                    ""type"": ""Button"",
+                    ""id"": ""9abd9e4d-5cc0-4e85-bb75-24b1206e4287"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -251,6 +278,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dbaf42d1-84f8-4bf2-8442-62dbb1528bf5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowFirst"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c85c698-9b23-468b-a271-c36bf110f289"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowSecond"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""320b7001-1ff9-419d-b365-f006625c5ff6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowThird"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -291,6 +351,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
         m_Land_Attack = m_Land.FindAction("Attack", throwIfNotFound: true);
         m_Land_Interact = m_Land.FindAction("Interact", throwIfNotFound: true);
+        m_Land_ShowFirst = m_Land.FindAction("ShowFirst", throwIfNotFound: true);
+        m_Land_ShowSecond = m_Land.FindAction("ShowSecond", throwIfNotFound: true);
+        m_Land_ShowThird = m_Land.FindAction("ShowThird", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -357,6 +420,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Land_Dash;
     private readonly InputAction m_Land_Attack;
     private readonly InputAction m_Land_Interact;
+    private readonly InputAction m_Land_ShowFirst;
+    private readonly InputAction m_Land_ShowSecond;
+    private readonly InputAction m_Land_ShowThird;
     public struct LandActions
     {
         private @PlayerControls m_Wrapper;
@@ -365,6 +431,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Land_Dash;
         public InputAction @Attack => m_Wrapper.m_Land_Attack;
         public InputAction @Interact => m_Wrapper.m_Land_Interact;
+        public InputAction @ShowFirst => m_Wrapper.m_Land_ShowFirst;
+        public InputAction @ShowSecond => m_Wrapper.m_Land_ShowSecond;
+        public InputAction @ShowThird => m_Wrapper.m_Land_ShowThird;
         public InputActionMap Get() { return m_Wrapper.m_Land; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -386,6 +455,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Interact.started -= m_Wrapper.m_LandActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnInteract;
+                @ShowFirst.started -= m_Wrapper.m_LandActionsCallbackInterface.OnShowFirst;
+                @ShowFirst.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnShowFirst;
+                @ShowFirst.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnShowFirst;
+                @ShowSecond.started -= m_Wrapper.m_LandActionsCallbackInterface.OnShowSecond;
+                @ShowSecond.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnShowSecond;
+                @ShowSecond.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnShowSecond;
+                @ShowThird.started -= m_Wrapper.m_LandActionsCallbackInterface.OnShowThird;
+                @ShowThird.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnShowThird;
+                @ShowThird.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnShowThird;
             }
             m_Wrapper.m_LandActionsCallbackInterface = instance;
             if (instance != null)
@@ -402,6 +480,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @ShowFirst.started += instance.OnShowFirst;
+                @ShowFirst.performed += instance.OnShowFirst;
+                @ShowFirst.canceled += instance.OnShowFirst;
+                @ShowSecond.started += instance.OnShowSecond;
+                @ShowSecond.performed += instance.OnShowSecond;
+                @ShowSecond.canceled += instance.OnShowSecond;
+                @ShowThird.started += instance.OnShowThird;
+                @ShowThird.performed += instance.OnShowThird;
+                @ShowThird.canceled += instance.OnShowThird;
             }
         }
     }
@@ -445,6 +532,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnShowFirst(InputAction.CallbackContext context);
+        void OnShowSecond(InputAction.CallbackContext context);
+        void OnShowThird(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

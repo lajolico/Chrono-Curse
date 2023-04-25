@@ -246,8 +246,8 @@ public class PlayerManager : MonoBehaviour
         Health = MaxHealth;
     }
 
-    public void HealPlayer()
-    {
-        Health = MaxHealth;
-    }
+    // public void HealPlayer()
+    // {
+    //     Health = MaxHealth;
+    // }
 }

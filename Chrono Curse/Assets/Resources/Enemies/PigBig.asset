@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b7047022bf7d448bee0d2ddbeefc73, type: 3}
   m_Name: PigBig
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 40
   _speed: 1
   _sprite: {fileID: 21300000, guid: 5079401ea260b9246bc00576b1b9af68, type: 3}
   _attackRange: 0.7

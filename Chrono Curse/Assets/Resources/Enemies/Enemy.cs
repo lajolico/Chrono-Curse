@@ -293,7 +293,7 @@ public class Enemy : MonoBehaviour
         AddToPlayer(enemyType);
         //EnemyManager.Instance.RemoveEnemy(this.gameObject);
         DemoEnemyManager.Instance.RemoveEnemy(this.gameObject);
-        Destroy(this.gameObject);
+        // Destroy(this.gameObject);
     }
 
     public void AddToPlayer(EnemyType type)

@@ -250,6 +250,7 @@ public class Enemy : MonoBehaviour
             player.GetComponent<Player>().TakeDamage(attackDamage);
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+attackDamage.ToString(), 
             PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
+            CinemachineShake.Instance.ShakeCamera();
         }
     }
 

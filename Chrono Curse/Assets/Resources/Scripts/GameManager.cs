@@ -26,8 +26,13 @@ public class GameManager : MonoBehaviour
         }
     }
      
+    public void LoadDemoDungeon()
+    {
+        SceneManager.LoadScene("DemoDungeon");
+        StartCoroutine(DemoDungeonCoroutine());
+    }
 
-    public void LoadDungeonScene(bool startNewGame)
+   /* public void LoadDungeonScene(bool startNewGame)
     {
         SceneManager.LoadScene(1);
         if (startNewGame)
@@ -41,29 +46,9 @@ public class GameManager : MonoBehaviour
                                                    SaveManager.Instance.GetPlayerData(),
                                                    SaveManager.Instance.GetEnemyData()));
         }
-    }
+    }*/
 
-    // private IEnumerator WaitForLoadingScreen()
-    // {
-    //     while(!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-    //     {
-    //         yield return null;
-    //     }
-
-    //     
-    // }
-
-    // private IEnumerator WaitForRestLoadingScreen()
-    // {
-    //     while (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
-    //     {
-    //         yield return null;
-    //     }
-
-    //     SceneLoader.Instance.LoadSceneAsync("RestRoom");
-    // }
-
-    public void LoadRestAreaScene()
+/*    public void LoadRestAreaScene()
     {
         SceneManager.LoadScene("RestRoom");
         SaveManager.Instance.DeleteDungeonSave();
@@ -80,6 +65,15 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance.SavePlayerData(saveData);
     }
 
+*/
+
+    public void LoadDemoRestScene()
+    {
+        SceneManager.LoadScene("RestRoom");
+        PlayerManager.Instance.SpawnPlayer();
+        PlayerManager.Instance.SetPlayerPosition(new Vector3(-0.5f, -1f, 0f));
+    }
+
     public void PlayerDied()
     {
         SceneManager.LoadScene("YouDied");
@@ -87,6 +81,13 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance.DeleteEnemySave();
         SaveManager.Instance.DeletePlayerSave();
         AStarEditor.Instance.DeleteGraph();
+    }
+
+    private IEnumerator DemoDungeonCoroutine()
+    {
+        yield return new WaitUntil(() => DungeonGenerator.Instance != null);
+
+        DungeonGenerator.Instance.GenerateDungeon();
     }
 
     private IEnumerator NewGame()
@@ -135,6 +136,11 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
    
+    }
+
+    public void LoadDemoDungeonDie()
+    {
+        SceneManager.LoadScene("DiePlayer");
     }
 
 }

@@ -36,7 +36,9 @@ public class MainMenu : MonoBehaviour
 
     public void OnPlayButtonClicked()
     {
-          if (SaveManager.Instance.DungeonSaveExists())
+        GameManager.Instance.LoadDemoDungeon();
+
+        /*  if (SaveManager.Instance.DungeonSaveExists())
           {
               GameManager.Instance.LoadDungeonScene(false);
 
@@ -47,7 +49,7 @@ public class MainMenu : MonoBehaviour
           else
           {
               GameManager.Instance.LoadDungeonScene(true);
-          }
+          }*/
     }
 
     public void QuitGame()

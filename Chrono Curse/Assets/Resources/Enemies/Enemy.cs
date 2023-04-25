@@ -250,6 +250,7 @@ public class Enemy : MonoBehaviour
             player.GetComponent<Player>().TakeDamage(attackDamage);
             StartCoroutine(FloatingTextManager.Instance.ShowFloatingText("-"+attackDamage.ToString(), 
             PlayerManager.Instance.GetPlayerPosition(), 0.5f, FloatingTextType.DamagePlayer));
+            CinemachineShake.Instance.ShakeCamera();
         }
     }
 
@@ -290,7 +291,8 @@ public class Enemy : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         attackCheckerRenderer.enabled = false;
         AddToPlayer(enemyType);
-        EnemyManager.Instance.RemoveEnemy(this.gameObject);
+        //EnemyManager.Instance.RemoveEnemy(this.gameObject);
+        DemoEnemyManager.Instance.RemoveEnemy(this.gameObject);
         Destroy(this.gameObject);
     }
 

@@ -12,6 +12,6 @@ public class LoadingIntoGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startGame.LoadDungeonScene(true);
+        //startGame.LoadDungeonScene(true);
     }
 }

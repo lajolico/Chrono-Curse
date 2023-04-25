@@ -34,7 +34,8 @@ public class ExitRestRoom : MonoBehaviour
         if ( (canEnter && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || (canEnter && Input.GetKeyDown(KeyCode.A)))
         {
             door.GetComponent<SpriteRenderer>().sprite = openDoor;
-            GameManager.Instance.LoadDungeonScene(true);
+            //GameManager.Instance.LoadDungeonScene(true);
+            GameManager.Instance.LoadDemoDungeonDie();
         }
     }
 }

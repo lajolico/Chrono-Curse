@@ -208,6 +208,7 @@ public class Player : MonoBehaviour
     void Attack()
     {
         myAnimator.SetTrigger("Brattack");
+        CinemachineShake.Instance.ShakeCamera();
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         Enemy enemy;

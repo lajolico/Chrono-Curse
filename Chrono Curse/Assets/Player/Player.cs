@@ -107,7 +107,6 @@ public class Player : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
 
-        // Debug.Log(move.ReadValue<Vector2>());
         moveDirection = move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
         GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
@@ -233,16 +232,15 @@ public class Player : MonoBehaviour
             pot = propCollider.GetComponent<Pot>();
             if(crate != null) 
             {
-                crate.TakeDamage(attackDamage);
-                // enemy.TakeDamage(PlayerManager.Instance.attackDamage);
+                crate.TakeDamage(PlayerManager.Instance.attackDamage);
             }
             if(barrel != null)
             {
-                barrel.TakeDamage(attackDamage);
+                barrel.TakeDamage(PlayerManager.Instance.attackDamage);
             }
             if(pot != null)
             {
-                pot.TakeDamage(attackDamage);
+                pot.TakeDamage(PlayerManager.Instance.attackDamage);
             }
         }
     }
@@ -252,7 +250,6 @@ public class Player : MonoBehaviour
         myAnimator.SetTrigger("Damaged");
         PlayerManager.Instance.DamagePlayer(damage);
         healthBar.SetHealth(PlayerManager.Instance.Health);
-        Debug.Log("Player health: " + PlayerManager.Instance.Health);
         if(PlayerManager.Instance.Health <= 0)
         {
             youDeathed.SetActive(true);

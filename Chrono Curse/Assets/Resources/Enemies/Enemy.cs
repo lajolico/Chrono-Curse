@@ -281,7 +281,6 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Enemy should have died...");
         attackCheckerAnimator.SetTrigger("Death");
     }
 

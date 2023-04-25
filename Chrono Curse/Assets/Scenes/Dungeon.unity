@@ -153,19 +153,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propsToPlace:
-  - {fileID: 11400000, guid: 5fc67902a4c263c409fa8a738795a17e, type: 2}
-  - {fileID: 11400000, guid: 4aef601ea92b04347a48b139c6e35e5c, type: 2}
-  - {fileID: 11400000, guid: 8e8e2cf0a4b2483468bad7a24b6e29ca, type: 2}
-  - {fileID: 11400000, guid: 4f1ecb17fc84b79489ad98d9210c050b, type: 2}
-  - {fileID: 11400000, guid: c741e4a7a3e74614580ff694d4ca9b18, type: 2}
-  - {fileID: 11400000, guid: b40706f11af5ec14182264f57871f915, type: 2}
-  - {fileID: 11400000, guid: 17247cbd82bc31b4e9ea9e57dc4ddff2, type: 2}
-  - {fileID: 11400000, guid: 4691bf3cb6f34d1478ca09de9445e7a8, type: 2}
-  - {fileID: 11400000, guid: fb88645678e33654fa86d74bde38e2cd, type: 2}
-  - {fileID: 11400000, guid: eec70724d1ac011429447c4a073a0a77, type: 2}
-  - {fileID: 11400000, guid: 4c05545e2b2c8e9429420a3d8f67b0c9, type: 2}
-  - {fileID: 11400000, guid: 6977d9e64055b8c41a27e9d8cec64a11, type: 2}
   - {fileID: 11400000, guid: 12a10d613c8add94f92f3cde33bca4e5, type: 2}
+  - {fileID: 11400000, guid: 6977d9e64055b8c41a27e9d8cec64a11, type: 2}
+  - {fileID: 11400000, guid: 4c05545e2b2c8e9429420a3d8f67b0c9, type: 2}
+  - {fileID: 11400000, guid: eec70724d1ac011429447c4a073a0a77, type: 2}
+  - {fileID: 11400000, guid: fb88645678e33654fa86d74bde38e2cd, type: 2}
+  - {fileID: 11400000, guid: 4aef601ea92b04347a48b139c6e35e5c, type: 2}
+  - {fileID: 11400000, guid: 4691bf3cb6f34d1478ca09de9445e7a8, type: 2}
+  - {fileID: 11400000, guid: 17247cbd82bc31b4e9ea9e57dc4ddff2, type: 2}
+  - {fileID: 11400000, guid: b40706f11af5ec14182264f57871f915, type: 2}
+  - {fileID: 11400000, guid: c741e4a7a3e74614580ff694d4ca9b18, type: 2}
+  - {fileID: 11400000, guid: 4f1ecb17fc84b79489ad98d9210c050b, type: 2}
+  - {fileID: 11400000, guid: 8e8e2cf0a4b2483468bad7a24b6e29ca, type: 2}
+  - {fileID: 11400000, guid: 8f93d2198926fa74998b9f1b6a64ee78, type: 2}
+  - {fileID: 11400000, guid: c08e0f0f531f50c429ef5b1aeff73c9d, type: 2}
+  - {fileID: 11400000, guid: 5fc67902a4c263c409fa8a738795a17e, type: 2}
   - {fileID: 11400000, guid: 25c3b94e3f69fd749be6fb96566eae1e, type: 2}
   propPrefabParent: {fileID: 9044795489249168722, guid: 3752e5a74e36cb6469b7188bfe52a5b0, type: 3}
   allProps: []
@@ -362,7 +364,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335296941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.021, y: -1, z: -10}
+  m_LocalPosition: {x: -2.021, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -773,10 +775,10 @@ MonoBehaviour:
   floorTile: {fileID: 11400000, guid: b0fe331984b5dfb4bb6a9ca21f0de7fd, type: 2}
   wallRight: {fileID: 11400000, guid: 0c2c1382f2c8ec947874ffdc97228036, type: 2}
   wallLeft: {fileID: 11400000, guid: 32c7084b14272df46b236e270e94a5a2, type: 2}
-  wallBottom: {fileID: 11400000, guid: 02ac13498f2cf134cac94d2d73e86b4e, type: 2}
+  wallBottom: {fileID: 11400000, guid: edaba67a7aa8b1a439511685ec4dc704, type: 2}
   wallFull: {fileID: 11400000, guid: 1f8a5fd8f20e03849940ef137ef31392, type: 2}
-  wallInnerCornerDownLeft: {fileID: 11400000, guid: a64d2791a90f62f489a88f7f2b63e090, type: 2}
-  wallInnerCornerDownRight: {fileID: 11400000, guid: d999f733b5b79ea4396bd8f761c8514e, type: 2}
+  wallInnerCornerDownLeft: {fileID: 11400000, guid: d999f733b5b79ea4396bd8f761c8514e, type: 2}
+  wallInnerCornerDownRight: {fileID: 11400000, guid: a64d2791a90f62f489a88f7f2b63e090, type: 2}
   wallDiagonalCornerDownRight: {fileID: 11400000, guid: 81f35f86a99bd6f40acc5bac15d44e2e, type: 2}
   wallDiagonalCornerDownLeft: {fileID: 11400000, guid: eb4160de26d2ca04d92b49a62458290c, type: 2}
   wallDiagonalCornerUpRight: {fileID: 11400000, guid: f06bbe52865b9104897fbb2f60cb259b, type: 2}

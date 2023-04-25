@@ -201,7 +201,6 @@ public class PlayerManager : MonoBehaviour
     public void AddXP(int amount)
     {
         currentXP += amount;
-        Debug.Log("CurrentXP: " + currentXP);
         if (currentXP >= xpToLevelUp)
         {
             LevelUp();

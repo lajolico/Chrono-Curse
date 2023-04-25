@@ -94,6 +94,17 @@
                 },
                 {
                     "name": "",
+                    "id": "a1e19994-d93a-4c25-8968-5103f0618407",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "89a707fb-c0e3-49fe-9cd6-09a60d312e9f",
                     "path": "<Keyboard>/a",
                     "interactions": "",
@@ -107,6 +118,17 @@
                     "name": "",
                     "id": "1fc422a2-0ff2-4893-a64f-bc65d086953a",
                     "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da622723-d041-4eae-ae7a-83ae58807c10",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

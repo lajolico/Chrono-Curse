@@ -8,6 +8,8 @@ public class HealthBarScript : MonoBehaviour
 
     public Slider slider;
 
+    public GameObject healthBar;
+
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;
@@ -18,5 +20,11 @@ public class HealthBarScript : MonoBehaviour
     {
         slider.value = health;
         // Debug.Log("Bruh: " + health);
+    }
+
+    public void GETFUCKED()
+    {
+        healthBar.SetActive(false);
+        Debug.Log("Insane");
     }
 }

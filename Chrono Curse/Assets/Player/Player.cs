@@ -116,6 +116,8 @@ public class Player : MonoBehaviour
 
         if (showFirst.triggered)
         {
+            healthBar.GETFUCKED();
+
             if (!showTheText)
             {
                 showTheText = true;

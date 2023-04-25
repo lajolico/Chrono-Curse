@@ -44,7 +44,15 @@ public class Player : MonoBehaviour
     public InputAction dash;
     public InputAction attack;
     public InputAction interact;
+    public InputAction showFirst;
+    public InputAction showSecond;
+    public InputAction showThird;
 
+    private bool showTheText= false;
+    private bool showingSecond = false;
+    private bool showingThird = false;
+
+    public ShowText showText;
     // ! Initializes on player activation
     private void Awake()
     {
@@ -53,11 +61,6 @@ public class Player : MonoBehaviour
         healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
         footStepWalkSpeed = audioForPlayer.returnStepSpeed();
     }
-
-    // void Start()
-    // {
-    //     healthBar.SetMaxHealth(PlayerManager.Instance.MaxHealth);
-    // }
 
     // ! Player controls enabled state
     private void OnEnable()
@@ -70,8 +73,16 @@ public class Player : MonoBehaviour
         attack.Enable();
         interact = PlayerControl.Land.Interact;
         interact.Enable();
-    }
 
+        showFirst = PlayerControl.Land.ShowFirst;
+        showFirst.Enable();
+        showSecond = PlayerControl.Land.ShowSecond;
+        showSecond.Enable();
+        showThird = PlayerControl.Land.ShowThird;
+        showThird.Enable();
+    }
+    // #FFC757FF
+    // #FF9C31FF
     // ! Player controls disabled state
     private void OnDisable()
     {
@@ -79,6 +90,10 @@ public class Player : MonoBehaviour
         dash.Disable();
         attack.Disable();
         interact.Disable();
+
+        showFirst.Disable();
+        showSecond.Disable();
+        showThird.Disable();
     }
 
     void Update()
@@ -99,6 +114,50 @@ public class Player : MonoBehaviour
             staminaBar.GetComponent<StaminaBarScript>().UsingDash();
         }
 
+        if (showFirst.triggered)
+        {
+            if (!showTheText)
+            {
+                showTheText = true;
+                showText.showScene(showTheText, 1);
+            }
+            else
+            {
+                showTheText = false;
+                showText.showScene(showTheText, 1);
+            }
+
+        }
+
+        if (showSecond.triggered)
+        {
+            if (!showTheText)
+            {
+                showTheText = true;
+                showText.showScene(showTheText, 2);
+            }
+            else
+            {
+                showTheText = false;
+                showText.showScene(showTheText, 2);
+            }
+
+        }
+
+        if (showThird.triggered)
+        {
+            if (!showTheText)
+            {
+                showTheText = true;
+                showText.showScene(showTheText, 3);
+            }
+            else
+            {
+                showTheText = false;
+                showText.showScene(showTheText, 3);
+            }
+
+        }
     }
 
     // ! Sprite rendering components
@@ -261,8 +320,7 @@ public class Player : MonoBehaviour
 
     public void RecoverHealth()
     {
-        PlayerManager.Instance.HealPlayer();
-        healthBar.SetHealth(PlayerManager.Instance.Health);
+        healthBar.SetHealth(PlayerManager.Instance.MaxHealth);
     }
 
     // ! Shows hit box area for player attack

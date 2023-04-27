@@ -769,16 +769,16 @@ MonoBehaviour:
   floorTileMap: {fileID: 1433076016}
   wallTileMap: {fileID: 1122053777}
   floorTile: {fileID: 11400000, guid: b0fe331984b5dfb4bb6a9ca21f0de7fd, type: 2}
-  wallRight: {fileID: 11400000, guid: 0c2c1382f2c8ec947874ffdc97228036, type: 2}
-  wallLeft: {fileID: 11400000, guid: 32c7084b14272df46b236e270e94a5a2, type: 2}
-  wallBottom: {fileID: 11400000, guid: 02ac13498f2cf134cac94d2d73e86b4e, type: 2}
-  wallFull: {fileID: 11400000, guid: 1f8a5fd8f20e03849940ef137ef31392, type: 2}
-  wallInnerCornerDownLeft: {fileID: 11400000, guid: a64d2791a90f62f489a88f7f2b63e090, type: 2}
-  wallInnerCornerDownRight: {fileID: 11400000, guid: d999f733b5b79ea4396bd8f761c8514e, type: 2}
-  wallDiagonalCornerDownRight: {fileID: 11400000, guid: 81f35f86a99bd6f40acc5bac15d44e2e, type: 2}
-  wallDiagonalCornerDownLeft: {fileID: 11400000, guid: eb4160de26d2ca04d92b49a62458290c, type: 2}
-  wallDiagonalCornerUpRight: {fileID: 11400000, guid: f06bbe52865b9104897fbb2f60cb259b, type: 2}
-  wallDiagonalCornerUpLeft: {fileID: 11400000, guid: b151fee8f4539d940b6048a785350656, type: 2}
+  wallRight: {fileID: 11400000, guid: f46f380ca1cfacf41b72827ce8f1a991, type: 2}
+  wallLeft: {fileID: 11400000, guid: f46f380ca1cfacf41b72827ce8f1a991, type: 2}
+  wallBottom: {fileID: 11400000, guid: 9791439a9d6897e428f8d58b1688d81a, type: 2}
+  wallFull: {fileID: 11400000, guid: 71803ad6596d43b479dd603490c881c4, type: 2}
+  wallInnerCornerDownLeft: {fileID: 11400000, guid: ad430fd4642a85147bdfebe0322069d7, type: 2}
+  wallInnerCornerDownRight: {fileID: 11400000, guid: 8fbb69dde32487b469b09fa05774b1ee, type: 2}
+  wallDiagonalCornerDownRight: {fileID: 11400000, guid: d29e7d84a5123ea42843b80b3fbac116, type: 2}
+  wallDiagonalCornerDownLeft: {fileID: 11400000, guid: 34345e9c9baf5e44b9b794570a55bcee, type: 2}
+  wallDiagonalCornerUpRight: {fileID: 11400000, guid: f46f380ca1cfacf41b72827ce8f1a991, type: 2}
+  wallDiagonalCornerUpLeft: {fileID: 11400000, guid: f46f380ca1cfacf41b72827ce8f1a991, type: 2}
   wallFront:
   - {fileID: 11400000, guid: de0275916df6e074a94a64a817294cd3, type: 2}
   - {fileID: 11400000, guid: 7ce857baa1cb9eb4b9dfe28dba40fe36, type: 2}

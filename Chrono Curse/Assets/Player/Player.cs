@@ -52,6 +52,9 @@ public class Player : MonoBehaviour
     private bool showingSecond = false;
     private bool showingThird = false;
 
+    public VariableJoystick variableJoystick;
+
+
     public ShowText showText;
     // ! Initializes on player activation
     private void Awake()

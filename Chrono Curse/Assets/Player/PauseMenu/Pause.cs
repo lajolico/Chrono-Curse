@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Pause : MonoBehaviour
 {
@@ -15,11 +16,37 @@ public class Pause : MonoBehaviour
     public Animator myAnimator;
     public AppearingButtons appearButts;
 
+    public PlayerControls PlayerControl;
+    public InputAction pauseGame;
+
+    private void Awake()
+    {
+        PlayerControl = new PlayerControls();
+    }
+
+    private void OnEnable()
+    {
+        pauseGame = PlayerControl.UI.Pause;
+        pauseGame.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pauseGame.Disable();
+    }
+
     void Start()
     {
-
-        pauseButton.GetComponent<Button>().onClick.AddListener(delegate { Pausing(); });
+        // pauseButton.GetComponent<Button>().onClick.AddListener(delegate { Pausing(); });
         pauseScreen.GetComponent<Button>().onClick.AddListener(delegate { closeBook(); });
+    }
+
+    void Update()
+    {
+        if (pauseGame.triggered)
+        {
+            Pausing();
+        }
     }
 
     public void Pausing()

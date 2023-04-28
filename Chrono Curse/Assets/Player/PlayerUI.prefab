@@ -2154,6 +2154,18 @@ MonoBehaviour:
   pauseUI: {fileID: 5263900783877169916}
   pauseButton: {fileID: 1319134677496882583}
   pauseScreen: {fileID: 4471436128954041845}
+  freezeTime: 0
+  myAnimator: {fileID: 0}
+  appearButts: {fileID: 0}
+  pauseGame:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8870b70a-7b78-4fa5-9a45-bf5114ba7b46
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!225 &801231269700928951
 CanvasGroup:
   m_ObjectHideFlags: 0

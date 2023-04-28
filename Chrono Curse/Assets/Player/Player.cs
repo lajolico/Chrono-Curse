@@ -44,18 +44,10 @@ public class Player : MonoBehaviour
     public InputAction dash;
     public InputAction attack;
     public InputAction interact;
-    public InputAction showFirst;
-    public InputAction showSecond;
-    public InputAction showThird;
 
-    private bool showTheText= false;
-    private bool showingSecond = false;
-    private bool showingThird = false;
+    public Joystick joyStick;
+    public float joyStickRange = 0.2f;
 
-    public VariableJoystick variableJoystick;
-
-
-    public ShowText showText;
     // ! Initializes on player activation
     private void Awake()
     {
@@ -76,13 +68,6 @@ public class Player : MonoBehaviour
         attack.Enable();
         interact = PlayerControl.Land.Interact;
         interact.Enable();
-
-        showFirst = PlayerControl.Land.ShowFirst;
-        showFirst.Enable();
-        showSecond = PlayerControl.Land.ShowSecond;
-        showSecond.Enable();
-        showThird = PlayerControl.Land.ShowThird;
-        showThird.Enable();
     }
     // #FFC757FF
     // #FF9C31FF
@@ -93,10 +78,6 @@ public class Player : MonoBehaviour
         dash.Disable();
         attack.Disable();
         interact.Disable();
-
-        showFirst.Disable();
-        showSecond.Disable();
-        showThird.Disable();
     }
 
     void Update()
@@ -116,54 +97,8 @@ public class Player : MonoBehaviour
         {
             staminaBar.GetComponent<StaminaBarScript>().UsingDash();
         }
-
-        if (showFirst.triggered)
-        {
-            healthBar.GETFUCKED();
-
-            if (!showTheText)
-            {
-                showTheText = true;
-                showText.showScene(showTheText, 1);
-            }
-            else
-            {
-                showTheText = false;
-                showText.showScene(showTheText, 1);
-            }
-
-        }
-
-        if (showSecond.triggered)
-        {
-            if (!showTheText)
-            {
-                showTheText = true;
-                showText.showScene(showTheText, 2);
-            }
-            else
-            {
-                showTheText = false;
-                showText.showScene(showTheText, 2);
-            }
-
-        }
-
-        if (showThird.triggered)
-        {
-            if (!showTheText)
-            {
-                showTheText = true;
-                showText.showScene(showTheText, 3);
-            }
-            else
-            {
-                showTheText = false;
-                showText.showScene(showTheText, 3);
-            }
-
-        }
     }
+    
 
     // ! Sprite rendering components
     void FixedUpdate()
@@ -171,7 +106,56 @@ public class Player : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>(); // Used to flip sprite to change direction
 
-        moveDirection = move.ReadValue<Vector2>();
+        // ! Touch screen joystick input logic to control player speed properly based on joystick Vector2 values
+        if (joyStick.Horizontal >= joyStickRange)
+        {
+            if (joyStick.Vertical >= joyStickRange)
+            {
+                moveDirection = new Vector2(.71f, .71f);
+            }
+            else if (joyStick.Vertical <= -joyStickRange)
+            {
+                moveDirection = new Vector2(.71f, -.71f);
+            }
+            else
+            {
+                moveDirection = new Vector2(1f, 0f);
+            }
+        }
+        else if (joyStick.Horizontal <= -joyStickRange)
+        {
+            if (joyStick.Vertical >= joyStickRange)
+            {
+                moveDirection = new Vector2(-.71f, .71f);
+            }
+            else if (joyStick.Vertical <= -joyStickRange)
+            {
+                moveDirection = new Vector2(-.71f, -.71f);
+            }
+            else
+            {
+                moveDirection = new Vector2(-1f, 0f);
+            }
+        }
+        else if ((joyStickRange > joyStick.Horizontal) && (-joyStickRange < joyStick.Horizontal))
+        {
+            if (joyStick.Vertical >= joyStickRange)
+            {
+                moveDirection = new Vector2(0f, 1f);
+            }
+            else if (joyStick.Vertical <= -joyStickRange)
+            {
+                moveDirection = new Vector2(0f, -1f);
+            }
+            else
+            {
+                moveDirection = new Vector2(0f, 0f);
+            }
+        }
+        // ! ========================================================
+
+        // moveDirection = move.ReadValue<Vector2>();
+
         rb.velocity = new Vector2(moveDirection.x * activeMoveSpeed, moveDirection.y * activeMoveSpeed);
         GetComponent<Player>().transform.Translate(rb.velocity * Time.deltaTime * activeMoveSpeed);
 

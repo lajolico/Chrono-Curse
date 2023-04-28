@@ -26,15 +26,15 @@ public class GameManager : MonoBehaviour
         }
     }
      
-    public void LoadDemoDungeon()
-    {
-        SceneManager.LoadScene("DemoDungeon");
-        StartCoroutine(DemoDungeonCoroutine());
-    }
+    // public void LoadDemoDungeon()
+    // {
+    //     SceneManager.LoadScene("DemoDungeon");
+    //     StartCoroutine(DemoDungeonCoroutine());
+    // }
 
-   /* public void LoadDungeonScene(bool startNewGame)
+   public void LoadDungeonScene(bool startNewGame)
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Dungeon");
         if (startNewGame)
         {
             StartCoroutine(NewGame());
@@ -46,9 +46,9 @@ public class GameManager : MonoBehaviour
                                                    SaveManager.Instance.GetPlayerData(),
                                                    SaveManager.Instance.GetEnemyData()));
         }
-    }*/
+    }
 
-/*    public void LoadRestAreaScene()
+    public void LoadRestAreaScene()
     {
         SceneManager.LoadScene("RestRoom");
         SaveManager.Instance.DeleteDungeonSave();
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance.SavePlayerData(saveData);
     }
 
-*/
+
 
     public void LoadDemoRestScene()
     {

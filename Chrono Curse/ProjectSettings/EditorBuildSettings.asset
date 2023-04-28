@@ -5,9 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestingRoom.unity
     guid: 26ef804af30da9b42b6f01c6f62a8a71
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3a2ed3a83410e9147bb21e6736f76126
+  - enabled: 1
+    path: Assets/Scenes/RestRoom.unity
+    guid: c25a8e9fbd33afc4b8f6a21cdc6d463d
+  - enabled: 1
+    path: Assets/Scenes/YouDied.unity
+    guid: 46e1afe7d85cf364db55c4c647619b25
+  - enabled: 1
+    path: Assets/Scenes/Dungeon.unity
+    guid: 14d57f65773ea0c45bd04077f7ce7767
+  - enabled: 0
+    path: Assets/Scenes/DevMapping.unity
+    guid: 5f68280415d5a1441ae3aa554a52ea97
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: d79fc7282af28d84784ba28363a5514b, type: 2}
     com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 423601ee75578374494cf150dcadbb4b, type: 2}

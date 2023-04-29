@@ -11,7 +11,7 @@ public class Pause : MonoBehaviour
     public GameObject pauseUI;
     public GameObject pauseButton;
     public GameObject pauseScreen;
-    public bool freezeTime = false;
+    private bool freezeTime = false;
 
     public Animator myAnimator;
     public AppearingButtons appearButts;
